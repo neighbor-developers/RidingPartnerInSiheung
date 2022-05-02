@@ -86,5 +86,4 @@ class SignActivity : AppCompatActivity() {
             }
         }
     }
-
 }
