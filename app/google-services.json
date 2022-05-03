@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "541173590470-en8qpgvmrro3qmg22ajbbm9t0evl80tr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.first.ridingpartnerinsiheung",
+            "certificate_hash": "fbe140c16b630303234ea0b94aee238a6b384f99"
+          }
+        },
+        {
           "client_id": "541173590470-g3b64v7cdrg75uftu50n3bo3mtvjjqln.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -35,6 +43,14 @@
           "android_info": {
             "package_name": "com.first.ridingpartnerinsiheung",
             "certificate_hash": "7c30e1a9a294f28efcfe7c03c4cb47d19888a033"
+          }
+        },
+        {
+          "client_id": "541173590470-td4qigsrq18di1e91fv2t12gpf7r31cv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.first.ridingpartnerinsiheung",
+            "certificate_hash": "837b61863029c12c295c714d2d303494edd58eff"
           }
         },
         {
