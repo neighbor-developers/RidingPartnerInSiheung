@@ -5,10 +5,19 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.databinding.ActivityMainBinding
+import com.first.ridingpartnerinsiheung.extensions.showToast
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {
+
+    //viewBinding
+    private val viewModel by viewModels<MainViewModel>()
+    lateinit var binding : ActivityMainBinding
 
     private var PERMISSION_ACCESS_CODE = 100
 
@@ -46,26 +55,38 @@ class MainActivity : AppCompatActivity() {
 
     // 권한이 있는 경우 실행
     private fun permissionGranted(requestCode: Int) {
-        Toast.makeText(this, "위치 권한 설정!!", Toast.LENGTH_SHORT).show() // 권한이 있는 경우 구글 지도를준비하는 코드 실행
+        showToast("위치 권한 설정!!") // 권한이 있는 경우 구글 지도를준비하는 코드 실행
     }
 
     // 권한이 없는 경우 실행
     private fun permissionDenied(requestCode: Int) {
-        Toast.makeText(this
-            , "권한 승인이 필요합니다."
-            , Toast.LENGTH_LONG)
-            .show()
+        showToast("권한요청이 필요합니다")
     }
+
+    // 날씨 구할 당일 날짜, 시간
+    private var currentTime = System.currentTimeMillis()
+    private var date = SimpleDateFormat("yyyyMMdd").format(currentTime)
+    private var timeH = SimpleDateFormat("HH").format(currentTime)
+    private var timeM = SimpleDateFormat("mm").format(currentTime)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         // 사용할 권한 array로 저장
         var permissions=arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
         )
+        // 권한 확인 및 요헝
         requirePermissions(permissions)
+
+        // 예비 위도 경도
+        var lat = 37.3425
+        var lon = 126.7502
+
+        viewModel.setWeather(lat, lon, date, timeH, timeM)
     }
 }

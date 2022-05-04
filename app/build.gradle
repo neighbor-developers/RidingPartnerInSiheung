@@ -56,4 +56,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-maps:18.0.2'   //  map과 location을 맞춰야 되서 사용 안되면 18.0.2로 바꾸기
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.0'
 }
