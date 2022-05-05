@@ -2,70 +2,88 @@ package com.first.ridingpartnerinsiheung.scenarios.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.first.ridingpartnerinsiheung.data.Date
 import com.first.ridingpartnerinsiheung.data.LocationXY
 import com.first.ridingpartnerinsiheung.scenarios.main.weather.ApiObject
 import com.first.ridingpartnerinsiheung.data.ModelWeather
 import com.first.ridingpartnerinsiheung.scenarios.main.weather.Weather
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.NullPointerException
+import java.text.SimpleDateFormat
 
 class MainViewModel() : ViewModel() {
 
     // 날씨 정보 담을 변수
     var weather = MutableStateFlow<ModelWeather?>(null)
 
+    // 날짜 시간 설정
+    private val _date = MutableStateFlow(
+        System.currentTimeMillis().let { current ->
+            Date(
+                SimpleDateFormat("yyyyMMdd").format(current),
+                SimpleDateFormat("HH").format(current),
+                SimpleDateFormat("mm").format(current)
+            )
+        }
+    )
+    private val date = _date.asStateFlow()
+
+    // 임시 위치
+    private var nx = MutableStateFlow("56")
+    private var ny = MutableStateFlow("122")
+
     // 날씨 정보 받기
-    fun setWeather(lat: Double, lon: Double, date: String, timeH: String, timeM : String) {
-
-        // 위도 경도 -> 격자 X, Y로 바꾸기
-        var locationXY = dfs_xy_conv(lat, lon)
-        var nx : String = locationXY.x.toString()
-        var ny : String = locationXY.y.toString()
-
-        // API에서 받아올 수 있는 시간 형식으로 바꾸기
-        var time = getTime(timeH, timeM)
-
-        val call = ApiObject.retrofitService.getWeather(
-            num_of_rows = 60,
-            page_no = 2,
-            data_type = "JSON",
-            base_date = date,
-            base_time = time,
-            nx = nx,
-            ny = ny
-        )
-
-        var _weather = ModelWeather()
+    init{
         viewModelScope.launch {
-            call.enqueue(object : retrofit2.Callback<Weather> {
-                override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
-                    if (response.isSuccessful) {
-                        var weatherData: ArrayList<Weather.Item> =
-                            response.body()!!.response.body.items.item
+            var time = getTime(date.value.timeH, date.value.timeM)
 
-                        val total = response.body()!!.response.body.totalCount
-                        for (i in 0 until total step 6) {
-                            when (weatherData[i].category) {
-                                "PTY" -> _weather.rainType = weatherData[i].fcstValue // 강수형태
-                                "REH" -> _weather.humidity = weatherData[i].fcstValue // 습도
-                                "SKY" -> _weather.sky = weatherData[i].fcstValue // 하늘상태
-                                "T1H" -> _weather.temp = weatherData[i].fcstValue // 기온
+            val call = ApiObject.retrofitService.getWeather(
+                num_of_rows = 60,
+                page_no = 2,
+                data_type = "JSON",
+                base_date = date.value.date,
+                base_time = time,
+                nx = nx.value,
+                ny = ny.value)
+
+            viewModelScope.launch {
+                call.enqueue(object : retrofit2.Callback<Weather> {
+                    override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
+                        if (response.isSuccessful) {
+                            try {
+                                val _weather = ModelWeather()
+
+                                val weatherData: ArrayList<Weather.Item> = response.body()!!.response.body.items.item
+                                val total = response.body()!!.response.body.totalCount
+
+                                for (i in 0 until total step 6) {
+                                    when (weatherData[i].category) {
+                                        "PTY" -> _weather.rainType = weatherData[i].fcstValue // 강수형태
+                                        "REH" -> _weather.humidity = weatherData[i].fcstValue // 습도
+                                        "SKY" -> _weather.sky = weatherData[i].fcstValue // 하늘상태
+                                        "T1H" -> _weather.temp = weatherData[i].fcstValue // 기온
+                                    }
+                                }
+                                _weather.rainType = getRainType(_weather.rainType)
+                                _weather.sky = getSky(_weather.sky)
+
+                                weather.value = _weather
+                            }catch (e : NullPointerException){
                             }
                         }
-                        _weather.rainType = getRainType(_weather.rainType)
-                        _weather.sky = getSky(_weather.sky)
-
-                        weather.value = _weather
                     }
-                }
 
-                override fun onFailure(call: Call<Weather>, t: Throwable) {
-                    /*no-op*/
-                }
-            })
+                    override fun onFailure(call: Call<Weather>, t: Throwable) {
+                        /**/
+                    }
+                })
+            }
         }
+
     }
     // 강수 타입 텍스트 변환
     fun getRainType(rainType: String): String {
@@ -84,6 +102,11 @@ class MainViewModel() : ViewModel() {
             "4" -> "흐림"
             else -> "오류 sky : " + sky
         }
+    }
+    fun changeLocation(lat : Double, lon : Double){
+        val location = dfs_xy_conv(lat, lon)
+        nx.value = location.x.toString()
+        ny.value = location.y.toString()
     }
     // API에서 정보 받아올 수 있는 시간 형식으로 바꾸기
     private fun getTime(h :String, m : String): String{

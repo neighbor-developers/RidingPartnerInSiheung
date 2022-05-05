@@ -52,41 +52,38 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     // 권한이 있는 경우 실행
     private fun permissionGranted(requestCode: Int) {
         showToast("위치 권한 설정!!") // 권한이 있는 경우 구글 지도를준비하는 코드 실행
     }
-
     // 권한이 없는 경우 실행
     private fun permissionDenied(requestCode: Int) {
         showToast("권한요청이 필요합니다")
     }
 
-    // 날씨 구할 당일 날짜, 시간
-    private var currentTime = System.currentTimeMillis()
-    private var date = SimpleDateFormat("yyyyMMdd").format(currentTime)
-    private var timeH = SimpleDateFormat("HH").format(currentTime)
-    private var timeM = SimpleDateFormat("mm").format(currentTime)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        initBinding()
+        checkPermission()
+        // 예비 위도 경도
+        var lat = 37.3425
+        var lon = 126.7502
 
+        viewModel.changeLocation(lat, lon)
+    }
+    private fun initBinding(){
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewModel = viewModel
+    }
+    private fun checkPermission(){
         // 사용할 권한 array로 저장
-        var permissions=arrayOf(
+        val permissions=arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
         )
         // 권한 확인 및 요헝
         requirePermissions(permissions)
-
-        // 예비 위도 경도
-        var lat = 37.3425
-        var lon = 126.7502
-
-        viewModel.setWeather(lat, lon, date, timeH, timeM)
     }
 }
