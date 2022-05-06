@@ -18,22 +18,26 @@
             android:orientation="vertical">
             <TextView
                 android:id="@+id/rainTypeTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="20dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.rainType}" />
             <TextView
                 android:id="@+id/humidityTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="20dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.humidity}" />
             <TextView
                 android:id="@+id/skyTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="20dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.sky}" />
             <TextView
                 android:id="@+id/tempTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="20dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.temp}" />
         </LinearLayout>
