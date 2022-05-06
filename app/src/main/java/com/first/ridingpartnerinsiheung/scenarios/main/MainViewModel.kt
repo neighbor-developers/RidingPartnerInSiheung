@@ -50,38 +50,37 @@ class MainViewModel() : ViewModel() {
                 nx = nx.value,
                 ny = ny.value)
 
-            viewModelScope.launch {
-                call.enqueue(object : retrofit2.Callback<Weather> {
-                    override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
-                        if (response.isSuccessful) {
-                            try {
-                                val _weather = ModelWeather()
+            call.enqueue(object : retrofit2.Callback<Weather> {
+                override fun onResponse(call: Call<Weather>, response: Response<Weather>) {
+                    if (response.isSuccessful) {
+                        try {
+                            val _weather = ModelWeather()
 
-                                val weatherData: ArrayList<Weather.Item> = response.body()!!.response.body.items.item
-                                val total = response.body()!!.response.body.totalCount
+                            val weatherData: ArrayList<Weather.Item> = response.body()!!.response.body.items.item
+                            val total = response.body()!!.response.body.totalCount
 
-                                for (i in 0 until total step 6) {
-                                    when (weatherData[i].category) {
-                                        "PTY" -> _weather.rainType = weatherData[i].fcstValue // 강수형태
-                                        "REH" -> _weather.humidity = weatherData[i].fcstValue // 습도
-                                        "SKY" -> _weather.sky = weatherData[i].fcstValue // 하늘상태
-                                        "T1H" -> _weather.temp = weatherData[i].fcstValue // 기온
-                                    }
+                            for (i in 0 until total step 6) {
+                                when (weatherData[i].category) {
+                                    "PTY" -> _weather.rainType = weatherData[i].fcstValue // 강수형태
+                                    "REH" -> _weather.humidity = weatherData[i].fcstValue // 습도
+                                    "SKY" -> _weather.sky = weatherData[i].fcstValue // 하늘상태
+                                    "T1H" -> _weather.temp = weatherData[i].fcstValue // 기온
                                 }
-                                _weather.rainType = getRainType(_weather.rainType)
-                                _weather.sky = getSky(_weather.sky)
-
-                                weather.value = _weather
-                            }catch (e : NullPointerException){
                             }
+                            _weather.rainType = getRainType(_weather.rainType)
+                            _weather.sky = getSky(_weather.sky)
+
+                            weather.value = _weather
+                        }catch (e : NullPointerException){
                         }
                     }
+                }
 
-                    override fun onFailure(call: Call<Weather>, t: Throwable) {
-                        /**/
-                    }
-                })
-            }
+                override fun onFailure(call: Call<Weather>, t: Throwable) {
+                    /**/
+                }
+            })
+
         }
 
     }
