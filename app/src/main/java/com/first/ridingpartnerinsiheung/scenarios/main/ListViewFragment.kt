@@ -1,18 +1,24 @@
 package com.first.ridingpartnerinsiheung.scenarios.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.PlaceList
 import com.first.ridingpartnerinsiheung.databinding.FragmentListViewBinding
 
 
 class ListViewFragment : Fragment() {
-    private var binding : FragmentListViewBinding? =null
+
+    val viewModel by viewModels<Main2ViewModel>()
+    lateinit var binding : FragmentListViewBinding
 
     var placeList = arrayListOf<PlaceList>(
         PlaceList("오이도 빨간 등대", "23.7km", "oido",55,55),
@@ -27,38 +33,30 @@ class ListViewFragment : Fragment() {
         PlaceList("시화방조제", "23.7km", "sihwa",432,1)
     )
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
+        initBinding()
+        initClickListener()
 
+        binding.listView.isNestedScrollingEnabled = false
+        val placeAdapter = MainListAdapter(requireContext(), placeList)
+        binding.listView.adapter = placeAdapter
 
-
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
-        val activity1 = (activity as MainActivity2)
-        binding = FragmentListViewBinding.inflate(inflater,container,false)
-        val view1 = binding!!.root
-        binding!!.listView.isNestedScrollingEnabled = false
-        val placeAdapter = MainListAdapter(view1.context, placeList)
-        binding!!.listView.adapter = placeAdapter
-        binding!!.listView.setOnItemClickListener { adapterView, view, i, l ->
-
+        binding.listView.setOnItemClickListener { adapterView, view, i, l ->
             activity1.setArgument(placeList[i].lng,placeList[i].rtt)
             activity1.setFrag(1)
         }
-        binding!!.back.setOnClickListener {
-            activity1.finish()
+
+        return binding.root
+    }
+
+    private fun initBinding(inflater: LayoutInflater = this.layoutInflater, container: ViewGroup? = null){
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_view, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+    }
+    private fun initClickListener(){
+        binding.back.setOnClickListener {
+            startActivity(Intent(requireActivity(),MainActivity::class.java ))
         }
-
-
-
-        return view1
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
-    }
-
-
-
-
 }

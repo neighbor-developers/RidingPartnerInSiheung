@@ -18,7 +18,7 @@ class MainActivity2 : AppCompatActivity() {
         setFrag(0)
     }
 
-    public fun setArgument(lg : Int, rt:Int){
+    fun setArgument(lg : Int, rt:Int){
         lgt = lg
         rtt = rt
     }
