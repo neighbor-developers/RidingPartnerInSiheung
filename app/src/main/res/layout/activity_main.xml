@@ -6,16 +6,16 @@
     <data>
         <variable
             name="viewModel"
-            type="com.first.ridingpartnerinsiheung.scenarios.main.MainViewModel" />
+            type="com.first.ridingpartnerinsiheung.scenarios.main.startPage.StartViewModel" />
         <variable
             name="mainActivity"
-            type="com.first.ridingpartnerinsiheung.scenarios.main.MainActivity" />
+            type="com.first.ridingpartnerinsiheung.scenarios.main.startPage.StartActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".scenarios.main.MainActivity">
+        tools:context=".scenarios.main.startPage.StartActivity">
 
         <LinearLayout
             android:layout_width="match_parent"

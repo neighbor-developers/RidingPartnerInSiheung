@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.startPage.StartActivity
 import com.first.ridingpartnerinsiheung.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -38,7 +38,7 @@ class LoadingActivity : AppCompatActivity() {
     }
     private fun toMainActivity(user: FirebaseUser?) {
         if (user != null) {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, StartActivity::class.java))
             this.finish()
         }
     }

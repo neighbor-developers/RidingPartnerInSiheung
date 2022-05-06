@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".scenarios.main.MainActivity2"
+            android:name=".scenarios.main.MainActivity"
             android:exported="false" />
 
         <meta-data
@@ -36,7 +36,7 @@
             android:name=".scenarios.intro.SignActivity"
             android:exported="false" />
         <activity
-            android:name=".scenarios.main.MainActivity"
+            android:name=".scenarios.main.startPage.StartActivity"
             android:exported="true" />
     </application>
 

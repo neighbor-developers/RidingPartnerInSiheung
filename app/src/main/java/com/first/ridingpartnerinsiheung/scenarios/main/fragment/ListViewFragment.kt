@@ -1,23 +1,24 @@
-package com.first.ridingpartnerinsiheung.scenarios.main
+package com.first.ridingpartnerinsiheung.scenarios.main.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.PlaceList
 import com.first.ridingpartnerinsiheung.databinding.FragmentListViewBinding
+import com.first.ridingpartnerinsiheung.scenarios.main.MainListAdapter
+import com.first.ridingpartnerinsiheung.scenarios.main.MainViewModel
+import com.first.ridingpartnerinsiheung.scenarios.main.startPage.StartActivity
 
 
 class ListViewFragment : Fragment() {
 
-    val viewModel by viewModels<Main2ViewModel>()
+    val viewModel by viewModels<MainViewModel>()
     lateinit var binding : FragmentListViewBinding
 
     var placeList = arrayListOf<PlaceList>(
@@ -34,17 +35,10 @@ class ListViewFragment : Fragment() {
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
+
         initBinding()
         initClickListener()
-
-        binding.listView.isNestedScrollingEnabled = false
-        val placeAdapter = MainListAdapter(requireContext(), placeList)
-        binding.listView.adapter = placeAdapter
-
-        binding.listView.setOnItemClickListener { adapterView, view, i, l ->
-            activity1.setArgument(placeList[i].lng,placeList[i].rtt)
-            activity1.setFrag(1)
-        }
+        initListView()
 
         return binding.root
     }
@@ -56,7 +50,17 @@ class ListViewFragment : Fragment() {
     }
     private fun initClickListener(){
         binding.back.setOnClickListener {
-            startActivity(Intent(requireActivity(),MainActivity::class.java ))
+            startActivity(Intent(requireActivity(), StartActivity::class.java ))
+        }
+    }
+    private fun initListView(){
+        binding.listView.isNestedScrollingEnabled = false
+        val placeAdapter = MainListAdapter(requireContext(), placeList)
+        binding.listView.adapter = placeAdapter
+
+        binding.listView.setOnItemClickListener { adapterView, view, i, l ->
+            activity1.setArgument(placeList[i].lng,placeList[i].rtt)
+            activity1.setFrag(1)
         }
     }
 }
