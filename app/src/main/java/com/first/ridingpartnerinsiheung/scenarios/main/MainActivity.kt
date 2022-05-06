@@ -1,9 +1,11 @@
 package com.first.ridingpartnerinsiheung.scenarios.main
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -63,9 +65,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         initBinding()
+
         checkPermission()
         // 예비 위도 경도
         var lat = 37.3425
@@ -73,8 +75,17 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.changeLocation(lat, lon)
     }
+
+    public fun btnClick(view: View){
+        intent = Intent(this,MainActivity2::class.java)
+        startActivity(intent)
+
+    }
+
+
     private fun initBinding(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.mainActivity = this
         binding.viewModel = viewModel
     }
     private fun checkPermission(){

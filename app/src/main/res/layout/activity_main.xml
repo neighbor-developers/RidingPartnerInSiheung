@@ -2,11 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+
+
     <data>
         <variable
             name="viewModel"
             type="com.first.ridingpartnerinsiheung.scenarios.main.MainViewModel" />
+        <variable
+            name="mainActivity"
+            type="com.first.ridingpartnerinsiheung.scenarios.main.MainActivity" />
     </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,24 +26,49 @@
             android:orientation="vertical">
             <TextView
                 android:id="@+id/rainTypeTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.rainType}" />
             <TextView
                 android:id="@+id/humidityTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.humidity}" />
             <TextView
                 android:id="@+id/skyTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.sky}" />
             <TextView
                 android:id="@+id/tempTV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.temp}" />
+
+            <Button
+                android:id="@+id/recommendBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="추천 경로 보기"
+                android:onClick="@{mainActivity::btnClick}"
+                >
+            </Button>
+            <Button
+                android:id="@+id/findOfficeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{mainActivity::btnClick}"
+                android:text="대여소 위치 찾기"
+                >
+            </Button>
+            <Button
+                android:id="@+id/myPageBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{mainActivity::btnClick}"
+                android:text="마이페이지"
+                >
+            </Button>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
