@@ -14,12 +14,15 @@ import com.first.ridingpartnerinsiheung.databinding.FragmentListViewBinding
 import com.first.ridingpartnerinsiheung.scenarios.main.MainListAdapter
 import com.first.ridingpartnerinsiheung.scenarios.main.MainViewModel
 import com.first.ridingpartnerinsiheung.scenarios.main.startPage.StartActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
 
 
 class ListViewFragment : Fragment() {
 
     val viewModel by viewModels<MainViewModel>()
     lateinit var binding : FragmentListViewBinding
+    lateinit var mainActivity:MainActivity
+
 
     var placeList = arrayListOf<PlaceList>(
         PlaceList("오이도 빨간 등대", "23.7km", "oido",55,55),
@@ -59,8 +62,8 @@ class ListViewFragment : Fragment() {
         binding.listView.adapter = placeAdapter
 
         binding.listView.setOnItemClickListener { adapterView, view, i, l ->
-            activity1.setArgument(placeList[i].lng,placeList[i].rtt)
-            activity1.setFrag(1)
+            mainActivity.setArgument(placeList[i].lng,placeList[i].rtt)
+            mainActivity.setFrag(1)
         }
     }
 }
