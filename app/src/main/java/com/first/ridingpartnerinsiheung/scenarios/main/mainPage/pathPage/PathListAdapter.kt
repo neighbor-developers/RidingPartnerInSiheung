@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main
+package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.PlaceList
 
-class MainListAdapter(val context: Context, val placeList : ArrayList<PlaceList>) : BaseAdapter() {
+class PathListAdapter(val context: Context, val placeList : ArrayList<PlaceList>) : BaseAdapter() {
     override fun getView(position : Int, convertView: View?, parent : ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.main_lv_item, null)
 
@@ -19,8 +19,8 @@ class MainListAdapter(val context: Context, val placeList : ArrayList<PlaceList>
         val distance = view.findViewById<TextView>(R.id.placeDistance)
 
         val place = placeList[position]
-        val resourceId = context.resources.getIdentifier(place.photo, "drawable", context.packageName)
-        photo.setImageResource(resourceId)
+        //val resourceId = context.resources.getIdentifier(place.photo, "drawable", context.packageName)
+        photo.setImageResource(place.photo)
         placeName.text = place.placeTxt
         distance.text = place.placeDistance
 

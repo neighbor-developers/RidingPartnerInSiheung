@@ -17,7 +17,9 @@
         android:theme="@style/Theme.RidingPartnerInSiheung"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
+        <activity
+            android:name=".scenarios.main.MainActivity"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -31,11 +33,12 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBhkfP__jeCmYO8B2eJnnd6PvBOT6u6HgI" />
+            android:value="YOUR_API_KEY" />
 
         <activity
-            android:name=".scenarios.main.MainActivity"
-            android:exported="false" />
+            android:name=".scenarios.main.maps.MapActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".scenarios.intro.LoadingActivity"
             android:exported="true">
@@ -48,9 +51,6 @@
         <activity
             android:name=".scenarios.intro.SignActivity"
             android:exported="false" />
-        <activity
-            android:name=".scenarios.main.startPage.StartActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

@@ -1,12 +1,12 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.startPage
+package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.first.ridingpartnerinsiheung.data.Date
 import com.first.ridingpartnerinsiheung.data.LocationXY
-import com.first.ridingpartnerinsiheung.scenarios.main.startPage.weather.ApiObject
+import com.first.ridingpartnerinsiheung.api.weather.ApiObject
 import com.first.ridingpartnerinsiheung.data.ModelWeather
-import com.first.ridingpartnerinsiheung.scenarios.main.startPage.weather.Weather
+import com.first.ridingpartnerinsiheung.api.weather.Weather
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

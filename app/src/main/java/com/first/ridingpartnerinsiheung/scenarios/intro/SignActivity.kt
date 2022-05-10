@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.first.ridingpartnerinsiheung.scenarios.main.startPage.StartActivity
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -55,7 +55,7 @@ class SignActivity : AppCompatActivity() {
 
     private fun toMainActivity(user: FirebaseUser?){
         if(user !=null){
-            startActivity(Intent(this, StartActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 

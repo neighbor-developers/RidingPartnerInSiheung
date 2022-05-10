@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage.StartViewModel" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/rainTypeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.weather.rainType}" />
+            <TextView
+                android:id="@+id/humidityTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.weather.humidity}" />
+            <TextView
+                android:id="@+id/skyTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.weather.sky}" />
+            <TextView
+                android:id="@+id/tempTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.weather.temp}" />
+
+            <Button
+                android:id="@+id/recommendBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="추천 경로 보기"/>
+            <Button
+                android:id="@+id/findOfficeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="대여소 위치 찾기"/>
+            <Button
+                android:id="@+id/myPageBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="마이페이지"/>
+            <Button
+                android:id="@+id/ridingBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="라이딩 시작하기"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

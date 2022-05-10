@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.fragment
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,8 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentDisplayMapBinding
-import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
-import com.first.ridingpartnerinsiheung.scenarios.main.MainViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -21,8 +19,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class DisplayMapFragment : Fragment(), OnMapReadyCallback {
     lateinit var binding: FragmentDisplayMapBinding
-    val viewModel by viewModels<MainViewModel>()
-    lateinit var mainActivity: MainActivity
 
     private lateinit var mView: MapView
     lateinit var name: String
@@ -36,9 +32,6 @@ class DisplayMapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         val mapView = inflater.inflate(R.layout.fragment_display_map, container, false)
 
-        initBinding()
-        initClickListener()
-
         //  try catch로 맵이 null이 아닌지 확인 필요
 
         mView = mapView.findViewById(R.id.map)
@@ -46,7 +39,6 @@ class DisplayMapFragment : Fragment(), OnMapReadyCallback {
         mView.getMapAsync(this) // 구글맵을 불러오는 함수, this->MapsFragment->OnMapReadyCallback->onMapready()로 들어감
 
 
-        binding.testText.text = "lgt : " +mainActivity.getLgt().toString() +"\n"+ "경도: "+ mainActivity.getRtt().toString()
         return binding.root
 
         return mapView
@@ -77,18 +69,5 @@ class DisplayMapFragment : Fragment(), OnMapReadyCallback {
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15f))    //  줌 레벨 설정(굳이 두 개나 있어야 될까?)
     }
 
-    private fun initBinding(
-        inflater: LayoutInflater = this.layoutInflater,
-        container: ViewGroup? = null
-    ) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_display_map, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-    }
-
-    private fun initClickListener() {
-        binding.btn1.setOnClickListener {
-            mainActivity.setFrag(0)
-        }
-    }
+    
 }

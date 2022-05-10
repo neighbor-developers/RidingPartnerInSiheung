@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.startPage.weather
+package com.first.ridingpartnerinsiheung.api.weather
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
