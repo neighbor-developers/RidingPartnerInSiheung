@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".scenarios.main.MainActivity"
+            android:name=".scenarios.main.mainPage.MainActivity"
             android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.

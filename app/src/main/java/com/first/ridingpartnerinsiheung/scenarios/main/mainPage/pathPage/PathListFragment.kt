@@ -6,11 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.PlaceList
 import com.first.ridingpartnerinsiheung.databinding.FragmentPathListBinding
-import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage.StartFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.first.ridingpartnerinsiheung.views.dialog.PathDialog

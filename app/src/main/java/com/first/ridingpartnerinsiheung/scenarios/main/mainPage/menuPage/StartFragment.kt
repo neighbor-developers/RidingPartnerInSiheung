@@ -16,7 +16,7 @@ import androidx.fragment.app.viewModels
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
-import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage.PathListFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity

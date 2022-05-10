@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main
+package com.first.ridingpartnerinsiheung.scenarios.main.mainPage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

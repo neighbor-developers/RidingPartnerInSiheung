@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
-import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.collect
