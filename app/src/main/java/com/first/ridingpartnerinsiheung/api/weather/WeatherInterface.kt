@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.weather
+package com.first.ridingpartnerinsiheung.api.weather
 
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -2,4 +2,8 @@
     <string name="app_name">RidingPartnerInSiheung</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="operating_time_j">월~금 07시 ~ 21시 운영\n(토요일, 일요일, 공휴일은 휴무입니다)</string>
+    <string name="operating_time_w">수~일 09시 ~ 20시 운영\n(월요일, 화요일, 공휴일은 휴무입니다)</string>
+    <string name="notice_warning_rental">익일 대여소 운영 마감시간 30분전까지 반납\n대여자 본인이 직접 자전거의 이상 유무를 확인하고, 이상이 있는 경우 즉시 관리자와 점검 후 교체 이용 대여 중 발생한 사고는 대여 받은 자의 책임\n운영시간 중 반드시 관리자 확인 하에 반납, 대여소 앞 임의 주차는 반납으로 불인정</string>
 </resources>

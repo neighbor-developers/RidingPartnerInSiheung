@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.first.ridingpartnerinsiheung.scenarios.main.MainActivity
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

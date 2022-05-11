@@ -1,12 +1,12 @@
-package com.first.ridingpartnerinsiheung.scenarios.main
+package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.first.ridingpartnerinsiheung.data.Date
 import com.first.ridingpartnerinsiheung.data.LocationXY
-import com.first.ridingpartnerinsiheung.scenarios.main.weather.ApiObject
+import com.first.ridingpartnerinsiheung.api.weather.ApiObject
 import com.first.ridingpartnerinsiheung.data.ModelWeather
-import com.first.ridingpartnerinsiheung.scenarios.main.weather.Weather
+import com.first.ridingpartnerinsiheung.api.weather.Weather
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import retrofit2.Response
 import java.lang.NullPointerException
 import java.text.SimpleDateFormat
 
-class MainViewModel() : ViewModel() {
+class StartViewModel() : ViewModel() {
 
     // 날씨 정보 담을 변수
     var weather = MutableStateFlow<ModelWeather?>(null)
