@@ -17,44 +17,110 @@
             <TextView
                 android:id="@+id/rainTypeTV"
                 android:layout_width="match_parent"
+                android:textSize="20dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.rainType}" />
             <TextView
                 android:id="@+id/humidityTV"
                 android:layout_width="match_parent"
+                android:textSize="20dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.weather.humidity}" />
             <TextView
                 android:id="@+id/skyTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:text="@{viewModel.weather.sky}" />
             <TextView
                 android:id="@+id/tempTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:text="@{viewModel.weather.temp}" />
-
-            <Button
-                android:id="@+id/recommendBtn"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="추천 경로 보기"/>
-            <Button
-                android:id="@+id/findOfficeBtn"
+                android:textSize="20dp"
+                android:text=" " />
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="대여소 위치 찾기"/>
-            <Button
+                android:textSize="20dp"
+                android:text=" " />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text=" " />
+            <android.widget.Button
                 android:id="@+id/myPageBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="마이페이지"/>
-            <Button
-                android:id="@+id/ridingBtn"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/edge"
+                android:shadowColor="#FFFFFF"
+                android:text="마이페이지"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:onClick="@{mainActivity::btnClick}"
+                android:textStyle="bold"/>
+            <android.widget.Button
+                android:id="@+id/recommendBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="라이딩 시작하기"/>
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/edge"
+                android:shadowColor="#FFFFFF"
+                android:text="추천 경로 보기"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:onClick="@{mainActivity::btnClick}"
+                android:textStyle="bold"/>
+            <android.widget.Button
+                android:id="@+id/findOfficeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/edge"
+                android:shadowColor="#FFFFFF"
+                android:text="대여소 위치 찾기"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:onClick="@{mainActivity::btnClick}"
+                android:textStyle="bold"/>
+            <android.widget.Button
+                android:id="@+id/findPathBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/edge"
+                android:shadowColor="#FFFFFF"
+                android:text="목표까지 길찾기"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:onClick="@{mainActivity::btnClick}"
+                android:textStyle="bold"/>
+            <android.widget.Button
+                android:id="@+id/ridingStartBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/edge"
+                android:shadowColor="#FFFFFF"
+                android:text="라이딩 시작"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:onClick="@{mainActivity::btnClick}"
+                android:textStyle="bold"/>
+
+
+
         </LinearLayout>
 
     </LinearLayout>
