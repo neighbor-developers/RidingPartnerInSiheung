@@ -88,8 +88,12 @@ class StartViewModel() : ViewModel() {
     fun getRainType(rainType: String): String {
         return when (rainType) {
             "0" -> "없음"
-            "3" -> "구름 많음"
-            "4" -> "흐림"
+            "1" -> "비"
+            "2" -> "비/눈"
+            "3" -> "눈"
+            "5" -> "빗방울"
+            "6" -> "빗방울 눈날림"
+            "7" -> "눈날림"
             else -> "오류 rainType" + rainType
         }
     }
