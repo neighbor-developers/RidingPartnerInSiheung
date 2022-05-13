@@ -13,16 +13,7 @@
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.23233695652173914" />
         <entry key="app/src/main/res/layout/activity_map.xml" value="0.32916666666666666" />
         <entry key="app/src/main/res/layout/activity_sign.xml" value="0.16017106650532156" />
-        <entry key="app/src/main/res/layout/dialog_path.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/fragment_display_map.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_list_view.xml" value="0.23233695652173914" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_path_list.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/fragment_record.xml" value="0.2953125" />
-        <entry key="app/src/main/res/layout/fragment_rental_location.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/fragment_start.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/main_lv_item.xml" value="0.19610507246376813" />
       </map>
     </option>
   </component>

@@ -83,7 +83,7 @@ class StartFragment : Fragment() {
 
     private lateinit var mLastLocation : Location
     private var mFusedLocationProviderClient : FusedLocationProviderClient? = null
-    private lateinit var mLocationRequest: com.google.android.gms.location.LocationRequest
+    private lateinit var mLocationRequest: LocationRequest
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
