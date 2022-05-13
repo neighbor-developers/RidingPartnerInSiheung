@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -46,14 +47,16 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         binding =  FragmentRidingBinding.inflate(inflater, container, false)
-        val view = binding!!.root
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
 
         initLocation()
         changeRidingState()
 
         return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.ridingMapView) as SupportMapFragment?
+        mapFragment?.getMapAsync(this)
     }
     private fun changeRidingState(){
         binding!!.changeRidingStateBtn.setOnClickListener {
@@ -98,6 +101,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
             super.onLocationResult(locationResult)
 
             val location = locationResult.lastLocation
+            changeCurrentLocation(location)
 
             location.run {
                 val latLng = LatLng(latitude, longitude)
@@ -111,9 +115,17 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
         }
     }
-    private val polylineOptions = PolylineOptions().add(startLatLng).add(endLatLng).width(5f).color(
-        Color.RED)
+    private val polylineOptions = PolylineOptions()
+//        .add(
+//        when(startLatLng){
+//            LatLng(0.0,0.0) -> LatLng(mLocation!!.latitude, mLocation!!.longitude)
+//            else -> startLatLng
+//        })
+        .add(startLatLng).add(endLatLng).width(5f).color(Color.RED)
 
+    private fun changeCurrentLocation(location : Location){
+        mLocation = location
+    }
     override fun onResume() {
         super.onResume()
         checkPermission()
@@ -126,7 +138,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         fusedLocationProviderClient!!.removeLocationUpdates(locationCallback)
     }
 
-    private val PERMISSION_CODE = 100
+    private val PERMISSION_CODE = 1313
 
     //  권한 요청
     private fun requirePermissions(permissions: Array<String>){
