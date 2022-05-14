@@ -31,10 +31,11 @@ class SignActivity : AppCompatActivity() {
 
         googleLogin()
     }
+
     // 로그인 객체 생성
-    private fun googleLogin(){
+    private fun googleLogin() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                // 빨간줄이지만 토큰 문제라 실행 가능
+            // 빨간줄이지만 토큰 문제라 실행 가능
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()

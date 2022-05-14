@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".scenarios.main.mainPage.Record.RidingFinishFragment">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/rComplete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="45dp"
+            android:text="주행 완료"
+            android:textColor="#000000"
+            android:textSize="30dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/cTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="주행 시간:"
+            android:textColor="#000000"
+            android:textSize="23dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/avrSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="평균 속도:"
+            android:textColor="#000000"
+            android:textSize="23dp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/cImage"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/oido"/>
+
+        <TextView
+            android:id="@+id/cPath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:text="오이도 등대길"
+            android:textColor="#000000"
+            android:textSize="23dp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/rDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="7dp"
+            android:text="주행 거리:"
+            android:textColor="#000000"
+            android:textSize="23dp"
+            android:textStyle="bold"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageButton
+                android:id="@+id/memoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_add_circle_24"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="20dp"
+                android:background="#FFFFFF"/>
+
+            <TextView
+                android:id="@+id/addMemo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/memoBtn"
+                android:text="메모 추가하기"
+                android:textColor="#000000"
+                android:textSize="23dp"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+
+        <android.widget.Button
+            android:id="@+id/complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:background="@drawable/complete_edge"
+            android:shadowColor="#FFFFFF"
+            android:text="완료"
+            android:textColor="#000000"
+            android:textSize="37dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</FrameLayout>
