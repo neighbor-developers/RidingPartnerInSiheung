@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
@@ -21,6 +22,8 @@ import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFra
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage.PathListFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.google.android.gms.location.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class StartFragment : Fragment() {
 
@@ -100,6 +103,17 @@ class StartFragment : Fragment() {
         //viewModel.changeLocation(mLastLocation.latitude, mLastLocation.longitude)
         viewModel.changeLocation(37.3425, 126.7502)
 
+        //뷰모델 실행중 날씨모델 mutablestateflow 관찰해서 이미지 뷰 세팅
+        viewModel.run{
+            weather.onEach{
+                when(it!!.sky){
+                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+                    "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.cloud)
+                    "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.overcast)
+                    else -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
         return binding.root
     }
     private fun initBinding(inflater: LayoutInflater = this.layoutInflater, container: ViewGroup? = null){

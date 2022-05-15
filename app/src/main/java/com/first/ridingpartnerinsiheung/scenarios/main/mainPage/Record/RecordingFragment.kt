@@ -10,6 +10,7 @@ import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.databinding.FragmentRecordingBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class RecordingFragment : Fragment() {
@@ -27,31 +28,31 @@ class RecordingFragment : Fragment() {
     ): View? {
         binding = FragmentRecordingBinding.inflate(inflater, container, false)
 
-        finishWriting()
+//        finishWriting()
         return binding.root
     }
 
-    private fun finishWriting() {
-        binding.complete.setOnClickListener {
-            addDiaryContent(onSuccess = {showToast("저장 완료")}, onFailure = {showToast("저장 실패")})
-            activity?.let {
-                val intent = Intent(context, MainActivity::class.java)
-                startActivity(intent)
-            }
-        }
-    }
-
-    fun addDiaryContent(onSuccess: () -> Unit, onFailure: () -> Unit) {
-        val data = hashMapOf("contents" to diaryContent.value)
-        db.collection("UsersData")
-            .document(user).collection("Diary")
-            .document(date.value.toString())
-            .set(data)
-            .addOnSuccessListener {
-                postSuccess()
-            }
-            .addOnFailureListener {
-                postFailuer(it)
-            }
-    }
+//    private fun finishWriting() {
+//        binding.complete.setOnClickListener {
+//            addDiaryContent(onSuccess = {showToast("저장 완료")}, onFailure = {showToast("저장 실패")})
+//            activity?.let {
+//                val intent = Intent(context, MainActivity::class.java)
+//                startActivity(intent)
+//            }
+//        }
+//    }
+//
+//    fun addDiaryContent(onSuccess: () -> Unit, onFailure: () -> Unit) {
+//        val data = hashMapOf("contents" to diaryContent.value)
+//        db.collection("UsersData")
+//            .document(user).collection("Diary")
+//            .document(date.value.toString())
+//            .set(data)
+//            .addOnSuccessListener {
+//                postSuccess()
+//            }
+//            .addOnFailureListener {
+//                postFailuer(it)
+//            }
+//    }
 }

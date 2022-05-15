@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 class StartViewModel() : ViewModel() {
 
     // 날씨 정보 담을 변수
-    var weather = MutableStateFlow<ModelWeather?>(null)
+    var weather = MutableStateFlow<ModelWeather?>(ModelWeather())
 
     // 날짜 시간 설정
     private val _date = MutableStateFlow(
