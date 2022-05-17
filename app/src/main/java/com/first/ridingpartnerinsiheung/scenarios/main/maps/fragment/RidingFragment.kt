@@ -35,7 +35,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationCallback: MyLocationCallBack
     private var mLocation : Location? = null
 
     private var binding : FragmentRidingBinding? = null
