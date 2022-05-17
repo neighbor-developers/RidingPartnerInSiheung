@@ -19,4 +19,10 @@ class MapActivity : AppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+    private fun setRentalFragment(fragment:Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.mainframe, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
 }
