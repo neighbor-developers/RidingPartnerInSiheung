@@ -8,14 +8,20 @@ import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.CalDistance
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.RidingViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -25,20 +31,26 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import java.text.SimpleDateFormat
 
 class RidingFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var mMap : GoogleMap
-    private var ridingState = false // 라이딩 상태
-    private var startLatLng = LatLng(0.0,0.0) // polyline 시작점
-    private var endLatLng = LatLng(0.0,0.0) // polyline 끝점
+    private lateinit var binding : FragmentRidingBinding
+    private val viewModel by viewModels<RidingViewModel>()
 
     private var fusedLocationProviderClient: FusedLocationProviderClient? = null
     private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: MyLocationCallBack
-    private var mLocation : Location? = null
+    private lateinit var locationCallback: RidingFragment.MyLocationCallBack
+    var mLocation : Location? = null
 
-    private var binding : FragmentRidingBinding? = null
+    private lateinit var mMap : GoogleMap
+    private var ridingState = false // 라이딩 상태
+
+    var startTime = ""
+    var endTime = ""
+
+    var startLatLng = LatLng(0.0,0.0) // polyline 시작점
+    var endLatLng = LatLng(0.0,0.0) // polyline 끝점
 
 
     override fun onCreateView(
@@ -46,31 +58,51 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =  FragmentRidingBinding.inflate(inflater, container, false)
+        initBinding()
 
         initLocation()
         changeRidingState()
-
-        return view
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.ridingMapView) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
+    private fun initBinding(inflater: LayoutInflater = this.layoutInflater, container: ViewGroup? = null){
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_riding, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+    }
     private fun changeRidingState(){
-        binding!!.changeRidingStateBtn.setOnClickListener {
+        binding.changeRidingStateBtn.setOnClickListener {
             if(!ridingState) {
-                binding!!.changeRidingStateBtn.text = "중지"
+                binding.changeRidingStateBtn.text = "중지"
                 ridingState = true
-                mLocation?.let {
+                viewModel.mLocation?.let {
                     startLatLng = LatLng(it.latitude, it.longitude)
+                    marker(startLatLng)
+                    startTime = viewModel.currentTime.toString()
+                    viewModel.getDisSpeed()
                 }
             }else{
-                binding!!.changeRidingStateBtn.text = "시작"
+                binding.changeRidingStateBtn.text = "시작"
+                viewModel.mLocation?.let {
+                    endLatLng = LatLng(it.latitude, it.longitude)
+                    marker(endLatLng)
+                    //viewModel.endTime = getTimeNow()
+                    viewModel.timeHandler.removeMessages(0)
+                    endTime = viewModel.currentTime.toString()
+                }
             }
         }
     }
+    private fun marker(latLng: LatLng){
+        mMap.addMarker(MarkerOptions().alpha(0.5f).anchor(0.5f, 0.5f).position(latLng))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+    }
+
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -125,6 +157,15 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
     private fun changeCurrentLocation(location : Location){
         mLocation = location
+        viewModel.mLocation = mLocation
+
+        viewModel.befLat = location.latitude
+        viewModel.befLon = location.longitude
+
+        val marker = LatLng(mLocation!!.latitude, mLocation!!.longitude)
+        mMap.addMarker(MarkerOptions().position(marker).title("내 위치"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
+
     }
     override fun onResume() {
         super.onResume()
