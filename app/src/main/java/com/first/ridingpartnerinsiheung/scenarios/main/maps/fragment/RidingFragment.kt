@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import java.text.SimpleDateFormat
@@ -38,19 +39,35 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding : FragmentRidingBinding
     private val viewModel by viewModels<RidingViewModel>()
 
-    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: RidingFragment.MyLocationCallBack
-    var mLocation : Location? = null
-
     private lateinit var mMap : GoogleMap
     private var ridingState = false // 라이딩 상태
+    private var startLatLng = LatLng(0.0,0.0) // polyline 시작점
+    private var endLatLng = LatLng(0.0,0.0) // polyline 끝점
 
-    var startTime = ""
-    var endTime = ""
+    private var fusedLocationProviderClient: FusedLocationProviderClient? = null
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: MyLocationCallBack
+    private var mLocation : Location? = null
+    private var myLocationMarker : Marker? = null
 
-    var startLatLng = LatLng(0.0,0.0) // polyline 시작점
-    var endLatLng = LatLng(0.0,0.0) // polyline 끝점
+    private var sumDistance = 0
+    private var timer = 0
+    private var speed = 0
+
+    private var savedTimer = 0
+    private var savedSpeed = 0
+
+    private var befLat: Double = 0.0
+    private var befLon: Double = 0.0
+    private var curLat: Double = 0.0
+    private var curLon: Double = 0.0
+
+    private var startTime = System.currentTimeMillis().let { current ->
+        SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
+    }
+    private var endTime = ""
+
+    private lateinit var timeHandler: MyHandler
 
 
     override fun onCreateView(
@@ -77,38 +94,75 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     private fun changeRidingState(){
         binding.changeRidingStateBtn.setOnClickListener {
             if(!ridingState) {
+                speed = 0
+                timer = 0
                 binding.changeRidingStateBtn.text = "중지"
                 ridingState = true
-                viewModel.mLocation?.let {
-                    startLatLng = LatLng(it.latitude, it.longitude)
-                    marker(startLatLng)
-                    startTime = viewModel.currentTime.toString()
-                    viewModel.getDisSpeed()
+                mLocation?.let {
+                    getTimeNow().also { startTime = it }
+                    var startMarker = marker(LatLng(it.latitude, it.longitude), "출발지점")
+                    myLocationMarker?.remove()
                 }
             }else{
                 binding.changeRidingStateBtn.text = "시작"
-                viewModel.mLocation?.let {
+                mLocation?.let {
                     endLatLng = LatLng(it.latitude, it.longitude)
-                    marker(endLatLng)
-                    //viewModel.endTime = getTimeNow()
-                    viewModel.timeHandler.removeMessages(0)
-                    endTime = viewModel.currentTime.toString()
+                    var endMarker = marker(endLatLng, "도착 지점")
+                    savedSpeed = speed
+                    savedTimer = timer
+                    endTime = getTimeNow()
+                    timeHandler.removeMessages(0)
                 }
+
             }
         }
     }
-    private fun marker(latLng: LatLng){
-        mMap.addMarker(MarkerOptions().alpha(0.5f).anchor(0.5f, 0.5f).position(latLng))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+    // 시작지점 마크
+    private fun marker(latLng: LatLng, title : String) : Marker? {
+        val marker = mMap.addMarker(MarkerOptions().position(latLng).title(title))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
+        return marker
+    }
+    private fun getTimeNow() : String{
+        return System.currentTimeMillis().let { current ->
+            SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
+        }
     }
 
+    private fun getDisSpeed(){
+        timeHandler = MyHandler()
+    }
 
+    inner class MyHandler : Handler(){
+        private var time = 0
+        private var distance = 0
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
 
+            this.sendEmptyMessageDelayed(0, 1000)
+            time ++
+            Toast.makeText(requireContext(), mLocation.toString(), Toast.LENGTH_SHORT).show()
+
+            if(time %3==0){
+
+                curLat = mLocation!!.latitude
+                curLon = mLocation!!.longitude
+
+                val calDis = CalDistance()
+                distance = calDis.getDistance(befLat, befLon, curLat, curLon).toInt()
+                distance = ((distance*100)/100.0).toInt()
+                sumDistance += distance
+
+                speed = distance/time
+                speed = ((speed*100)/100.0).toInt()
+
+                befLon = curLon
+                befLat = curLat
+            }
+        }
+    }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val marker = LatLng(35.241615, 128.695587)
-        mMap.addMarker(MarkerOptions().position(marker).title("Marker LAB"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
     }
 
     private fun initLocation(){
@@ -121,8 +175,8 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             maxWaitTime = 100
         }
+        addLocationListener()
     }
-
     @SuppressLint("MissingPermission")
     private fun addLocationListener(){
         fusedLocationProviderClient!!.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper()!!)
@@ -137,35 +191,29 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
             location.run {
                 val latLng = LatLng(latitude, longitude)
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
-                while(ridingState){
-                    endLatLng = LatLng(latitude, longitude)
-                    mMap.addPolyline(polylineOptions)
-                    startLatLng = LatLng(latitude, longitude)
+                if(ridingState){
+                    drawPath(latLng)
+                    getDisSpeed()
                 }
             }
-
         }
     }
-    private val polylineOptions = PolylineOptions()
-//        .add(
-//        when(startLatLng){
-//            LatLng(0.0,0.0) -> LatLng(mLocation!!.latitude, mLocation!!.longitude)
-//            else -> startLatLng
-//        })
-        .add(startLatLng).add(endLatLng).width(5f).color(Color.RED)
+    private fun drawPath(latLng: LatLng){
+        endLatLng = LatLng(latLng.latitude, latLng.longitude)
+        val polylineOptions = PolylineOptions().add(LatLng(36.4, -122.5)).add(endLatLng).width(5f).color(Color.RED)
+        mMap.addPolyline(polylineOptions)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 18f));
+        startLatLng = endLatLng
+    }
 
     private fun changeCurrentLocation(location : Location){
+        if (mLocation==null){
+            startLatLng = LatLng(location.latitude, location.longitude)
+            marker(startLatLng, "현재위치")
+        }
         mLocation = location
-        viewModel.mLocation = mLocation
-
-        viewModel.befLat = location.latitude
-        viewModel.befLon = location.longitude
-
-        val marker = LatLng(mLocation!!.latitude, mLocation!!.longitude)
-        mMap.addMarker(MarkerOptions().position(marker).title("내 위치"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
-
+        befLat = location.latitude
+        befLon = location.longitude
     }
     override fun onResume() {
         super.onResume()
@@ -179,7 +227,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         fusedLocationProviderClient!!.removeLocationUpdates(locationCallback)
     }
 
-    private val PERMISSION_CODE = 1313
+    private val PERMISSION_CODE = 100
 
     //  권한 요청
     private fun requirePermissions(permissions: Array<String>){
@@ -188,6 +236,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
             ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
         }
         if (isAllPermissionsGranted) {    //  모든 권한이 허용되어 있을 경우
+            Toast.makeText(requireContext(), "권한 있음", Toast.LENGTH_SHORT).show()
             //permissionGranted()
         } else { //  그렇지 않을 경우 권한 요청
             ActivityCompat.requestPermissions(requireActivity(), permissions, PERMISSION_CODE)
@@ -217,7 +266,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     // 권한이 있는 경우 실행
     private fun permissionGranted() {
         Toast.makeText(requireContext(), "위치 권한 수락 완료", Toast.LENGTH_SHORT).show() // 권한이 있는 경우 구글 지도를준비하는 코드 실행
-        addLocationListener()
+
     }
     // 권한이 없는 경우 실행
     private fun permissionDenied() {
