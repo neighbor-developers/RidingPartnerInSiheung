@@ -12,24 +12,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/ridingMapView"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toTopOf="@+id/changeRidingStateBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <fragment
+                android:id="@+id/ridingMapView"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".MapsFragment" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="---주행 정보---"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/distanceText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.distanceText}"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/speedText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:text="@{viewModel.speedText}" />
+
+                <TextView
+                    android:id="@+id/averSpeedText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:text="@{viewModel.averSpeedText}" />
+            </LinearLayout>
+        </FrameLayout>
 
         <Button
             android:id="@+id/changeRidingStateBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="시작"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

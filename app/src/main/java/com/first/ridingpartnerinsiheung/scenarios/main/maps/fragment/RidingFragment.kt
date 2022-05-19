@@ -41,6 +41,8 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap : GoogleMap
     private var ridingState = false // 라이딩 상태
+
+    private var curLatLng = LatLng(0.0,0.0) // 맵 켰을때 위치
     private var startLatLng = LatLng(0.0,0.0) // polyline 시작점
     private var endLatLng = LatLng(0.0,0.0) // polyline 끝점
 
@@ -50,25 +52,12 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     private var mLocation : Location? = null
     private var myLocationMarker : Marker? = null
 
-    private var sumDistance = 0
-    private var timer = 0
-    private var speed = 0
-
     private var savedTimer = 0
-    private var savedSpeed = 0
+    private var savedSpeed = 0.0
+    private var savedDistance = 0.0
 
-    private var befLat: Double = 0.0
-    private var befLon: Double = 0.0
-    private var curLat: Double = 0.0
-    private var curLon: Double = 0.0
-
-    private var startTime = System.currentTimeMillis().let { current ->
-        SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
-    }
+    private var startTime = ""
     private var endTime = ""
-
-    private lateinit var timeHandler: MyHandler
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,24 +83,33 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     private fun changeRidingState(){
         binding.changeRidingStateBtn.setOnClickListener {
             if(!ridingState) {
-                speed = 0
-                timer = 0
                 binding.changeRidingStateBtn.text = "중지"
-                ridingState = true
+                ridingState = true // 라이딩중
                 mLocation?.let {
-                    getTimeNow().also { startTime = it }
-                    var startMarker = marker(LatLng(it.latitude, it.longitude), "출발지점")
-                    myLocationMarker?.remove()
+                    startLatLng = LatLng(it.latitude, it.longitude)
+                    viewModel.befLat = startLatLng.latitude
+                    viewModel.befLon = startLatLng.longitude
+
+                    viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
+                    startTime = getTimeNow() // 시작 시잔
+
+                    var startMarker = marker(startLatLng, "출발지점") // 출발지점 마크
+                    myLocationMarker?.remove() // 현재위치 마크 삭제
                 }
             }else{
                 binding.changeRidingStateBtn.text = "시작"
+                ridingState = false
                 mLocation?.let {
+                    viewModel.stopCal()
+
+                    savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
+                    savedTimer = viewModel.timer.value // 총 주행시간 받아오기
+                    savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
+
                     endLatLng = LatLng(it.latitude, it.longitude)
-                    var endMarker = marker(endLatLng, "도착 지점")
-                    savedSpeed = speed
-                    savedTimer = timer
                     endTime = getTimeNow()
-                    timeHandler.removeMessages(0)
+
+                    var endMarker = marker(endLatLng, "도착 지점")
                 }
 
             }
@@ -129,38 +127,6 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun getDisSpeed(){
-        timeHandler = MyHandler()
-    }
-
-    inner class MyHandler : Handler(){
-        private var time = 0
-        private var distance = 0
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-
-            this.sendEmptyMessageDelayed(0, 1000)
-            time ++
-            Toast.makeText(requireContext(), mLocation.toString(), Toast.LENGTH_SHORT).show()
-
-            if(time %3==0){
-
-                curLat = mLocation!!.latitude
-                curLon = mLocation!!.longitude
-
-                val calDis = CalDistance()
-                distance = calDis.getDistance(befLat, befLon, curLat, curLon).toInt()
-                distance = ((distance*100)/100.0).toInt()
-                sumDistance += distance
-
-                speed = distance/time
-                speed = ((speed*100)/100.0).toInt()
-
-                befLon = curLon
-                befLat = curLat
-            }
-        }
-    }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
     }
@@ -193,7 +159,6 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
                 val latLng = LatLng(latitude, longitude)
                 if(ridingState){
                     drawPath(latLng)
-                    getDisSpeed()
                 }
             }
         }
@@ -208,12 +173,11 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
     private fun changeCurrentLocation(location : Location){
         if (mLocation==null){
-            startLatLng = LatLng(location.latitude, location.longitude)
-            marker(startLatLng, "현재위치")
+            curLatLng = LatLng(location.latitude, location.longitude)
+            myLocationMarker = marker(curLatLng, "현재위치")
         }
         mLocation = location
-        befLat = location.latitude
-        befLon = location.longitude
+        viewModel.mLocation = location
     }
     override fun onResume() {
         super.onResume()

@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 
@@ -24,52 +25,67 @@ class RidingViewModel: ViewModel() {
 
     var mLocation : Location? = null
 
-    var currentTime = MutableStateFlow(
-        SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-    )
+    var sumDistance = MutableStateFlow(0.0)
+    var averSpeed = MutableStateFlow(0.0)
 
-    lateinit var timeHandler: MyHandler
-
-    private var sumDistance = 0
-    private var time = 0
-    private var speed = 0
+    var speed = MutableStateFlow(0.0)
+    var timer = MutableStateFlow(0)
 
     var befLat: Double = 0.0
     var befLon: Double = 0.0
-    private var curLat: Double = 0.0
-    private var curLon: Double = 0.0
 
-    fun getDisSpeed(){
-        timeHandler = MyHandler()
-        timeHandler.sendEmptyMessage(0)
-    }
+    var curLat: Double = 0.0
+    var curLon: Double = 0.0
 
-    inner class MyHandler : Handler(){
-        private var time = 0
-        private var distance = 0
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
+    var speedText = MutableStateFlow("주행 거리 :")
+    var distanceText = MutableStateFlow("")
+    var averSpeedText = MutableStateFlow("")
 
-            this.sendEmptyMessageDelayed(0, 1000)
-            time ++
+    private lateinit var calDisSpeedJob : Job
 
-            if(time %3==0){
+    fun calDisSpeed() {
 
-                curLat = mLocation!!.latitude
-                curLon = mLocation!!.longitude
+        befLat = mLocation!!.latitude
+        befLon = mLocation!!.longitude
 
-                val calDis = CalDistance()
-                distance = calDis.getDistance(befLat, befLon, curLat, curLon).toInt()
-                distance = ((distance*100)/100.0).toInt()
-                sumDistance += distance
+        calDisSpeedJob = CoroutineScope(Dispatchers.Main).launch {
+            var distance : Double
 
-                speed = distance/time
-                speed = ((speed*100)/100.0).toInt()
+            while(true) {
+                delay(1000) // 1초마다 타이머 증가
 
-                befLon = curLon
-                befLat = curLat
+                timer.value++
+
+                if(timer.value % 3 == 0) { // 3초마다 속도, 거리 업데이트
+                    curLat = mLocation!!.latitude
+                    curLon = mLocation!!.longitude
+
+                    val calDis = CalDistance()
+                    distance = calDis.getDistance(befLat, befLon, curLat, curLon)
+                    distance = (distance * 100) / 100.0
+
+                    sumDistance.value += distance // 총 주행거리 누적
+
+                    speed.value = distance / 3
+                    speed.value = ((speed.value * 100) / 100.0) // 순간 속도
+
+                    averSpeed.value = sumDistance.value/timer.value // 평균 속도
+
+                    befLon = curLon
+                    befLat = curLat
+
+                    distanceText.value = "주행 거리 : ${sumDistance.value}"
+                    averSpeedText.value= "평균 속도 : ${averSpeed.value}"
+                    speedText.value = "속도 : ${speed.value}"
+                }
             }
         }
+    }
+    fun stopCal() {
+        CoroutineScope(Dispatchers.Main).launch {
+            calDisSpeedJob.cancelAndJoin()
+        }
+
     }
 
 }
