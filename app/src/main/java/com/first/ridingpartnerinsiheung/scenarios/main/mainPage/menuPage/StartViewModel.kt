@@ -88,7 +88,7 @@ class StartViewModel() : ViewModel() {
     // 강수 타입 텍스트 변환
     fun getRainType(rainType: String): String {
         return when (rainType) {
-            "0" -> "없음"
+            "0" -> "강수 예정 없음"
             "1" -> "비"
             "2" -> "비/눈"
             "3" -> "눈"

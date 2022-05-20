@@ -107,11 +107,34 @@ class StartFragment : Fragment() {
         viewModel.run{
             weather.onEach{
                 when(it!!.sky){
-                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun2)
                     "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.cloud)
                     "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.overcast)
                     else -> binding.skyTypeImg.setImageResource(R.drawable.sun)
                 }
+                when(it!!.rainType){
+                    "강수 예정 없음" ->binding.rainTypeImg.setImageResource(R.drawable.not_rain)
+                    "비" -> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
+                    "비/눈" -> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
+                    "눈" ->  binding.rainTypeImg.setImageResource(R.drawable.snow)
+                    "빗방울" -> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
+                    "빗방울 눈날림"-> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
+                    "눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.snow)
+                }
+//                when(it!!.rainType){
+//                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+//                    "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.cloud)
+//                    "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.overcast)
+//                    else -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+//                }
+//                when(it!!.rainType){
+//                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+//                    "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.cloud)
+//                    "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.overcast)
+//                    else -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+//                }
+
+
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
         return binding.root

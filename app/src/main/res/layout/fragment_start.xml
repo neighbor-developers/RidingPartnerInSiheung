@@ -20,6 +20,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:fontFamily="@font/main_font"
                 android:text="HOME"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp"
@@ -57,8 +58,10 @@
                         android:layout_height="20dp"
                         android:textSize="15dp"
                         android:textStyle="bold"
-                        android:text="오늘의 날씨" />
+
+                        android:text="날씨 정보" />
                     <ImageView
+                        android:layout_margin="10dp"
                         android:id="@+id/skyTypeImg"
                         android:gravity="center"
                         android:layout_width="match_parent"
@@ -67,131 +70,59 @@
                         android:layout_weight="1">
 
                     </ImageView>
+                    <TextView
+                        android:id="@+id/skyTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:textColor="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.4"
+                        android:text="@{viewModel.weather.sky}" >
+
+                    </TextView>
 
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="0dp"
                     android:background="@drawable/button_purple"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="4"
                     android:layout_margin="10dp"
-                    android:layout_weight="4">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="5dp"
+                    android:padding="10dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_gravity="right"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:textColor="#FFFFFF"
+                        android:layout_height="20dp"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
 
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_gravity="right"
-                            android:gravity="right|center_vertical"
-                            android:layout_width="match_parent"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text=" " />
+                        android:text="강수 정보" />
+                    <ImageView
+                        android:layout_margin="10dp"
+                        android:id="@+id/rainTypeImg"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:scaleType="fitCenter"
+                        android:layout_weight="1">
 
-                        <TextView
-                            android:layout_gravity="right"
-                            android:gravity="right|center_vertical"
-                            android:layout_width="match_parent"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="날씨 :" />
-                        <TextView
-                            android:layout_gravity="right"
-                            android:gravity="right|center_vertical"
-                            android:layout_width="match_parent"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="강수 :" />
-                        <TextView
-                            android:gravity="right|center_vertical"
-                            android:layout_width="match_parent"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="온도 :" />
-                        <TextView
+                    </ImageView>
+                    <TextView
+                        android:id="@+id/rainTypeTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:textColor="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.4"
+                        android:text="@{viewModel.weather.rainType}" >
 
-                            android:gravity="right|center_vertical"
-                            android:layout_width="match_parent"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="습도 :" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:padding="5dp"
+                    </TextView>
 
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_gravity="right"
-                            android:gravity="left|center_vertical"
-                            android:layout_width="match_parent"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text=" " />
-                        <TextView
-                            android:id="@+id/skyTV"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:text="@{viewModel.weather.sky}" />
-                        <TextView
-                            android:id="@+id/rainTypeTV"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:text="@{viewModel.weather.rainType}" />
-                        <TextView
-                            android:id="@+id/tempTv"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:text="@{viewModel.weather.temp}" />
-                        <TextView
-                            android:id="@+id/humidityTV"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            android:text="@{viewModel.weather.humidity}" />
-                    </LinearLayout>
 
                 </LinearLayout>
                 <LinearLayout
@@ -201,12 +132,19 @@
                     >
 
                 </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                android:layout_weight="3">
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </TextView>
+
 <!--                <android.widget.Button-->
 <!--                    android:id="@+id/myPageBtn"-->
 <!--                    android:layout_width="match_parent"-->
@@ -267,6 +205,20 @@
 <!--                    android:textColor="#000000"-->
 <!--                    android:textSize="20dp"-->
 <!--                    android:textStyle="bold"/>-->
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
             </LinearLayout>
 
 
