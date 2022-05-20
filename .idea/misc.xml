@@ -7,22 +7,12 @@
         <entry key="..\:/Users/jsy94/AndroidStudioProjects/RidingPartnerInSiheung/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/jsy94/AndroidStudioProjects/RidingPartnerInSiheung/app/src/main/res/layout/activity_map.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/jsy94/AndroidStudioProjects/RidingPartnerInSiheung/app/src/main/res/layout/activity_sign.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/jsy94/AndroidStudioProjects/RidingPartnerInSiheung/app/src/main/res/layout/fragment_rental_location.xml" value="0.1" />
+        <entry key="..\:/Users/jsy94/AndroidStudioProjects/RidingPartnerInSiheung/app/src/main/res/layout/fragment_riding.xml" value="0.1" />
         <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung/app/src/main/res/layout/fragment_start.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/botto_icon_color.xml" value="0.1" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/ic_baseline_home_24_clicked.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/ic_baseline_pedal_bike_24.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/ic_baseline_storefront_24.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/ic_home_selector.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1905" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
         <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/fragment_my_page.xml" value="0.1875" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/fragment_path_list.xml" value="0.358695652173913" />
         <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/fragment_recording.xml" value="0.1875" />
         <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/fragment_start.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/menu/bottom_menu.xml" value="0.36614583333333334" />
         <entry key="app/src/main/res/layout/activity_loading.xml" value="0.11367753623188406" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16197916666666667" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.23233695652173914" />
@@ -38,7 +28,10 @@
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.14635416666666667" />
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.1707193515704154" />
         <entry key="app/src/main/res/layout/fragment_path_list.xml" value="0.19322916666666667" />
+        <entry key="app/src/main/res/layout/fragment_record.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_recording.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_rental_location.xml" value="0.2526041666666667" />
+        <entry key="app/src/main/res/layout/fragment_riding.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_start.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/main_lv_item.xml" value="0.13019250253292808" />
       </map>

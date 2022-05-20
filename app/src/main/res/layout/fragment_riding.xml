@@ -15,7 +15,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="@+id/changeRidingStateBtn"
+            app:layout_constraintBottom_toBottomOf="@id/buttonLayout"
             app:layout_constraintTop_toTopOf="parent">
 
             <fragment
@@ -27,13 +27,17 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/riding_radius"
+                android:layout_margin="20dp"
+                android:padding="20dp"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:text="---주행 정보---"
                     android:textColor="@color/black" />
 
@@ -63,15 +67,41 @@
             </LinearLayout>
         </FrameLayout>
 
-        <Button
-            android:id="@+id/changeRidingStateBtn"
+        <LinearLayout
+            android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="시작"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingEnd="5dp"
+                android:text="start"
+                />
+            <Button
+                android:id="@+id/pauseBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingStart="5dp"
+                android:layout_height="wrap_content"
+                android:text="stop"
+                android:visibility="gone"
+                />
+            <Button
+                android:id="@+id/saveAndStopBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingStart="5dp"
+                android:layout_height="wrap_content"
+                android:text="저장"
+                android:visibility="gone"
+                />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
