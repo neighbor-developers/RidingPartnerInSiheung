@@ -69,6 +69,7 @@ class StartViewModel() : ViewModel() {
                             }
                             _weather.rainType = getRainType(_weather.rainType)
                             _weather.sky = getSky(_weather.sky)
+                            _weather.temp = _weather.temp+" °C"
 
                             weather.value = _weather
                         }catch (e : NullPointerException){

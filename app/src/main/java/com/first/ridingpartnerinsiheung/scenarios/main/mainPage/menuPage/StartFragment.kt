@@ -93,7 +93,7 @@ class StartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         initBinding()
-        initClickListener()
+//        initClickListener()
 
         // 날씨 정보를 받아오기 위한 GPS 받기
         mLocationRequest = LocationRequest.create().apply {
@@ -122,20 +122,20 @@ class StartFragment : Fragment() {
         binding.viewModel = viewModel
     }
 
-    private fun initClickListener(){
-        binding.recommendBtn.setOnClickListener {
-            (activity as MainActivity).setFrag(PathListFragment())
-        }
-        binding.findOfficeBtn.setOnClickListener {
-            startActivity(Intent(requireContext(), MapActivity::class.java))
-        }
-        binding.myPageBtn.setOnClickListener {
-            (activity as MainActivity).setFrag(MyPageFragment())
-        }
-        binding.ridingBtn.setOnClickListener {
-            startActivity(Intent(requireContext(), MapActivity::class.java))
-        }
-    }
+//    private fun initClickListener(){
+//        binding.recommendBtn.setOnClickListener {
+//            (activity as MainActivity).setFrag(PathListFragment())
+//        }
+//        binding.findOfficeBtn.setOnClickListener {
+//            startActivity(Intent(requireContext(), MapActivity::class.java))
+//        }
+//        binding.myPageBtn.setOnClickListener {
+//            (activity as MainActivity).setFrag(MyPageFragment())
+//        }
+//        binding.ridingBtn.setOnClickListener {
+//            startActivity(Intent(requireContext(), MapActivity::class.java))
+//        }
+//    }
 
     private fun startLocationUpdate(){
         checkPermission()
