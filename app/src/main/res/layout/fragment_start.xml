@@ -25,7 +25,19 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20dp"
                 android:gravity="center"
-                android:layout_weight="0.2">
+                android:layout_weight="0.3">
+
+            </TextView>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="@{viewModel.weather.temp}"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:layout_marginLeft="29dp"
+                android:gravity="left|center_vertical"
+                android:layout_weight="0.4">
 
             </TextView>
 
