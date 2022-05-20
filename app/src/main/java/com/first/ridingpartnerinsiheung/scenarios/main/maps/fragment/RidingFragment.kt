@@ -2,6 +2,9 @@ package com.first.ridingpartnerinsiheung.scenarios.main.maps.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -20,7 +23,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.CalDistance
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.RidingViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -68,6 +73,8 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
         initLocation()
         changeRidingState()
+
+
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,58 +87,73 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
     }
-    private fun changeRidingState(){
-        binding.changeRidingStateBtn.setOnClickListener {
-            if(!ridingState) {
-                binding.changeRidingStateBtn.text = "중지"
-                ridingState = true // 라이딩중
-                mLocation?.let {
-                    startLatLng = LatLng(it.latitude, it.longitude)
-                    viewModel.befLat = startLatLng.latitude
-                    viewModel.befLon = startLatLng.longitude
+    private fun changeRidingState() {
+        binding.startBtn.setOnClickListener {
+            // 시작 눌렀을때
+            binding.startBtn.visibility = View.GONE
+            binding.pauseBtn.visibility = View.VISIBLE
+            binding.saveAndStopBtn.visibility = View.GONE
 
-                    viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
-                    startTime = getTimeNow() // 시작 시잔
+            ridingState = true // 라이딩중
+            viewModel.mLocation?.let {
+                var startLatLng = LatLng(it.latitude, it.longitude)
+                viewModel.befLat = startLatLng.latitude
+                viewModel.befLon = startLatLng.longitude
 
-                    var startMarker = marker(startLatLng, "출발지점") // 출발지점 마크
-                    myLocationMarker?.remove() // 현재위치 마크 삭제
-                }
-            }else{
-                binding.changeRidingStateBtn.text = "시작"
-                ridingState = false
-                mLocation?.let {
-                    viewModel.stopCal()
+                viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
+                startTime = viewModel.getTimeNow() // 시작 시잔
 
-                    savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
-                    savedTimer = viewModel.timer.value // 총 주행시간 받아오기
-                    savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
-
-                    endLatLng = LatLng(it.latitude, it.longitude)
-                    endTime = getTimeNow()
-
-                    var endMarker = marker(endLatLng, "도착 지점")
-                }
-
+                var startMarker = marker(startLatLng, "출발지점") // 출발지점 마크
+                myLocationMarker?.remove() // 현재위치 마크 삭제
             }
         }
+        binding.pauseBtn.setOnClickListener {
+            binding.startBtn.visibility = View.VISIBLE
+            binding.startBtn.text = "다시 시작"
+            binding.saveAndStopBtn.visibility = View.VISIBLE
+            binding.pauseBtn.visibility = View.GONE
+            ridingState = false
+
+            mLocation?.let {
+                viewModel.stopCal()
+
+                savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
+                savedTimer = viewModel.timer.value // 총 주행시간 받아오기
+                savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
+
+                var endLatLng = LatLng(it.latitude, it.longitude)
+                endTime = viewModel.getTimeNow()
+
+                var endMarker = marker(endLatLng, "도착 지점")
+            }
+            // 다이얼로그 키면서 저장 및 중지하시겠습니까? -> 데이터 저장
+        }
+        binding.saveAndStopBtn.setOnClickListener {
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("기록 저장")
+            builder.setMessage("저장하시겠습니까?")
+            builder.setPositiveButton("저장") { dialogInterface: DialogInterface, i: Int ->
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+            }
+            builder.setNegativeButton("취소") { dialogInterface: DialogInterface, i: Int ->
+            }
+
+            builder.show()
+        }
     }
-    // 시작지점 마크
+     //시작지점 마크
     private fun marker(latLng: LatLng, title : String) : Marker? {
         val marker = mMap.addMarker(MarkerOptions().position(latLng).title(title))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
         return marker
     }
-    private fun getTimeNow() : String{
-        return System.currentTimeMillis().let { current ->
-            SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
-        }
-    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-    }
 
-    private fun initLocation(){
+    }
+    fun initLocation(){
         fusedLocationProviderClient = FusedLocationProviderClient(requireContext())
         locationCallback = MyLocationCallBack()
 
@@ -163,9 +185,13 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
     private fun drawPath(latLng: LatLng){
+        if(startLatLng == LatLng(0.0, 0.0)){
+            startLatLng = latLng
+        }
         endLatLng = LatLng(latLng.latitude, latLng.longitude)
-        val polylineOptions = PolylineOptions().add(LatLng(36.4, -122.5)).add(endLatLng).width(5f).color(Color.RED)
+        val polylineOptions = PolylineOptions().add(startLatLng).add(endLatLng).width(5f).color(Color.RED)
         mMap.addPolyline(polylineOptions)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 18f));
         startLatLng = endLatLng
@@ -187,9 +213,10 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         super.onPause()
         removeLocationListener()
     }
-    private fun removeLocationListener() { // 앱 동작하지 않을때에는 위치 정보 요청 제거
+    fun removeLocationListener() { // 앱 동작하지 않을때에는 위치 정보 요청 제거
         fusedLocationProviderClient!!.removeLocationUpdates(locationCallback)
     }
+
 
     private val PERMISSION_CODE = 100
 

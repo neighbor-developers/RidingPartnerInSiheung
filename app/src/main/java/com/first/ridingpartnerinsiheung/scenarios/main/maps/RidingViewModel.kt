@@ -1,12 +1,21 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ContentProvider
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.first.ridingpartnerinsiheung.data.Date
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.fragment.RidingFragment
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -14,7 +23,9 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.coroutines.*
@@ -37,7 +48,7 @@ class RidingViewModel: ViewModel() {
     var curLat: Double = 0.0
     var curLon: Double = 0.0
 
-    var speedText = MutableStateFlow("주행 거리 :")
+    var speedText = MutableStateFlow("")
     var distanceText = MutableStateFlow("")
     var averSpeedText = MutableStateFlow("")
 
@@ -48,7 +59,7 @@ class RidingViewModel: ViewModel() {
         befLat = mLocation!!.latitude
         befLon = mLocation!!.longitude
 
-        calDisSpeedJob = CoroutineScope(Dispatchers.Main).launch {
+        calDisSpeedJob = CoroutineScope(Dispatchers.IO).launch {
             var distance : Double
 
             while(true) {
@@ -85,7 +96,12 @@ class RidingViewModel: ViewModel() {
         CoroutineScope(Dispatchers.Main).launch {
             calDisSpeedJob.cancelAndJoin()
         }
-
     }
+    fun getTimeNow() : String{
+        return System.currentTimeMillis().let { current ->
+            SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
+        }
+    }
+
 
 }

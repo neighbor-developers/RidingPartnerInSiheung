@@ -13,6 +13,7 @@
         <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/fragment_my_page.xml" value="0.1875" />
         <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/fragment_recording.xml" value="0.1875" />
         <entry key="..\:/Users/qhwns/AndroidStudioProjects/RidingPartnerInSiheung1/app/src/main/res/layout/fragment_start.xml" value="0.358695652173913" />
+        <entry key="app/src/main/res/drawable/riding_radius.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_loading.xml" value="0.11367753623188406" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16197916666666667" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.23233695652173914" />
@@ -22,6 +23,8 @@
         <entry key="app/src/main/res/layout/activity_sign.xml" value="0.16017106650532156" />
         <entry key="app/src/main/res/layout/activity_start.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_path.xml" value="0.2635833740234375" />
+        <entry key="app/src/main/res/layout/dialog_recode.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_record.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_list_view.xml" value="0.23233695652173914" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.21467391304347827" />
