@@ -24,7 +24,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBhkfP__jeCmYO8B2eJnnd6PvBOT6u6HgI" />
-
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="rlidnseith" />
         <activity
             android:name=".scenarios.main.mainPage.MainActivity"
             android:exported="false" />
