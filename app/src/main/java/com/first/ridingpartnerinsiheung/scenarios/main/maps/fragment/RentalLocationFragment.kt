@@ -14,16 +14,15 @@ import androidx.core.content.ContextCompat
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.RentalLocation
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.RentalLocationXY
-
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.util.FusedLocationSource
 
-class RentalLocationFragment : Fragment(), OnMapReadyCallback {
-
+class RentalLocationFragment : Fragment(), com.naver.maps.map.OnMapReadyCallback {
+    private lateinit var naverMap: NaverMap
+    private lateinit var locationSource: FusedLocationSource
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,41 +33,64 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment?
+
         mapFragment?.getMapAsync(this)
     }
 
-    override fun onMapReady(googleMap: GoogleMap){
+    override fun onMapReady(naverMap: NaverMap){
 
-        val latLng = LatLng(37.349741467772, 126.76182486561)
+        this.naverMap = naverMap
+        val uiSettings = naverMap.uiSettings
+        // 맵 첫 시작 카메라 위치
+        val latLng =com.naver.maps.geometry.LatLng(37.349741467772, 126.76182486561)
 
-        googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(12f))
+        // 맵 타입
+        naverMap.mapType = NaverMap.MapType.Navi
+        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BICYCLE, true)
 
-        addMarkers(googleMap)
-        if(ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            googleMap.setMyLocationEnabled(true)
+        // 맵 시작 위치와 줌 설정
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, 11.0)
+            .animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
+
+        //대여소 위치 추가
+        addMarkers(naverMap)
+
+        // 내 위치 받기
+        uiSettings.isLocationButtonEnabled = true
+
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            this.naverMap = naverMap
+
+            locationSource = FusedLocationSource(this ,
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            naverMap.locationSource = locationSource
+            naverMap.locationTrackingMode = LocationTrackingMode.Face
         } else{
-            Toast.makeText(requireActivity(), "권한을 설정하세요", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "권한을 설정하세요", Toast.LENGTH_SHORT).show()
             permissionDenied()
-            googleMap.setMyLocationEnabled(true)
         }
     }
     private val places:List<RentalLocation> by lazy{
         RentalLocationXY(requireActivity()).read()
     }
 
-    private fun addMarkers(googleMap: GoogleMap){
+    private fun addMarkers(naverMap: NaverMap){
         places.forEach{ place ->
-            val marker = googleMap.addMarker(
-                MarkerOptions()
-                    .title(place.name)
-                    .position(place.location)
-            )
+            val marker = Marker()
+            marker.position = com.naver.maps.geometry.LatLng(
+                place.location.latitude,
+                place.location.longitude)
+            //marker.icon = OverlayImage.fromResource(R.drawable.))
+            marker.map=naverMap
         }
     }
-    private val PERMISSION_CODE = 9999
+
+    companion object{
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+    }
 
     //  권한 요청
     private fun requirePermissions(permissions: Array<String>){
@@ -79,7 +101,7 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
         if (isAllPermissionsGranted) {    //  모든 권한이 허용되어 있을 경우
             //permissionGranted()
         } else { //  그렇지 않을 경우 권한 요청
-            ActivityCompat.requestPermissions(requireActivity(), permissions, PERMISSION_CODE)
+            ActivityCompat.requestPermissions(requireActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE)
         }
     }
 
@@ -91,7 +113,7 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode == PERMISSION_CODE){
+        if(requestCode == LOCATION_PERMISSION_REQUEST_CODE){
             if(grantResults.isNotEmpty()){
                 for(grant in grantResults){
                     if(grant != PackageManager.PERMISSION_GRANTED) {
