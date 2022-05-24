@@ -1,5 +1,7 @@
 package com.first.ridingpartnerinsiheung.data
 
-class PlaceList (val placeTxt : String, val placeDistance : String, val photo : Int, val lng: Int, val rtt:Int) {
+import com.google.android.gms.maps.model.LatLng
+
+class PlaceList (val placeTxt : String, val placeDistance : String, val photo : Int, val path: Array<LatLng>) {
     var placeList = arrayListOf<PlaceList>()
 }

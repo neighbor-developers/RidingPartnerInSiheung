@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.PlaceList
 
-class PathListAdapter(val context: Context, val placeList : ArrayList<PlaceList>) : BaseAdapter() {
+class PathListAdapter(val context: Context, val placeList : List<PlaceList>) : BaseAdapter() {
     override fun getView(position : Int, convertView: View?, parent : ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.main_lv_item, null)
 
