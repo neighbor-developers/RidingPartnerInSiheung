@@ -1,38 +1,17 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.ContentProvider
-import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.first.ridingpartnerinsiheung.data.Date
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.fragment.RidingFragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import androidx.lifecycle.viewModelScope
+import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 
 class RidingViewModel: ViewModel() {
+
+    private var _event = MutableSharedFlow<RidingEvent>()
+    var event = _event.asSharedFlow()
 
     var mLocation : Location? = null
 
@@ -42,58 +21,57 @@ class RidingViewModel: ViewModel() {
     var speed = MutableStateFlow(0.0)
     var timer = MutableStateFlow(0)
 
-    var befLat: Double = 0.0
-    var befLon: Double = 0.0
+    var befLatLng = LatLng(0.0, 0.0)
+    var curLatLng = LatLng(0.0, 0.0)
 
-    var curLat: Double = 0.0
-    var curLon: Double = 0.0
+    val distanceText = sumDistance.map {
+        "주행 거리 :" + it
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
-    var speedText = MutableStateFlow("")
-    var distanceText = MutableStateFlow("")
-    var averSpeedText = MutableStateFlow("")
+    val averSpeedText = averSpeed.map {
+        "평균 속도 : "+ it
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
+
+    val speedText = speed.map {
+        "순간 속도 : "+ it
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
+
+    val timeText = timer.map {
+        "주행 시간 : "+it
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     private lateinit var calDisSpeedJob : Job
 
     fun calDisSpeed() {
 
-        befLat = mLocation!!.latitude
-        befLon = mLocation!!.longitude
-
-        calDisSpeedJob = CoroutineScope(Dispatchers.IO).launch {
+        calDisSpeedJob = viewModelScope.launch(Dispatchers.Default) {
             var distance : Double
 
-            while(true) {
-                delay(1000) // 1초마다 타이머 증가
+            delay(1000) // 1초마다 타이머 증가
 
-                timer.value++
+            timer.value+=1
 
-                if(timer.value % 3 == 0) { // 3초마다 속도, 거리 업데이트
-                    curLat = mLocation!!.latitude
-                    curLon = mLocation!!.longitude
+            if(timer.value % 2 == 0) { // 3초마다 속도, 거리 업데이트
+                curLatLng = LatLng(mLocation!!.latitude, mLocation!!.longitude)
 
-                    val calDis = CalDistance()
-                    distance = calDis.getDistance(befLat, befLon, curLat, curLon)
-                    distance = (distance * 100) / 100.0
+                val calDis = CalDistance()
+                distance = calDis.getDistance(befLatLng.latitude, befLatLng.longitude, curLatLng.latitude, curLatLng.longitude)
+                distance = (distance * 100) / 100.0
 
-                    sumDistance.value += distance // 총 주행거리 누적
+                sumDistance.value += distance // 총 주행거리 누적
 
-                    speed.value = distance / 3
-                    speed.value = ((speed.value * 100) / 100.0) // 순간 속도
+                speed.value = distance / 3
+                speed.value = ((speed.value * 100) / 100.0) // 순간 속도
 
-                    averSpeed.value = sumDistance.value/timer.value // 평균 속도
+                averSpeed.value = sumDistance.value/timer.value // 평균 속도
 
-                    befLon = curLon
-                    befLat = curLat
+                befLatLng = curLatLng
 
-                    distanceText.value = "주행 거리 : ${sumDistance.value}"
-                    averSpeedText.value= "평균 속도 : ${averSpeed.value}"
-                    speedText.value = "속도 : ${speed.value}"
-                }
             }
         }
     }
     fun stopCal() {
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
             calDisSpeedJob.cancelAndJoin()
         }
     }
@@ -102,6 +80,13 @@ class RidingViewModel: ViewModel() {
             SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
         }
     }
-
+    sealed class RidingEvent{
+        object StartRiding : RidingEvent()
+        object StopRiding : RidingEvent()
+        object SaveRiding : RidingEvent()
+    }
+    fun startRiding() = viewModelScope.launch { _event.emit(RidingEvent.StartRiding) }
+    fun stopRiding() = viewModelScope.launch { _event.emit(RidingEvent.StopRiding) }
+    fun saveRiding() = viewModelScope.launch { _event.emit(RidingEvent.SaveRiding) }
 
 }

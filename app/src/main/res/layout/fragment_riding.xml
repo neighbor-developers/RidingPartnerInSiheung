@@ -20,10 +20,9 @@
 
             <fragment
                 android:id="@+id/ridingMapView"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:name="com.naver.maps.map.MapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:context=".MapsFragment" />
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -64,6 +63,13 @@
                     android:layout_weight="1"
                     android:textColor="@color/black"
                     android:text="@{viewModel.averSpeedText}" />
+                <TextView
+                    android:id="@+id/timeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:text="@{viewModel.timeText}" />
             </LinearLayout>
         </FrameLayout>
 
@@ -82,24 +88,27 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
                 android:text="start"
+                android:onClick="@{()-> viewModel.startRiding()}"
                 />
             <Button
-                android:id="@+id/pauseBtn"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:paddingStart="5dp"
-                android:layout_height="wrap_content"
-                android:text="stop"
-                android:visibility="gone"
-                />
-            <Button
-                android:id="@+id/saveAndStopBtn"
+                android:id="@+id/saveBtn"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:paddingStart="5dp"
                 android:layout_height="wrap_content"
                 android:text="저장"
                 android:visibility="gone"
+                android:onClick="@{()-> viewModel.saveRiding()}"
+                />
+            <Button
+                android:id="@+id/stopBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingStart="5dp"
+                android:layout_height="wrap_content"
+                android:text="중지"
+                android:visibility="gone"
+                android:onClick="@{()-> viewModel.stopRiding()}"
                 />
         </LinearLayout>
 
