@@ -18,10 +18,10 @@ class PathListFragment : Fragment() {
 
     private lateinit var binding : FragmentPathListBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? )
+    : View? {
         binding = FragmentPathListBinding.inflate(inflater, container, false)
-       // initBinding()
+
         initClickListener()
         initListView()
 

@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
+import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 
@@ -194,19 +195,20 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        checkPermission()
+        requirePermissions()
     }
 
+    //  권한 요청
     private val PERMISSION_CODE = 100
 
-    //  권한 요청
-    private fun requirePermissions(permissions: Array<String>) {
+    private fun requirePermissions(){
+        val permissions=arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
 
         val isAllPermissionsGranted = permissions.all { //  permissions의 모든 권한 체크
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                it
-            ) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
         }
         if (isAllPermissionsGranted) {    //  모든 권한이 허용되어 있을 경우
             //permissionGranted()
@@ -223,39 +225,21 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == PERMISSION_CODE) {
-            if (grantResults.isNotEmpty()) {
-                for (grant in grantResults) {
-                    if (grant != PackageManager.PERMISSION_GRANTED) {
+        if(requestCode == PERMISSION_CODE){
+            if(grantResults.isNotEmpty()){
+                for(grant in grantResults){
+                    if(grant == PackageManager.PERMISSION_GRANTED) {
+                        /*no-op*/
+                    }else{
                         permissionDenied()
-                    } else {
-                        permissionGranted()
+                        requirePermissions()
                     }
                 }
             }
         }
     }
-
-    // 권한이 있는 경우 실행
-    private fun permissionGranted() {
-        Toast.makeText(requireContext(), "위치 권한 수락 완료", Toast.LENGTH_SHORT)
-            .show() // 권한이 있는 경우 구글 지도를준비하는 코드 실행
-
-    }
-
     // 권한이 없는 경우 실행
     private fun permissionDenied() {
-        Toast.makeText(requireContext(), "위치 권한 필요", Toast.LENGTH_SHORT).show()
-        checkPermission()
-    }
-
-    private fun checkPermission() {
-        // 사용할 권한 array로 저장
-        val permissions = arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-        )
-        // 권한 확인 및 요헝
-        requirePermissions(permissions)
+        showToast("위치 권한이 필요합니다")
     }
 }

@@ -1,6 +1,7 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
@@ -26,58 +28,6 @@ class StartFragment : Fragment() {
     private val viewModel by viewModels<StartViewModel>()
     lateinit var binding : FragmentStartBinding
 
-    private val PERMISSION_CODE = 100
-
-    //  권한 요청
-    private fun requirePermissions(permissions: Array<String>){
-
-        val isAllPermissionsGranted = permissions.all { //  permissions의 모든 권한 체크
-            ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
-        }
-        if (isAllPermissionsGranted) {    //  모든 권한이 허용되어 있을 경우
-            //permissionGranted()
-        } else { //  그렇지 않을 경우 권한 요청
-            ActivityCompat.requestPermissions(requireActivity(), permissions, PERMISSION_CODE)
-        }
-    }
-
-    // 권한 요청 완료시 이 함수를 호출해 권한 요청에 대한 결과를 argument로 받을 수 있음
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if(requestCode == PERMISSION_CODE){
-            if(grantResults.isNotEmpty()){
-                for(grant in grantResults){
-                    if(grant != PackageManager.PERMISSION_GRANTED) {
-                        permissionDenied()
-                    }else{
-                        permissionGranted()
-                    }
-                }
-            }
-        }
-    }
-    // 권한이 있는 경우 실행
-    private fun permissionGranted() {
-        showToast("위치 권한 수락 완료") // 권한이 있는 경우 구글 지도를준비하는 코드 실행
-    }
-    // 권한이 없는 경우 실행
-    private fun permissionDenied() {
-        showToast("위치 권한이 필요합니다")
-    }
-    private fun checkPermission(){
-        // 사용할 권한 array로 저장
-        val permissions=arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-        )
-        // 권한 확인 및 요헝
-        requirePermissions(permissions)
-    }
 
     private lateinit var mLastLocation : Location
     private var mFusedLocationProviderClient : FusedLocationProviderClient? = null
@@ -116,20 +66,7 @@ class StartFragment : Fragment() {
                     "빗방울 눈날림"-> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
                     "눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.snow)
                 }
-//                when(it!!.rainType){
-//                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun)
-//                    "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.cloud)
-//                    "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.overcast)
-//                    else -> binding.skyTypeImg.setImageResource(R.drawable.sun)
-//                }
-//                when(it!!.rainType){
-//                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun)
-//                    "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.cloud)
-//                    "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.overcast)
-//                    else -> binding.skyTypeImg.setImageResource(R.drawable.sun)
-//                }
-
-
+//
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
         return binding.root
@@ -140,8 +77,9 @@ class StartFragment : Fragment() {
         binding.viewModel = viewModel
     }
 
+    @SuppressLint("MissingPermission")
     private fun startLocationUpdate(){
-        checkPermission()
+        requirePermissions()
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
@@ -157,6 +95,49 @@ class StartFragment : Fragment() {
 
     fun onLocationChanged(location: Location){
         mLastLocation = location
+    }
+    private val PERMISSION_CODE = 100
+
+    //  권한 요청
+    private fun requirePermissions(){
+        val permissions=arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+        val isAllPermissionsGranted = permissions.all { //  permissions의 모든 권한 체크
+            ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+        }
+        if (isAllPermissionsGranted) {    //  모든 권한이 허용되어 있을 경우
+            //permissionGranted()
+        } else { //  그렇지 않을 경우 권한 요청
+            ActivityCompat.requestPermissions(requireActivity(), permissions, PERMISSION_CODE)
+        }
+    }
+
+    // 권한 요청 완료시 이 함수를 호출해 권한 요청에 대한 결과를 argument로 받을 수 있음
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == PERMISSION_CODE){
+            if(grantResults.isNotEmpty()){
+                for(grant in grantResults){
+                    if(grant == PackageManager.PERMISSION_GRANTED) {
+                        /*no-op*/
+                    }else{
+                        permissionDenied()
+                        requirePermissions()
+                    }
+                }
+            }
+        }
+    }
+    // 권한이 없는 경우 실행
+    private fun permissionDenied() {
+        showToast("위치 권한이 필요합니다")
     }
 
 }

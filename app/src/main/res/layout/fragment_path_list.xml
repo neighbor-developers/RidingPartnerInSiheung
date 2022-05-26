@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/darkBlue"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+    <LinearLayout
 
-    <TextView
-        android:id="@+id/recommend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="30dp"
-        android:text="추천 경로"
-        android:textColor="#FFFFFF"
-        android:textSize="35dp"
-        android:textStyle="bold"/>
-
-    <ListView
-        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:padding="10dp"
-        android:background="@drawable/list_edge" />
+        android:background="@color/darkBlue"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.widget.Button
-        android:layout_marginBottom="30dp"
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@drawable/edge"
-        android:shadowColor="#FFFFFF"
-        android:text="돌아가기"
-        android:textColor="#000000"
-        android:textSize="37dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:text="추천 경로"
+            android:textColor="#FFFFFF"
+            android:textSize="35dp"
+            android:textStyle="bold"/>
 
-</LinearLayout>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:padding="10dp"
+            android:background="@drawable/list_edge" />
+
+        <android.widget.Button
+            android:layout_marginBottom="30dp"
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/edge"
+            android:shadowColor="#FFFFFF"
+            android:text="돌아가기"
+            android:textColor="#000000"
+            android:textSize="37dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</ScrollView>

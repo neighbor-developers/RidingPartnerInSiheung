@@ -8,15 +8,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.RentalLocation
+import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.util.FusedLocationSource
 
 class RentalLocationFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
@@ -32,12 +30,12 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         return inflater.inflate(R.layout.fragment_rental_location, container, false)
 
+        requirePermissions()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment?
-
         mapFragment?.getMapAsync(this)
     }
 
@@ -74,9 +72,13 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     //  권한 요청
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1000
+    private val PERMISSION_CODE = 100
 
-    private fun requirePermissions(permissions: Array<String>){
+    private fun requirePermissions(){
+        val permissions=arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
 
         val isAllPermissionsGranted = permissions.all { //  permissions의 모든 권한 체크
             ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
@@ -84,7 +86,7 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
         if (isAllPermissionsGranted) {    //  모든 권한이 허용되어 있을 경우
             //permissionGranted()
         } else { //  그렇지 않을 경우 권한 요청
-            ActivityCompat.requestPermissions(requireActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE)
+            ActivityCompat.requestPermissions(requireActivity(), permissions, PERMISSION_CODE)
         }
     }
 
@@ -96,33 +98,21 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode == LOCATION_PERMISSION_REQUEST_CODE){
+        if(requestCode == PERMISSION_CODE){
             if(grantResults.isNotEmpty()){
                 for(grant in grantResults){
-                    if(grant != PackageManager.PERMISSION_GRANTED) {
-                        permissionDenied()
+                    if(grant == PackageManager.PERMISSION_GRANTED) {
+                        /*no-op*/
                     }else{
-                        permissionGranted()
+                        permissionDenied()
+                        requirePermissions()
                     }
                 }
             }
         }
     }
-    // 권한이 있는 경우 실행
-    private fun permissionGranted() {
-        Toast.makeText(requireContext(), "위치 권한 수락 완료", Toast.LENGTH_SHORT).show() // 권한이 있는 경우 구글 지도를준비하는 코드 실행
-    }
     // 권한이 없는 경우 실행
     private fun permissionDenied() {
-        checkPermission()
-    }
-    private fun checkPermission(){
-        // 사용할 권한 array로 저장
-        val permissions=arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-        )
-        // 권한 확인 및 요헝
-        requirePermissions(permissions)
+        showToast("위치 권한이 필요합니다")
     }
 }

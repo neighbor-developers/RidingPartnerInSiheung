@@ -17,19 +17,17 @@ class RidingFinishFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = RidingFinishFragmentBinding.inflate(inflater, container, false)
+
         finishClickListener()
         startingRecord()
+
         return binding.root
     }
 
     private fun finishClickListener() {
         binding.complete.setOnClickListener {
-            activity?.let {
-                val intent = Intent(context, MainActivity::class.java)
-                startActivity(intent)
-            }
+            startActivity(Intent(requireContext(), MainActivity::class.java))
         }
     }
 
