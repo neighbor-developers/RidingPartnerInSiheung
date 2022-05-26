@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.maps.fragment
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.rentalMap
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -13,22 +13,25 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.RentalLocation
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.RentalLocationXY
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 
-class RentalLocationFragment : Fragment(), com.naver.maps.map.OnMapReadyCallback {
+class RentalLocationFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
-    private lateinit var locationSource: FusedLocationSource
+
+    private val rentalLocation = arrayListOf(
+        RentalLocation("정왕 자전거 대여소", LatLng(37.343991285297, 126.74729588817)),
+        RentalLocation("월곶 자전거 대여소", LatLng(37.3917953, 126.742692)))
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_rental_location, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,46 +44,28 @@ class RentalLocationFragment : Fragment(), com.naver.maps.map.OnMapReadyCallback
     override fun onMapReady(naverMap: NaverMap){
 
         this.naverMap = naverMap
-        val uiSettings = naverMap.uiSettings
-        // 맵 첫 시작 카메라 위치
-        val latLng =com.naver.maps.geometry.LatLng(37.349741467772, 126.76182486561)
 
         // 맵 타입
         naverMap.mapType = NaverMap.MapType.Navi
         naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BICYCLE, true)
 
         // 맵 시작 위치와 줌 설정
-        val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, 11.0)
-            .animate(CameraAnimation.Easing)
+        val latLng = LatLng(37.349741467772, 126.76182486561)
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, 11.0).animate(CameraAnimation.Easing)
         naverMap.moveCamera(cameraUpdate)
 
         //대여소 위치 추가
         addMarkers(naverMap)
 
         // 내 위치 받기
+        val uiSettings = naverMap.uiSettings
         uiSettings.isLocationButtonEnabled = true
-
-        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            this.naverMap = naverMap
-
-            locationSource = FusedLocationSource(this ,
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-            naverMap.locationSource = locationSource
-            naverMap.locationTrackingMode = LocationTrackingMode.Face
-        } else{
-            Toast.makeText(requireContext(), "권한을 설정하세요", Toast.LENGTH_SHORT).show()
-            permissionDenied()
-        }
-    }
-    private val places:List<RentalLocation> by lazy{
-        RentalLocationXY(requireActivity()).read()
     }
 
     private fun addMarkers(naverMap: NaverMap){
-        places.forEach{ place ->
+        rentalLocation.forEach{ place ->
             val marker = Marker()
-            marker.position = com.naver.maps.geometry.LatLng(
+            marker.position = LatLng(
                 place.location.latitude,
                 place.location.longitude)
             //marker.icon = OverlayImage.fromResource(R.drawable.))
@@ -88,11 +73,9 @@ class RentalLocationFragment : Fragment(), com.naver.maps.map.OnMapReadyCallback
         }
     }
 
-    companion object{
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-    }
-
     //  권한 요청
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1000
+
     private fun requirePermissions(permissions: Array<String>){
 
         val isAllPermissionsGranted = permissions.all { //  permissions의 모든 권한 체크

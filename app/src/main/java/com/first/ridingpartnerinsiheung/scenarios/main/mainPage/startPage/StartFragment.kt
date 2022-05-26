@@ -1,7 +1,6 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage
+package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -17,10 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage.PathListFragment
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.google.android.gms.location.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -144,21 +139,6 @@ class StartFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
     }
-
-//    private fun initClickListener(){
-//        binding.recommendBtn.setOnClickListener {
-//            (activity as MainActivity).setFrag(PathListFragment())
-//        }
-//        binding.findOfficeBtn.setOnClickListener {
-//            startActivity(Intent(requireContext(), MapActivity::class.java))
-//        }
-//        binding.myPageBtn.setOnClickListener {
-//            (activity as MainActivity).setFrag(MyPageFragment())
-//        }
-//        binding.ridingBtn.setOnClickListener {
-//            startActivity(Intent(requireContext(), MapActivity::class.java))
-//        }
-//    }
 
     private fun startLocationUpdate(){
         checkPermission()

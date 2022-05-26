@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage.StartViewModel" />
+            type="com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage.StartViewModel" />
 
     </data>
     <LinearLayout

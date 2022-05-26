@@ -1,7 +1,8 @@
 package com.first.ridingpartnerinsiheung.data
 
 import androidx.fragment.app.FragmentActivity
-import com.google.android.gms.maps.model.LatLng
+import com.naver.maps.geometry.LatLng
+
 
 data class RentalLocation(
     var name: String,

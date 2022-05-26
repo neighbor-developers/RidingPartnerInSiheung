@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.maps.fragment
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap
 
 import android.Manifest
 import android.content.Context
@@ -9,9 +9,6 @@ import android.location.LocationManager
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +19,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.RidingViewModel
-import com.google.android.gms.maps.SupportMapFragment
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 
@@ -34,7 +29,6 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
 class RidingFragment : Fragment(), OnMapReadyCallback {

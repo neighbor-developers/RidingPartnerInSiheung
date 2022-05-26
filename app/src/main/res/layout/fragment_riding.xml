@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.first.ridingpartnerinsiheung.scenarios.main.maps.RidingViewModel" />
+            type="com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

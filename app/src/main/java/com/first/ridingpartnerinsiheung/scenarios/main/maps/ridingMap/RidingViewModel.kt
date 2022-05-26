@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.maps
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap
 
 import android.location.Location
 import androidx.lifecycle.ViewModel

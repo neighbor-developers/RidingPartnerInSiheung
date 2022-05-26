@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.maps
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap
 
 class CalDistance() {
     var theta : Double = 0.0

@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage
+package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -107,7 +107,7 @@ class StartViewModel() : ViewModel() {
             else -> "오류 sky : " + sky
         }
     }
-    fun changeLocation(lat : Double, lon : Double){
+    fun changeLocation(lat:Double, lon:Double){
         val location = dfs_xy_conv(lat, lon)
         nx.value = location.x.toString()
         ny.value = location.y.toString()

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.first.ridingpartnerinsiheung.data.PlaceList
 import com.first.ridingpartnerinsiheung.databinding.FragmentPathListBinding
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage.StartFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage.StartFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.first.ridingpartnerinsiheung.views.dialog.PathDialog
 

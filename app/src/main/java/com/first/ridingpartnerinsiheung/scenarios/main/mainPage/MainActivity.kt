@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.menuPage.StartFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage.StartFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage.PathListFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> setFrag(StartFragment())
                 R.id.myPage-> setFrag(MyPageFragment())
                 R.id.pathList -> setFrag(PathListFragment())
-                R.id.riding -> startActivity(Intent(applicationContext, MapActivity::class.java))
-                R.id.rental -> startActivity(Intent(applicationContext, MapActivity::class.java))
+                R.id.riding -> toMap("riding")
+                R.id.rental -> toMap("rental")
             }
             true
         })
@@ -37,5 +37,10 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.mainframe, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+    fun toMap(to : String){
+        val intent = Intent(this, MapActivity::class.java)
+        intent.putExtra("to", to)
+        startActivity(intent)
     }
 }
