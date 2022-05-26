@@ -25,8 +25,18 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> setFrag(StartFragment())
                 R.id.myPage-> setFrag(MyPageFragment())
                 R.id.pathList -> setFrag(PathListFragment())
-                R.id.riding -> startActivity(Intent(applicationContext, MapActivity::class.java))
-                R.id.rental -> startActivity(Intent(applicationContext, MapActivity::class.java))
+
+                R.id.riding -> {
+                    var myIntent = Intent(applicationContext,MapActivity::class.java)
+                    myIntent.putExtra("key",0)
+                    startActivity(myIntent)
+                }
+
+                R.id.rental -> {
+                    var myIntent = Intent(applicationContext,MapActivity::class.java)
+                    myIntent.putExtra("key",1)
+                    startActivity(myIntent)
+                }
             }
             true
         })
