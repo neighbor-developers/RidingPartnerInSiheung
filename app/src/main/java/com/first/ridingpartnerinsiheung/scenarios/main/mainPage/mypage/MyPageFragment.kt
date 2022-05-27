@@ -2,14 +2,9 @@ package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -29,13 +24,11 @@ import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.MySharedPreferences
 import com.first.ridingpartnerinsiheung.databinding.FragmentMyPageBinding
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.recordPage.RecordFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordFragment
 import com.first.ridingpartnerinsiheung.views.dialog.ChangeNameDialog
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import java.io.File
 
 
 class MyPageFragment : Fragment() {

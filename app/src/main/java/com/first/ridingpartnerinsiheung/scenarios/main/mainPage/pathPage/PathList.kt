@@ -8,10 +8,10 @@ import com.google.android.gms.maps.model.LatLng
 class PathList(private val context: Context) {
     fun read():List<PlaceList>{
         return listOf(
-            PlaceList("오이도역 - 오이도 - 반달섬", "23.7km", R.drawable.oido, coastline),
-            PlaceList("그린웨이", "23.7km", R.drawable.mulwang, greenWay),
-            PlaceList("오이도역 - 시화방조제 - 대부도 공원", "23.7km", R.drawable.sihwa, sihwaSeawall),
-            PlaceList("시흥 순환 코스", "23.7km", R.drawable.botong, siheungCycleCourse)
+            PlaceList("오이도역 - 오이도 - 반달섬", "23.7km", R.drawable.place_oido, coastline),
+            PlaceList("그린웨이", "23.7km", R.drawable.place_mulwang, greenWay),
+            PlaceList("오이도역 - 시화방조제 - 대부도 공원", "23.7km", R.drawable.place_sihwa, sihwaSeawall),
+            PlaceList("시흥 순환 코스", "23.7km", R.drawable.place_botong, siheungCycleCourse)
         )
     }
 

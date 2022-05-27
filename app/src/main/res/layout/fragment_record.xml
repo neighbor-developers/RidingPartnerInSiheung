@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scenarios.main.mainPage.recordPage.RecordFragment">
+    tools:context=".scenarios.main.recordPage.RecordFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: Update blank fragment dialog -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

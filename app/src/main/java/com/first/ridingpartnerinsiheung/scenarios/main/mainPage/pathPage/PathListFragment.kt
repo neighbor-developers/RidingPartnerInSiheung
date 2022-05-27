@@ -22,16 +22,9 @@ class PathListFragment : Fragment() {
     : View? {
         binding = FragmentPathListBinding.inflate(inflater, container, false)
 
-        initClickListener()
         initListView()
 
         return binding.root
-    }
-
-    private fun initClickListener(){
-        binding.back.setOnClickListener {
-            (activity as MainActivity).setFrag(StartFragment())
-        }
     }
 
     private fun initListView(){

@@ -1,118 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scenarios.main.mainPage.Record.RidingFinishFragment">
+    tools:context=".scenarios.main.recordPage.RidingFinishFragment">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingTop="40dp"
         >
-
         <TextView
             android:id="@+id/rComplete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="45dp"
-            android:text="주행 완료"
+            android:text="주행 기록"
             android:textColor="#000000"
-            android:textSize="30dp"
-            android:textStyle="bold"/>
-
+            android:fontFamily="@font/dd"
+            android:textSize="25dp"
+            android:layout_marginBottom="25dp"
+            android:textStyle="bold" />
+        <View
+            android:layout_marginHorizontal="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="20dp"
+            android:background="#cdcdcd"/>
         <TextView
-            android:id="@+id/cTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="31.47"
+            android:layout_marginHorizontal="35dp"
+            android:fontFamily="@font/recode_font2"
+            android:textColor="@color/black"
+            android:textSize="60sp"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:text="주행 시간:"
-            android:textColor="#000000"
-            android:textSize="23dp"
-            android:textStyle="bold"/>
+            android:layout_marginHorizontal="35dp"
 
-        <TextView
-            android:id="@+id/avrSpeed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:text="평균 속도:"
-            android:textColor="#000000"
-            android:textSize="23dp"
-            android:textStyle="bold"/>
+            android:text=" 킬로미터"
+            android:textSize="15sp"/>
+
+
 
         <ImageView
             android:id="@+id/cImage"
-            android:layout_width="230dp"
-            android:layout_height="230dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/oido"/>
+            android:layout_width="200dp"
+            android:layout_height="180dp"
+            android:layout_marginVertical="20dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/path"/>
 
-        <TextView
-            android:id="@+id/cPath"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:text="오이도 등대길"
-            android:textColor="#000000"
-            android:textSize="23dp"
-            android:textStyle="bold"
-            />
-
-        <TextView
-            android:id="@+id/rDistance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="7dp"
-            android:text="주행 거리:"
-            android:textColor="#000000"
-            android:textSize="23dp"
-            android:textStyle="bold"
-            />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <ImageButton
-                android:id="@+id/memoBtn"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_add_circle_24"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="20dp"
-                android:background="#FFFFFF"/>
+                android:layout_marginHorizontal="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/cTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="27sp"
+                    android:paddingVertical="3dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/c"
+                    android:text="1: 11: 43"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="주행 시간"
+                    android:fontFamily="@font/d"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/avrSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="27sp"
+                    android:textColor="@color/black"
+                    android:paddingVertical="3dp"
+                    android:fontFamily="@font/c"
+                    android:text="30km/h"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="평균 속도"
+                    android:fontFamily="@font/d"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/sumDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="27sp"
+                    android:textColor="@color/black"
+                    android:paddingVertical="3dp"
+                    android:fontFamily="@font/c"
+                    android:text="31.47km"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="주행 거리"
+                    android:fontFamily="@font/d"
+                    android:textSize="13dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/kcal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="27sp"
+                    android:textColor="@color/black"
+                    android:paddingVertical="3dp"
+                    android:fontFamily="@font/c"
+                    android:text="130kcal"/>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="소모 칼로리"
+                    android:fontFamily="@font/d"
+                    android:textSize="13dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cdcdcd"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="20dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/addMemo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/memoBtn"
                 android:text="메모 추가하기"
                 android:textColor="#000000"
-                android:textSize="23dp"
-                android:textStyle="bold"
-                />
-        </RelativeLayout>
+                android:fontFamily="@font/d"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/memoET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/cc"
+            android:background="@android:color/transparent"
+            android:layout_marginHorizontal="20dp"
+            android:hint="#오늘의 라이을 #기록해보세요"/>
 
         <android.widget.Button
             android:id="@+id/complete"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_gravity="center"
-            android:layout_margin="30dp"
-            android:background="@drawable/complete_edge"
-            android:shadowColor="#FFFFFF"
+            android:background="@drawable/riding_radius"
+            android:layout_marginTop="20dp"
             android:text="완료"
-            android:textColor="#000000"
-            android:textSize="37dp"
+            android:fontFamily="@font/d"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold"/>
 
     </LinearLayout>
-</FrameLayout>
+</ScrollView>

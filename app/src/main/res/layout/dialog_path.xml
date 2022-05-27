@@ -2,9 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:background="@drawable/dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#BFBDBD"
         android:orientation="vertical">
 
         <LinearLayout
@@ -21,26 +21,30 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="오이도 빨간 등대"
+                android:text="오이도 빨간 등대 코스"
+                android:fontFamily="@font/dd"
+                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#cdcdcd" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="30dp">
-
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="70dp">
             <ImageView
+                android:layout_gravity="center"
                 android:id="@+id/pathImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/path"/>
         </LinearLayout>
 
         <View
@@ -53,21 +57,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
+            android:paddingVertical="5dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/cancelBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
+                android:textColor="@color/iphoneBlue"
+                android:background="#00FFFFFF"
                 android:text="취소" />
 
             <Button
                 android:id="@+id/okBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:text="확인" />
+                android:textColor="@color/iphoneBlue"
+                android:background="#00FFFFFF"
+                android:text="경로 안내" />
         </LinearLayout>
     </LinearLayout>
 

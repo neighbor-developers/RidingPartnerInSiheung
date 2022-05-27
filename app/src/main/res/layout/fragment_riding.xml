@@ -26,7 +26,7 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="150dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/riding_radius"
                 android:layout_margin="20dp"
@@ -37,7 +37,10 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="---주행 정보---"
+                    android:layout_margin="5dp"
+                    android:fontFamily="@font/b"
+                    android:text="주행 정보"
+                    android:textStyle="bold"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -45,6 +48,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:layout_margin="3dp"
+                    android:fontFamily="@font/b"
                     android:text="@{viewModel.distanceText}"
                     android:textColor="@color/black" />
 
@@ -53,6 +58,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:layout_margin="3dp"
+                    android:fontFamily="@font/b"
                     android:textColor="@color/black"
                     android:text="@{viewModel.speedText}" />
 
@@ -61,15 +68,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:layout_margin="3dp"
+                    android:fontFamily="@font/b"
                     android:textColor="@color/black"
                     android:text="@{viewModel.averSpeedText}" />
                 <TextView
                     android:id="@+id/timeText"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="3dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/b"
                     android:textColor="@color/black"
-                    android:text="@{viewModel.timeText}" />
+                    android:text="@{viewModel.timerText}" />
             </LinearLayout>
         </FrameLayout>
 
@@ -88,6 +99,10 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
                 android:text="start"
+                android:textColor="@color/black"
+                android:fontFamily="@font/a"
+                android:textStyle="bold"
+                android:background="@drawable/riding_radius"
                 android:onClick="@{()-> viewModel.startRiding()}"
                 />
             <Button
@@ -95,18 +110,22 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:paddingStart="5dp"
+                android:background="@drawable/riding_radius"
                 android:layout_height="wrap_content"
-                android:text="저장"
+                android:text="SAVE"
+                android:textColor="@color/black"
                 android:visibility="gone"
                 android:onClick="@{()-> viewModel.saveRiding()}"
                 />
             <Button
                 android:id="@+id/stopBtn"
                 android:layout_width="0dp"
+                android:background="@drawable/riding_radius"
                 android:layout_weight="1"
                 android:paddingStart="5dp"
                 android:layout_height="wrap_content"
-                android:text="중지"
+                android:text="STOP"
+                android:textColor="@color/black"
                 android:visibility="gone"
                 android:onClick="@{()-> viewModel.stopRiding()}"
                 />

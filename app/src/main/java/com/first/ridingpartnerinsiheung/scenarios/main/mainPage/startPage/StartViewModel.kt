@@ -33,8 +33,8 @@ class StartViewModel() : ViewModel() {
     private val date = _date.asStateFlow()
 
     // 임시 위치
-    private var nx = MutableStateFlow("56")
-    private var ny = MutableStateFlow("122")
+    var nx = MutableStateFlow("56")
+    var ny = MutableStateFlow("122")
 
     // 날씨 정보 받기
     init{

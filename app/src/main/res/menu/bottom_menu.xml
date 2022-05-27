@@ -3,30 +3,30 @@
     <item
         android:id="@+id/home"
         android:enabled="true"
-        android:icon="@drawable/ic_home_selector"
+        android:icon="@drawable/icon_home_selector"
         android:title="홈"/>
 
     <item
         android:id="@+id/myPage"
         android:enabled="true"
 
-        android:icon="@drawable/ic_baseline_person_24"
+        android:icon="@drawable/icon_person"
         android:title="마이페이지"/>
 
     <item
         android:id="@+id/pathList"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_map_24"
+        android:icon="@drawable/icon_map"
         android:title="경로"/>
 
     <item
         android:id="@+id/rental"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_storefront_24"
+        android:icon="@drawable/icon_storefront"
         android:title="대여소"/>
     <item
         android:id="@+id/riding"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_pedal_bike_24"
+        android:icon="@drawable/icon_bike"
         android:title="시작"/>
 </menu>

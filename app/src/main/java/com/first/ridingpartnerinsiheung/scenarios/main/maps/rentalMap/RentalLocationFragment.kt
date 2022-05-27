@@ -66,7 +66,7 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
             marker.position = LatLng(
                 place.location.latitude,
                 place.location.longitude)
-            //marker.icon = OverlayImage.fromResource(R.drawable.))
+            marker.captionText = place.name
             marker.map=naverMap
         }
     }

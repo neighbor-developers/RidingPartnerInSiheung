@@ -14,7 +14,6 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
@@ -38,33 +37,31 @@ class StartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         initBinding()
-//        initClickListener()
 
         // 날씨 정보를 받아오기 위한 GPS 받기
         mLocationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         startLocationUpdate()
-        //viewModel.changeLocation(mLastLocation.latitude, mLastLocation.longitude)
-        viewModel.changeLocation(37.3425, 126.7502)
+
 
         //뷰모델 실행중 날씨모델 mutablestateflow 관찰해서 이미지 뷰 세팅
         viewModel.run{
             weather.onEach{
                 when(it!!.sky){
-                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.sun2)
-                    "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.cloud)
-                    "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.overcast)
-                    else -> binding.skyTypeImg.setImageResource(R.drawable.sun)
+                    "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_sun3)
+                    "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_cloud)
+                    "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_overcast)
+                    else -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_sun2)
                 }
                 when(it!!.rainType){
-                    "강수 예정 없음" ->binding.rainTypeImg.setImageResource(R.drawable.not_rain)
-                    "비" -> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
-                    "비/눈" -> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
-                    "눈" ->  binding.rainTypeImg.setImageResource(R.drawable.snow)
-                    "빗방울" -> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
-                    "빗방울 눈날림"-> binding.rainTypeImg.setImageResource(R.drawable.umbrella)
-                    "눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.snow)
+                    "강수 예정 없음" ->binding.rainTypeImg.setImageResource(R.drawable.icon_whether_sun)
+                    "비" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
+                    "비/눈" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
+                    "눈" ->  binding.rainTypeImg.setImageResource(R.drawable.icon_whether_snow)
+                    "빗방울" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
+                    "빗방울 눈날림"-> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
+                    "눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_snow)
                 }
 //
             }.launchIn(viewLifecycleOwner.lifecycleScope)
@@ -88,13 +85,14 @@ class StartFragment : Fragment() {
     private var mLocationCallback = object  : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
-            locationResult.lastLocation
+            mLastLocation = locationResult.lastLocation
             onLocationChanged(locationResult.lastLocation)
         }
     }
 
     fun onLocationChanged(location: Location){
         mLastLocation = location
+        viewModel.changeLocation(mLastLocation.latitude, mLastLocation.longitude)
     }
     private val PERMISSION_CODE = 100
 

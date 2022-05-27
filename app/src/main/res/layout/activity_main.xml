@@ -19,5 +19,6 @@
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_menu"
+        app:itemTextAppearance="@style/TextStyleBNV"
         tools:layout_editor_absoluteX="8dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

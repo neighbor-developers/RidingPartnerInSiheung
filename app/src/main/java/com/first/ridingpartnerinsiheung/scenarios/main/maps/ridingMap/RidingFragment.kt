@@ -1,7 +1,10 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PointF
@@ -18,8 +21,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordActivity
+import com.first.ridingpartnerinsiheung.views.dialog.PathDialog
+import com.first.ridingpartnerinsiheung.views.dialog.RidingSaveDialog
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 
@@ -36,7 +44,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mNaverMap: NaverMap
 
-    private var ridingState = false // 라이딩 상태
+    private var ridingState = true // 라이딩 상태
     private var startLatLng = LatLng(0.0, 0.0) // polyline 시작점
     private var endLatLng = LatLng(0.0, 0.0) // polyline 끝점
 
@@ -54,13 +62,20 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     private var startTime = ""
     private var endTime = ""
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        initBinding()
 
+        initBinding()
+        initMapView()
+        initObserve()
+
+        return binding.root
+    }
+    private fun initMapView(){
         locationSource = FusedLocationSource(this, PERMISSION_CODE)
 
         val fm = childFragmentManager
@@ -71,10 +86,6 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
 
         locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        initObserve()
-
-        return binding.root
     }
 
     private fun initBinding(
@@ -85,6 +96,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
     }
+
     private fun initObserve() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.event.collect { event ->
@@ -92,6 +104,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
                     RidingViewModel.RidingEvent.StartRiding -> startRiding()
                     RidingViewModel.RidingEvent.StopRiding -> stopRiding()
                     RidingViewModel.RidingEvent.SaveRiding -> saveRiding()
+                    is RidingViewModel.RidingEvent.PostFailuer -> showToast("저장 실패")
                 }
             }
         }
@@ -106,13 +119,13 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setOverlay() {
-        mNaverMap.locationTrackingMode = LocationTrackingMode.Follow
+        mNaverMap.locationTrackingMode = LocationTrackingMode.Face
         val locationOverlay = mNaverMap.locationOverlay
         locationOverlay.subIcon =
             OverlayImage.fromResource(com.naver.maps.map.R.drawable.navermap_location_overlay_icon)
-        locationOverlay.subIconWidth = 80
+        locationOverlay.subIconWidth = 40
         locationOverlay.subIconHeight = 40
-        locationOverlay.subAnchor = PointF(0.5f, 1f)
+        locationOverlay.subAnchor = PointF(0.5f, 0.5f)
     }
 
     private fun changeLocation() {
@@ -120,12 +133,11 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
             if (mNaverMap.locationTrackingMode == LocationTrackingMode.NoFollow) {
                 setOverlay()
             }
-            drawPath(LatLng(location.latitude, location.longitude),)
+            drawPath(LatLng(location.latitude, location.longitude))
             viewModel.mLocation = location
         }
     }
     private fun startRiding(){ // 시작버튼
-        ridingState = true // 라이딩중
         binding.startBtn.visibility = View.GONE
         binding.stopBtn.visibility = View.VISIBLE
         binding.saveBtn.visibility = View.GONE
@@ -137,9 +149,14 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
             var startMarker = marker(startLatLng, "출발지점") // 출발지점 마크
         }
         changeLocation()
-
         setOverlay()
 
+        if(ridingState) {
+        // 라이딩중
+            var startMarker = marker(startLatLng, "출발지점") // 출발지점 마크
+        }else{
+            var restartMarker = marker(startLatLng, "재출발지점") // 출발지점 마크
+        }
         viewModel.befLatLng = startLatLng
         viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
     }
@@ -155,21 +172,30 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         locationSource.lastLocation?.let { location ->
             viewModel.stopCal()
 
-            savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
-            savedTimer = viewModel.timer.value // 총 주행시간 받아오기
-            savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
-
-            endLatLng =
-                LatLng(location.latitude, location.longitude)
+            endLatLng = LatLng(location.latitude, location.longitude)
             var endMarker = marker(endLatLng, "도착 지점")
         }
     }
     private fun saveRiding(){
+
+        savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
+        savedTimer = viewModel.timer.value // 총 주행시간 받아오기
+        savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
+        val savedKcal = 234
+
+        val data = RidingData(savedDistance, savedSpeed, savedTimer, savedKcal)
         // 페이지 이동
+        val dialog = RidingSaveDialog(requireContext())
+        dialog.start()
+        dialog.setOnClickListener(object: RidingSaveDialog.DialogOKCLickListener{
+            override fun onOKClicked() {
+                viewModel.saveData(onFailure = { showToast("저장 실패") }, data)
+                startActivity(Intent(requireContext(), RecordActivity::class.java))
+            }
+        })
     }
     private fun drawPath(latLng:LatLng) {
         endLatLng = LatLng(latLng.latitude, latLng.longitude)
-        viewModel.calDisSpeed()
 
         val path = PathOverlay()
         path.coords = listOf(startLatLng, endLatLng)

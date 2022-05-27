@@ -69,6 +69,7 @@
                         android:textColor="#FFFFFF"
                         android:layout_height="20dp"
                         android:textSize="15dp"
+                        android:fontFamily="@font/b"
                         android:textStyle="bold"
 
                         android:text="날씨 정보" />
@@ -89,6 +90,7 @@
                         android:textColor="#FFFFFF"
                         android:gravity="center"
                         android:textStyle="bold"
+                        android:fontFamily="@font/b"
                         android:layout_weight="0.4"
                         android:text="@{viewModel.weather.sky}" >
 
@@ -110,8 +112,8 @@
                         android:textColor="#FFFFFF"
                         android:layout_height="20dp"
                         android:textSize="15dp"
+                        android:fontFamily="@font/b"
                         android:textStyle="bold"
-
                         android:text="강수 정보" />
                     <ImageView
                         android:layout_margin="10dp"
@@ -129,6 +131,7 @@
                         android:layout_height="0dp"
                         android:textColor="#FFFFFF"
                         android:gravity="center"
+                        android:fontFamily="@font/b"
                         android:textStyle="bold"
                         android:layout_weight="0.4"
                         android:text="@{viewModel.weather.rainType}" >
