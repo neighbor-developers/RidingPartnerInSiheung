@@ -1,9 +1,14 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap
 
+import android.app.Application
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.first.ridingpartnerinsiheung.data.MySharedPreferences
 import com.first.ridingpartnerinsiheung.data.RidingData
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -98,7 +103,7 @@ class RidingViewModel: ViewModel() {
             SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(current)
         }
     }
-    fun saveData(onFailure : () -> Unit, data : RidingData){
+    fun saveData(onFailure : () -> Unit, data : RidingData): String{
         val time = getTimeNow()
         db.collection(user)
             .document(time)
@@ -109,6 +114,7 @@ class RidingViewModel: ViewModel() {
             .addOnFailureListener{
                 postFailuer(it)
             }
+        return time
     }
 
     sealed class RidingEvent{

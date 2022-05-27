@@ -18,9 +18,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.data.MySharedPreferences
 import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordActivity
 import com.first.ridingpartnerinsiheung.views.dialog.RidingSaveDialog
 import com.naver.maps.geometry.LatLng
@@ -186,7 +190,9 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         dialog.start()
         dialog.setOnClickListener(object: RidingSaveDialog.DialogOKCLickListener{
             override fun onOKClicked() {
-                viewModel.saveData(onFailure = { showToast("저장 실패") }, data)
+                var time = viewModel.saveData(onFailure = { showToast("저장 실패") }, data)
+                var prefs = MySharedPreferences((activity as MapActivity).applicationContext)
+                prefs.recentRidingTime = time
                 startActivity(Intent(requireContext(), RecordActivity::class.java))
             }
         })

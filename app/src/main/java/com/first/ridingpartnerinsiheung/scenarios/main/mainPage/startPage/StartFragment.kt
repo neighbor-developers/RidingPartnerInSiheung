@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.data.MySharedPreferences
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.google.android.gms.location.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -26,8 +33,11 @@ class StartFragment : Fragment() {
     //viewBinding
     private val viewModel by viewModels<StartViewModel>()
     lateinit var binding : FragmentStartBinding
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = Firebase.auth
+    private val user = auth.currentUser!!.uid
 
-
+    var recordArray = arrayListOf<String>()
     private lateinit var mLastLocation : Location
     private var mFusedLocationProviderClient : FusedLocationProviderClient? = null
     private lateinit var mLocationRequest: LocationRequest
@@ -52,7 +62,7 @@ class StartFragment : Fragment() {
                     "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_sun3)
                     "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_cloud)
                     "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_overcast)
-                    else -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_sun2)
+                    else -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_sun3)
                 }
                 when(it!!.rainType){
                     "강수 예정 없음" ->binding.rainTypeImg.setImageResource(R.drawable.icon_whether_sun)
@@ -66,8 +76,32 @@ class StartFragment : Fragment() {
 //
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
+
+
+// TODO : doc 가 null 이라고 나오는데 파이어베이스에 진짜 없는건지 아이디가 일치안해서 없는건지 확인하고 진짜 없는거면 수정 해야함
+
+//        주석 해제하면 오류날수 있습니다!
+//        var prefs = MySharedPreferences((activity as MainActivity).applicationContext)
+//
+//        if (prefs.recentRidingTime!=""){
+//            showToast("데이터 불러오기")
+//            val recDoc = db.collection("UsersData")
+//                .document(user).collection("Record").document(prefs.recentRidingTime!!)
+//
+//            recDoc.addSnapshotListener { value, error ->
+//                value!!.data!!.entries.forEach {
+//                    recordArray.add(it.value.toString())
+//                }
+//            }
+//
+//        }
+
+
         return binding.root
     }
+
+
+
     private fun initBinding(inflater: LayoutInflater = this.layoutInflater, container: ViewGroup? = null){
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_start, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
