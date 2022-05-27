@@ -6,5 +6,5 @@ data class RidingData(
     var sumDistance : Double,
     var averSpeed : Double,
     var timer: Int,
-    var kcal: Int
+    var kcal: Double
 )

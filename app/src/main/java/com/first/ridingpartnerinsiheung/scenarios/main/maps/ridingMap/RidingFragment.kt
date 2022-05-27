@@ -1,9 +1,7 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -15,7 +13,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -24,9 +21,7 @@ import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentRidingBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordActivity
-import com.first.ridingpartnerinsiheung.views.dialog.PathDialog
 import com.first.ridingpartnerinsiheung.views.dialog.RidingSaveDialog
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
@@ -181,7 +176,9 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
         savedTimer = viewModel.timer.value // 총 주행시간 받아오기
         savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
-        val savedKcal = 234
+
+
+        val savedKcal:Double = calculateKcal(savedSpeed, savedTimer, 60.0)  //  몸무게 임의로 60 설정
 
         val data = RidingData(savedDistance, savedSpeed, savedTimer, savedKcal)
         // 페이지 이동
@@ -193,6 +190,26 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
                 startActivity(Intent(requireContext(), RecordActivity::class.java))
             }
         })
+    }
+    private fun calculateKcal(averageSpeed: Double, savedTimer: Int, weight: Double): Double {
+        // 평속을 칼로리 소비계수로 전환
+        val changeKcal: Double = when (averageSpeed) {
+            in 13.0..15.0 -> 0.065
+            in 16.0..18.0 -> 0.0783
+            in 19.0..21.0 -> 0.0939
+            in 22.0..23.0 -> 0.113
+            in 24.0..25.0 -> 0.124
+            26.0 -> 0.136
+            in 27.0..28.0 -> 0.149
+            in 29.0..30.0 -> 0.163
+            31.0 -> 0.179
+            in 32.0..33.0 -> 0.196
+            in 34.0..36.0 -> 0.215
+            in 37.0..39.0 -> 0.259
+            40.0 -> 0.311
+            else -> 0.01
+        }
+        return changeKcal * savedTimer * weight
     }
     private fun drawPath(latLng:LatLng) {
         endLatLng = LatLng(latLng.latitude, latLng.longitude)
