@@ -12,6 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import kotlin.math.round
 
 class RidingViewModel: ViewModel() {
 
@@ -23,7 +24,7 @@ class RidingViewModel: ViewModel() {
     private var _event = MutableSharedFlow<RidingEvent>()
     var event = _event.asSharedFlow()
 
-    var mLocation : Location? = null
+    var mLocation = MutableStateFlow<Location?>(null)
 
     var sumDistance = MutableStateFlow(0.0)
     var averSpeed = MutableStateFlow(0.0)
@@ -37,19 +38,19 @@ class RidingViewModel: ViewModel() {
     var curLatLng = LatLng(0.0, 0.0)
 
     val distanceText = sumDistance.map {
-        "주행 거리 : " + it
+        "주행 거리 : ${round(it*100)/100} km"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     val averSpeedText = averSpeed.map {
-        "평균 속도 : "+ it
+        "평균 속도 : ${round(it*100)/100} km/h"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     val speedText = speed.map {
-        "순간 속도 : "+ it
+        "현재 속도 : ${round(it*100)/100} km/h"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     val timerText = timer.map {
-        "주행 시간 : "+"${it/3600} : ${it / 60} : ${it%60}"
+        "주행 시간 : ${it/3600} : ${it / 60} : ${it%60}"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     private lateinit var calDisSpeedJob : Job
@@ -58,28 +59,27 @@ class RidingViewModel: ViewModel() {
 
         calDisSpeedJob = viewModelScope.launch(Dispatchers.Default) {
             var distance : Double
+            val calDis = CalDistance()
 
             while(true){
                 delay(1000) // 1초마다 타이머 증가
 
                 timer.value+=1
 
-                if(timer.value % 2 == 0) { // 3초마다 속도, 거리 업데이트
-                    curLatLng = LatLng(mLocation!!.latitude, mLocation!!.longitude)
+                if(timer.value % 3 == 0) { // 3초마다 속도, 거리 업데이트
+                    curLatLng = LatLng(mLocation.value!!.latitude, mLocation.value!!.longitude)
 
-                    val calDis = CalDistance()
                     distance = calDis.getDistance(
                         befLatLng.latitude,
                         befLatLng.longitude,
                         curLatLng.latitude,
                         curLatLng.longitude
                     )
-                    distance = (distance * 100) / 100.0
 
                     sumDistance.value += distance // 총 주행거리 누적
 
-                    speed.value = distance / 3
-                    speed.value = ((speed.value * 100) / 100.0) // 순간 속도
+                    speed.value = distance / 3 * 100
+//                    speed.value = ((speed.value * 100) / 100.0) // 순간 속도
 
                     averSpeed.value = sumDistance.value / timer.value // 평균 속도
 
@@ -98,8 +98,7 @@ class RidingViewModel: ViewModel() {
             SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(current)
         }
     }
-    fun saveData(onFailure : () -> Unit, data : RidingData){
-        val time = getTimeNow()
+    fun saveData(onFailure : () -> Unit, data : RidingData, time: String){
         db.collection(user)
             .document(time)
             .set(data)
@@ -109,6 +108,26 @@ class RidingViewModel: ViewModel() {
             .addOnFailureListener{
                 postFailuer(it)
             }
+    }
+    fun calculateKcal(averageSpeed: Double, savedTimer: Int, weight: Double): Double {
+        // 평속을 칼로리 소비계수로 전환
+        val changeKcal: Double = when (averageSpeed) {
+            in 13.0..15.0 -> 0.065
+            in 16.0..18.0 -> 0.0783
+            in 19.0..21.0 -> 0.0939
+            in 22.0..23.0 -> 0.113
+            in 24.0..25.0 -> 0.124
+            26.0 -> 0.136
+            in 27.0..28.0 -> 0.149
+            in 29.0..30.0 -> 0.163
+            31.0 -> 0.179
+            in 32.0..33.0 -> 0.196
+            in 34.0..36.0 -> 0.215
+            in 37.0..39.0 -> 0.259
+            40.0 -> 0.311
+            else -> 0.01
+        }
+        return changeKcal * savedTimer * weight
     }
 
     sealed class RidingEvent{

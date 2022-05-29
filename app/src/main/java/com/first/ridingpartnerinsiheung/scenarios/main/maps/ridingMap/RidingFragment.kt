@@ -53,6 +53,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
     private var savedTimer = 0
     private var savedSpeed = 0.0
     private var savedDistance = 0.0
+    private var savedKcal = 0.0
 
     private var startTime = ""
     private var endTime = ""
@@ -129,9 +130,20 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
                 setOverlay()
             }
             drawPath(LatLng(location.latitude, location.longitude))
-            viewModel.mLocation = location
+            viewModel.mLocation.value = location
         }
     }
+    private fun drawPath(latLng:LatLng) {
+        endLatLng = LatLng(latLng.latitude, latLng.longitude)
+
+        val path = PathOverlay()
+        path.coords = listOf(startLatLng, endLatLng)
+        path.color = Color.BLUE
+        path.map = mNaverMap
+
+        startLatLng = endLatLng
+    }
+
     private fun startRiding(){ // 시작버튼
         binding.startBtn.visibility = View.GONE
         binding.stopBtn.visibility = View.VISIBLE
@@ -172,13 +184,10 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         }
     }
     private fun saveRiding(){
-
         savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
         savedTimer = viewModel.timer.value // 총 주행시간 받아오기
         savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
-
-
-        val savedKcal:Double = calculateKcal(savedSpeed, savedTimer, 60.0)  //  몸무게 임의로 60 설정
+        savedKcal = viewModel.calculateKcal(savedSpeed, savedTimer, 60.0)  //  몸무게 임의로 60 설정
 
         val data = RidingData(savedDistance, savedSpeed, savedTimer, savedKcal)
         // 페이지 이동
@@ -186,40 +195,13 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         dialog.start()
         dialog.setOnClickListener(object: RidingSaveDialog.DialogOKCLickListener{
             override fun onOKClicked() {
-                viewModel.saveData(onFailure = { showToast("저장 실패") }, data)
-                startActivity(Intent(requireContext(), RecordActivity::class.java))
+                viewModel.saveData(onFailure = { showToast("저장 실패") }, data, endTime)
+                val intent = Intent(requireContext(), RecordActivity::class.java)
+                intent.putExtra("time",endTime)
+                startActivity(intent)
+
             }
         })
-    }
-    private fun calculateKcal(averageSpeed: Double, savedTimer: Int, weight: Double): Double {
-        // 평속을 칼로리 소비계수로 전환
-        val changeKcal: Double = when (averageSpeed) {
-            in 13.0..15.0 -> 0.065
-            in 16.0..18.0 -> 0.0783
-            in 19.0..21.0 -> 0.0939
-            in 22.0..23.0 -> 0.113
-            in 24.0..25.0 -> 0.124
-            26.0 -> 0.136
-            in 27.0..28.0 -> 0.149
-            in 29.0..30.0 -> 0.163
-            31.0 -> 0.179
-            in 32.0..33.0 -> 0.196
-            in 34.0..36.0 -> 0.215
-            in 37.0..39.0 -> 0.259
-            40.0 -> 0.311
-            else -> 0.01
-        }
-        return changeKcal * savedTimer * weight
-    }
-    private fun drawPath(latLng:LatLng) {
-        endLatLng = LatLng(latLng.latitude, latLng.longitude)
-
-        val path = PathOverlay()
-        path.coords = listOf(startLatLng, endLatLng)
-        path.color = Color.BLUE
-        path.map = mNaverMap
-
-        startLatLng = endLatLng
     }
 
     // 시작지점 마크

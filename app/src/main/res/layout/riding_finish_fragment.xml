@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordViewModel" />
+    </data>
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".scenarios.main.recordPage.RidingFinishFragment">
@@ -75,7 +82,7 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:fontFamily="@font/c"
-                    android:text="1: 11: 43"/>
+                    android:text="@{viewModel.savedTimer}"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -96,7 +103,7 @@
                     android:textColor="@color/black"
                     android:paddingVertical="3dp"
                     android:fontFamily="@font/c"
-                    android:text="30km/h"/>
+                    android:text="@{viewModel.speedText}"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -125,7 +132,7 @@
                     android:textColor="@color/black"
                     android:paddingVertical="3dp"
                     android:fontFamily="@font/c"
-                    android:text="31.47km"/>
+                    android:text="@{viewModel.distanceText}"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -147,7 +154,7 @@
                     android:textColor="@color/black"
                     android:paddingVertical="3dp"
                     android:fontFamily="@font/c"
-                    android:text="130kcal"/>
+                    android:text="@{viewModel.kcalText}"/>
                 <TextView
 
                     android:layout_width="wrap_content"
@@ -208,3 +215,4 @@
 
     </LinearLayout>
 </ScrollView>
+</layout>

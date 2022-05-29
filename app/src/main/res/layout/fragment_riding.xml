@@ -13,75 +13,85 @@
         android:layout_height="match_parent">
 
         <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="@id/buttonLayout"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <fragment
                 android:id="@+id/ridingMapView"
                 android:name="com.naver.maps.map.MapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="180dp"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/riding_radius"
-                android:layout_margin="20dp"
-                android:padding="20dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_margin="5dp"
-                    android:fontFamily="@font/b"
-                    android:text="주행 정보"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                android:background="#CD2A71CD">
 
-                <TextView
-                    android:id="@+id/distanceText"
+                <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_margin="3dp"
-                    android:fontFamily="@font/b"
-                    android:text="@{viewModel.distanceText}"
-                    android:textColor="@color/black" />
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="5dp">
 
-                <TextView
-                    android:id="@+id/speedText"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_margin="3dp"
-                    android:fontFamily="@font/b"
-                    android:textColor="@color/black"
-                    android:text="@{viewModel.speedText}" />
+                    <TableRow
+                        android:id="@+id/linearLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp">
 
-                <TextView
-                    android:id="@+id/averSpeedText"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_margin="3dp"
-                    android:fontFamily="@font/b"
-                    android:textColor="@color/black"
-                    android:text="@{viewModel.averSpeedText}" />
-                <TextView
-                    android:id="@+id/timeText"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/b"
-                    android:textColor="@color/black"
-                    android:text="@{viewModel.timerText}" />
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/distanceText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/e"
+                            android:text="@{viewModel.distanceText}"
+                            android:layout_marginHorizontal="20dp"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/speedText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/e"
+                            android:text="@{viewModel.speedText}"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="20dp"
+                            android:textSize="15sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/linearLayout2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="10dp">
+
+                        <TextView
+                            android:id="@+id/averSpeedText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/e"
+                            android:layout_marginHorizontal="20dp"
+                            android:text="@{viewModel.averSpeedText}"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/timeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/e"
+                            android:text="@{viewModel.timerText}"
+                            android:textColor="@color/black"
+                            android:layout_marginStart="20dp"
+                            android:textSize="15sp" />
+                    </TableRow>
+                </TableLayout>
+            </FrameLayout>
+
         </FrameLayout>
 
         <LinearLayout
@@ -89,47 +99,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-            <Button
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/startBtn"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:paddingEnd="5dp"
-                android:text="start"
-                android:textColor="@color/black"
-                android:fontFamily="@font/a"
-                android:textStyle="bold"
+                android:layout_weight="1"
                 android:background="@drawable/riding_radius"
                 android:onClick="@{()-> viewModel.startRiding()}"
-                />
-            <Button
+                android:paddingEnd="5dp"
+                android:text="라이딩 시작하기"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/saveBtn"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:paddingStart="5dp"
-                android:background="@drawable/riding_radius"
                 android:layout_height="wrap_content"
-                android:text="SAVE"
-                android:textColor="@color/black"
-                android:visibility="gone"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/riding_radius_2"
                 android:onClick="@{()-> viewModel.saveRiding()}"
-                />
-            <Button
+                android:text="저장"
+                android:textStyle="bold"
+                android:textColor="@color/iphoneBlue"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/stopBtn"
-                android:layout_width="0dp"
-                android:background="@drawable/riding_radius"
-                android:layout_weight="1"
-                android:paddingStart="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="STOP"
-                android:textColor="@color/black"
-                android:visibility="gone"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/riding_radius_2"
                 android:onClick="@{()-> viewModel.stopRiding()}"
-                />
+                android:text="라이딩 중단"
+                android:textStyle="bold"
+                android:textColor="@color/iphoneBlue"
+                android:visibility="gone" />
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

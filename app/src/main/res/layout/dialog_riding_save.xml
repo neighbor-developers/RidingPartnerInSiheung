@@ -24,22 +24,22 @@
             android:gravity="end"
             android:orientation="horizontal">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cancelBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="7dp"
                 android:layout_weight="1"
-                android:background="@drawable/cancel_btn"
+                android:background="@drawable/riding_radius_2"
                 android:text="취소"
-                android:textColor="@color/darkBlue" />
+                android:textColor="@color/iphoneBlue" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/okBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/ok_btn"
+                android:background="@drawable/riding_radius"
                 android:text="완료"
                 android:textColor="@color/white" />
         </LinearLayout>

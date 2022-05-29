@@ -35,12 +35,14 @@
         <entry key="app/src/main/res/drawable/memo_edge.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/ok_btn.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/riding_radius.xml" value="0.1315" />
+        <entry key="app/src/main/res/drawable/riding_radius_2.xml" value="0.181" />
         <entry key="app/src/main/res/layout/activity_loading.xml" value="0.1954020845717278" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16197916666666667" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.23233695652173914" />
         <entry key="app/src/main/res/layout/activity_map.xml" value="0.32916666666666666" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.13019250253292808" />
         <entry key="app/src/main/res/layout/activity_maps2.xml" value="0.30833333333333335" />
+        <entry key="app/src/main/res/layout/activity_recode.xml" value="0.276268115942029" />
         <entry key="app/src/main/res/layout/activity_sign.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_start.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_change_name.xml" value="0.368890380859375" />
@@ -55,7 +57,7 @@
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_recording.xml" value="0.285302734375" />
         <entry key="app/src/main/res/layout/fragment_rental_location.xml" value="0.2526041666666667" />
-        <entry key="app/src/main/res/layout/fragment_riding.xml" value="0.43033905029296876" />
+        <entry key="app/src/main/res/layout/fragment_riding.xml" value="0.2612359550561798" />
         <entry key="app/src/main/res/layout/fragment_start.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/main_lv_item.xml" value="0.33123925546261557" />
         <entry key="app/src/main/res/layout/riding_finish_fragment.xml" value="0.2947860717773438" />
