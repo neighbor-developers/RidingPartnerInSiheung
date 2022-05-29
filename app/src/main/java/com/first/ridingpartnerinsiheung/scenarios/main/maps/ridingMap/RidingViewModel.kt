@@ -96,7 +96,7 @@ class RidingViewModel: ViewModel() {
     }
     fun getTimeNow() : String{
         return System.currentTimeMillis().let { current ->
-            SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
+            SimpleDateFormat("yyyy.MM/dd/HH:mm:ss").format(current)
         }
     }
     fun saveData(onFailure : () -> Unit, data : RidingData, time: String){
