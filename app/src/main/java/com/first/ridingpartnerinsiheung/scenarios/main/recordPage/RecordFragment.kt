@@ -33,3 +33,4 @@ class RecordFragment : Fragment() {
             .get()
     }
 }
+
