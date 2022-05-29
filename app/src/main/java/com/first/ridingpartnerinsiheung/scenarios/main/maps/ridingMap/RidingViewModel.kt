@@ -32,7 +32,7 @@ class RidingViewModel: ViewModel() {
     var speed = MutableStateFlow(0.0)
     var timer = MutableStateFlow(0)
 
-    var kcal = MutableStateFlow(0)
+    var kcal = MutableStateFlow(0.0)
 
     var befLatLng = LatLng(0.0, 0.0)
     var curLatLng = LatLng(0.0, 0.0)
@@ -89,13 +89,14 @@ class RidingViewModel: ViewModel() {
         }
     }
     fun stopCal() {
+        kcal.value = calculateKcal(averSpeed.value, timer.value, 60.0)
         viewModelScope.launch {
             calDisSpeedJob.cancelAndJoin()
         }
     }
     fun getTimeNow() : String{
         return System.currentTimeMillis().let { current ->
-            SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(current)
+            SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(current)
         }
     }
     fun saveData(onFailure : () -> Unit, data : RidingData, time: String){

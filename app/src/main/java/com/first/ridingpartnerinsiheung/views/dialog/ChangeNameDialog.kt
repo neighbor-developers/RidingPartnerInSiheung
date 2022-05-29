@@ -19,8 +19,8 @@ class ChangeNameDialog (context : Context){
     lateinit var data : String
 
     private val modifyEditText: EditText by lazy {  dialog.findViewById(R.id.modifyET)}
-    private val okBtn : Button by lazy{ dialog.findViewById(R.id.okModify)}
-    private val cancelBtn : Button by lazy { dialog.findViewById(R.id.cancelModify)}
+    private val okBtn : Button by lazy{ dialog.findViewById(R.id.okBtn)}
+    private val cancelBtn : Button by lazy { dialog.findViewById(R.id.cancelBtn)}
 
     fun start() {
         setDialog()

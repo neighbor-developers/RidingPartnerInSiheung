@@ -21,14 +21,10 @@ import com.google.firebase.ktx.Firebase
 
 class RidingFinishFragment : Fragment() {
 
-    // Firebase
-    private val db = FirebaseFirestore.getInstance()
-    private val auth = Firebase.auth
-    private val user = auth.currentUser!!.uid
-
     private lateinit var binding: RidingFinishFragmentBinding
     private val viewModel by viewModels<RecordViewModel>()
-    private var memo : String = ""
+
+    private var memo : String? = ""
     private var data : RidingData? = null
 
     private var time : String? = null
@@ -39,11 +35,12 @@ class RidingFinishFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         time = arguments?.getString("time")
+        data = arguments?.getSerializable("data") as RidingData
 
         initBinding()
         initTextChanged()
         finishClickListener()
-
+        initData(time!!, data!!)
 
         return binding.root
     }
@@ -57,12 +54,21 @@ class RidingFinishFragment : Fragment() {
     }
     private fun finishClickListener() {
         binding.complete.setOnClickListener {
-            startActivity(Intent(requireContext(), RecordActivity::class.java))
+            val recordActivity = activity as RecordActivity
+            viewModel.memo.value = memo.toString()
+            recordActivity.setFragment(RecordFragment(), time!!, data!!)
         }
     }
     private fun initTextChanged(){
         binding.memoET.doAfterTextChanged {
             memo = it.toString()
         }
+    }
+    private fun initData(time : String, data: RidingData){
+        viewModel.savedTimer.value = data.timer
+        viewModel.savedSpeed.value = data.averSpeed
+        viewModel.savedKcal.value = data.kcal
+        viewModel.savedDistance.value = data.sumDistance
+        viewModel.savedTime.value = time
     }
 }

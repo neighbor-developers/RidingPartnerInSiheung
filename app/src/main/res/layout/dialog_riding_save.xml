@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="7dp"
                 android:layout_weight="1"
-                android:background="@drawable/riding_radius_2"
+                android:background="@drawable/cancel_btn"
                 android:text="취소"
                 android:textColor="@color/iphoneBlue" />
 

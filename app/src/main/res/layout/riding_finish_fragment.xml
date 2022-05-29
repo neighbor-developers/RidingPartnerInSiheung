@@ -39,10 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="3dp"
-            android:text="31.47"
             android:layout_marginHorizontal="35dp"
             android:fontFamily="@font/recode_font2"
             android:textColor="@color/black"
+            android:text="@{viewModel.mainDistanceText}"
             android:textSize="60sp"/>
         <TextView
             android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:fontFamily="@font/c"
-                    android:text="@{viewModel.savedTimer}"/>
+                    android:text="@{viewModel.timerText}"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -203,15 +203,15 @@
         <android.widget.Button
             android:id="@+id/complete"
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_height="42dp"
             android:layout_gravity="center"
-            android:background="@drawable/riding_radius"
             android:layout_marginTop="20dp"
-            android:text="완료"
+            android:background="@drawable/riding_radius"
             android:fontFamily="@font/d"
+            android:text="완료"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 </ScrollView>

@@ -29,7 +29,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#CD2A71CD">
+                android:background="@drawable/riding">
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -48,7 +48,8 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/e"
                             android:text="@{viewModel.distanceText}"
-                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginStart="60dp"
+                            android:layout_marginEnd="45dp"
                             android:textColor="@color/black"
                             android:textSize="15sp" />
 
@@ -74,7 +75,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/e"
-                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginStart="60dp"
                             android:text="@{viewModel.averSpeedText}"
                             android:textColor="@color/black"
                             android:textSize="15sp" />
@@ -85,6 +86,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/e"
                             android:text="@{viewModel.timerText}"
+                            android:layout_marginEnd="45dp"
                             android:textColor="@color/black"
                             android:layout_marginStart="20dp"
                             android:textSize="15sp" />

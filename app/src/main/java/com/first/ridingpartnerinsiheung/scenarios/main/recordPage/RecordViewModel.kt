@@ -12,50 +12,34 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.math.round
 
 class RecordViewModel: ViewModel() {
-    // Firebase
-    private val db = FirebaseFirestore.getInstance()
-    private val auth = Firebase.auth
-    private val user = auth.currentUser!!.uid
+    var savedTimer = MutableStateFlow(0)
+    var savedSpeed = MutableStateFlow(1.0)
+    var savedDistance = MutableStateFlow(0.0)
+    var savedKcal = MutableStateFlow(0.0)
+    var savedTime = MutableStateFlow("0/0/0")
+    var memo = MutableStateFlow("")
 
-    var data : RidingData? = null
-
-     var savedTimer = MutableStateFlow(0)
-     var savedSpeed = MutableStateFlow(0.0)
-     var savedDistance = MutableStateFlow(0.0)
-     var savedKcal = MutableStateFlow(0.0)
-    val distanceText = savedDistance.map {
-        "$it km"
-    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
-    val speedText = savedDistance.map {
-        "$it km/h"
-    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
-    val kcalText = savedDistance.map {
-        "$it kcal"
+    var distanceText = savedDistance.map {
+        "${ round(it*100) /100} km"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
-    private val listenerRegistration = MutableStateFlow<ListenerRegistration?>(null)
+    var mainDistanceText = savedDistance.map {
+        "${ round(it*100) /100}"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
-    var time = MutableStateFlow("")
+    var speedText = savedSpeed.map {
+        "${round(it*100)/100} km/h"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
+    var kcalText = savedKcal.map {
+        "${round(it*10)/10} kcal"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
-    init {
-        viewModelScope.launch {
-                listenerRegistration.value?.remove()
-//                listenerRegistration.value = db.collection(user)
-//                    .document(time.value)
-//                    .addSnapshotListener{ value, error ->
-//                        var _data : Array<String?>? = null
-//                        var i = 0
-//                        value?.data?.entries?.sortedBy { it.key }?.forEach {
-//                            _data?.set(i, it.value.toString())
-//                        }
-//
-//
-//                    }
+    var timerText = savedTimer.map {
+        "${it/3600} : ${it / 60} : ${it%60}"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
-
-        }
-    }
 }

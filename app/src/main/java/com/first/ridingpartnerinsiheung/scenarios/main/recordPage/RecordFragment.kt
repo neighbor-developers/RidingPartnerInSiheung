@@ -19,6 +19,7 @@ class RecordFragment : Fragment() {
     private val auth = Firebase.auth
     private val user = auth.currentUser!!.uid
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,10 +28,5 @@ class RecordFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_record, container, false)
     }
 
-    private fun showRecord() {
-        val data = db.collection("UsersData")
-            .document(user).collection("Record")
-            .get()
-    }
 }
 

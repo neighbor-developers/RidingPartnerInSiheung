@@ -198,6 +198,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
                 viewModel.saveData(onFailure = { showToast("저장 실패") }, data, endTime)
                 val intent = Intent(requireContext(), RecordActivity::class.java)
                 intent.putExtra("time",endTime)
+                intent.putExtra("data", data)
                 startActivity(intent)
 
             }
