@@ -43,17 +43,17 @@ class RecordViewModel: ViewModel() {
     init {
         viewModelScope.launch {
                 listenerRegistration.value?.remove()
-                listenerRegistration.value = db.collection(user)
-                    .document(time.value)
-                    .addSnapshotListener{ value, error ->
-                        var _data : Array<String?>? = null
-                        var i = 0
-                        value?.data?.entries?.sortedBy { it.key }?.forEach {
-                            _data?.set(i, it.value.toString())
-                        }
-
-
-                    }
+//                listenerRegistration.value = db.collection(user)
+//                    .document(time.value)
+//                    .addSnapshotListener{ value, error ->
+//                        var _data : Array<String?>? = null
+//                        var i = 0
+//                        value?.data?.entries?.sortedBy { it.key }?.forEach {
+//                            _data?.set(i, it.value.toString())
+//                        }
+//
+//
+//                    }
 
 
         }
