@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.RentalLocation
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.rentalMap.RentalLocationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingFragment
 
@@ -19,6 +20,8 @@ class MapActivity : AppCompatActivity() {
             setFragment(RidingFragment())
         }else if(to=="rental"){
             setFragment(RentalLocationFragment())
+        }else if(to=="navigation"){
+            setFragment(NavigationFragment())
         }
     }
     private fun setFragment(fragment: Fragment){

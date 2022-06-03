@@ -92,7 +92,9 @@ class StartFragment : Fragment() {
 
             recDoc.get().addOnSuccessListener { documentSnapshot ->
                 recentRecord = documentSnapshot.toObject<RidingData>()!!
-                binding.recentRidingTv.text = recentRecord.sumDistance.toString()
+                binding.recentRidingTv.text = recentRecord.timer.toString()
+
+                showToast(recentRecord.sumDistance.toString())
             }
 
         }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <fragment
+            android:id="@+id/ridingMapView"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/directionSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/searchStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/startPlace"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:hint="출발지"
+                    android:textSize="10dp" />
+                <Button
+                    android:id="@+id/searchStartBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="48dp"
+                    android:textColor="#000000"
+                    android:textSize="10dp"
+                    android:text="검색"
+                    android:onClick="@{()-> viewModel.setStartPlace()}"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/searchEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/endPlace"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:hint="도착지"
+                    android:textSize="10dp"
+                    android:visibility="visible"
+                    />
+                <Button
+                    android:id="@+id/searchEndBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="48dp"
+                    android:textColor="#000000"
+                    android:textSize="10dp"
+                    android:text="검색"
+                    android:onClick="@{()-> viewModel.setEndPlace()}"
+                    />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/placeListView"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:padding="10dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </FrameLayout>
+</layout>

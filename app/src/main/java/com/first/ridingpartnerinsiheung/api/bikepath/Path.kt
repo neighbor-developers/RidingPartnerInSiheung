@@ -108,8 +108,8 @@ val bikeretrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
-object ApiObject {
+object ApiObject2 {
     val retrofitService: PathInterface by lazy {
-        retrofit.create(PathInterface::class.java)
+        bikeretrofit.create(PathInterface::class.java)
     }
 }

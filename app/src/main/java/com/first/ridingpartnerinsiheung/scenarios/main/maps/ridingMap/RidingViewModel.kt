@@ -23,6 +23,8 @@ class RidingViewModel: ViewModel() {
 
     private var _event = MutableSharedFlow<RidingEvent>()
     var event = _event.asSharedFlow()
+    private var _navigationEvent = MutableSharedFlow<NavigationEvent>()
+    var navigationEvent = _navigationEvent.asSharedFlow()
 
     var mLocation = MutableStateFlow<Location?>(null)
 
@@ -141,4 +143,18 @@ class RidingViewModel: ViewModel() {
     fun stopRiding() = viewModelScope.launch { _event.emit(RidingEvent.StopRiding) }
     fun saveRiding() = viewModelScope.launch { _event.emit(RidingEvent.SaveRiding) }
     fun postFailuer(e :Exception) = viewModelScope.launch { _event.emit(RidingEvent.PostFailuer(e)) }
+
+    sealed class NavigationEvent{
+        object SetStartPlace : NavigationEvent()
+        object SetEndPlace : NavigationEvent()
+        object SelectStartPlace : NavigationEvent()
+        object SelectEndPlace : NavigationEvent()
+        object GetPath: NavigationEvent()
+    }
+
+    fun setStartPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SetStartPlace) }
+    fun setEndPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SetEndPlace) }
+    fun selectStartPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SelectStartPlace) }
+    fun selectEndPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SelectEndPlace) }
+    fun getPath() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.GetPath) }
 }
