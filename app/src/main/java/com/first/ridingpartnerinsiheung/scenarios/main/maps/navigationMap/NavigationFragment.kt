@@ -231,6 +231,10 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                                 endPlaceData = placeDetail[i]
                                 binding.placeListView.visibility = View.GONE
                             }
+
+                            if (binding.startPlace.text.toString().isNotEmpty() && binding.endPlace.text.toString().isNotEmpty()) {
+                                binding.startBtn.visibility = View.VISIBLE
+                            }
                         }
 
                     }catch (e : NullPointerException){

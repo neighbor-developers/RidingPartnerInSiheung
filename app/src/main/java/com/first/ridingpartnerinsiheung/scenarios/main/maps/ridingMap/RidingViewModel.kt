@@ -147,14 +147,16 @@ class RidingViewModel: ViewModel() {
     sealed class NavigationEvent{
         object SetStartPlace : NavigationEvent()
         object SetEndPlace : NavigationEvent()
-        object SelectStartPlace : NavigationEvent()
-        object SelectEndPlace : NavigationEvent()
+        object StartNavigation : NavigationEvent()
+        object StopNavigation : NavigationEvent()
+        object SaveNavigation : NavigationEvent()
         object GetPath: NavigationEvent()
     }
 
     fun setStartPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SetStartPlace) }
     fun setEndPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SetEndPlace) }
-    fun selectStartPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SelectStartPlace) }
-    fun selectEndPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SelectEndPlace) }
+    fun startNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.StartNavigation) }
+    fun stopNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.StopNavigation) }
+    fun saveNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SaveNavigation) }
     fun getPath() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.GetPath) }
 }

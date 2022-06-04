@@ -75,5 +75,55 @@
                 android:visibility="gone" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:layout_gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/startBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/riding_radius"
+                android:onClick="@{()-> viewModel.startNavigation()}"
+                android:paddingEnd="5dp"
+                android:text="라이딩 시작하기"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/riding_radius_2"
+                android:onClick="@{()-> viewModel.saveNavigation()}"
+                android:text="저장"
+                android:textColor="@color/iphoneBlue"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/stopBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/riding_radius_2"
+                android:onClick="@{()-> viewModel.stopNavigation()}"
+                android:text="라이딩 중단"
+                android:textColor="@color/iphoneBlue"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
     </FrameLayout>
 </layout>
