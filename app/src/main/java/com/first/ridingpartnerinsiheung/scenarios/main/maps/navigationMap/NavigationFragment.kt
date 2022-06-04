@@ -204,7 +204,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
 
     private fun setPlace(type: String) {
         var place = binding.startPlace.text.toString()
-        if (type == "start") {
+        if (type == "end") {
             place = binding.endPlace.text.toString()
         }
 
