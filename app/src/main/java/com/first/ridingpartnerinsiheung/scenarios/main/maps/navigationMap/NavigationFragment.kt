@@ -28,7 +28,6 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import kotlinx.android.synthetic.main.place_list_item.view.*
 import kotlinx.coroutines.flow.collect
 import retrofit2.Call
 import retrofit2.Response
@@ -51,8 +50,10 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         initBinding()
+        initMapView()
         initObserves()
         initMapView()
+        getPath()
         return binding.root
     }
     private fun initMapView(){
@@ -83,10 +84,12 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                 when(event){
                     RidingViewModel.NavigationEvent.SetStartPlace -> setPlace("start")
                     RidingViewModel.NavigationEvent.SetEndPlace -> setPlace("end")
+                    RidingViewModel.NavigationEvent.StartNavigation -> startNavigation()
                 }
             }
         }
     }
+
     override fun onMapReady(naverMap: NaverMap) {
         mNaverMap = naverMap
         mNaverMap.locationSource = locationSource
@@ -118,7 +121,6 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         marker.captionText = title
         return marker
     }
-
 
     private fun setPlace(type: String) {
         val place = when(type){
@@ -188,30 +190,52 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-    private fun getPath() {
+
+    private fun startNavigation(){ // 시작버튼
+        binding.startBtn.visibility = View.GONE
+        var startTime = viewModel.getTimeNow() // 시작 시간
+        var startLatLng = LatLng(startPlaceData.y.toDouble(), startPlaceData.x.toDouble())
+        var startMarker = marker(startLatLng, "출발지점") // 출발지점 마크
+
+        var endLatLng = LatLng(endPlaceData.y.toDouble(), endPlaceData.x.toDouble())
+
+        var path = getPath();
+        setOverlay()
+
+        viewModel.befLatLng = startLatLng
+        viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
+    }
+
+    private fun getPath(): Path? {
         val call = ApiObject2.retrofitService.getPAth(
-            start_latLon = "37.5055196999994,126.94229594606628",
-            start_name = "한국공학대",
-            destination = "37.5055196999994,126.94229594606628",
-            destination_name = "한국공학대")
+            start = "126.9820673,37.4853855,name=이수역 7호선",
+            destination = "126.9803409,37.5029146,name=동작역 4호선",
+        )
+
+        var path: Path? = null;
 
         call.enqueue(object : retrofit2.Callback<Path> {
             override fun onResponse(call: Call<Path>, response: Response<Path>) {
                 if (response.isSuccessful) {
                     try {
-                        showToast(response.body().toString())
+                        Log.d("확인", "성공")
+                        path = response.body()!!
                     }catch (e : NullPointerException){
+                        Log.d("에러러", "dd")
                     }
+                } else {
+                    Log.d("확인", "에러")
                 }
             }
 
             override fun onFailure(call: Call<Path>, t: Throwable) {
-                showToast(t.message.toString())
+                Log.d("에러", "ㅜㅜ")
             }
         })
 
-        //binding.adrId.text = places!![0].jibunAddress;
+        return path
     }
+
     //  권한 요청
     private val PERMISSION_CODE = 100
 
