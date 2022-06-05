@@ -15,10 +15,12 @@ class PlaceAdapter(val context: Context, val places : List<PlaceDetail.Place>) :
 
         val placeName = view.findViewById<TextView>(R.id.placeName)
         val placeAdr = view.findViewById<TextView>(R.id.placeAdr)
+        val placeType = view.findViewById<TextView>(R.id.placeType)
 
         val place = places[position]
         placeName.text = place.title
         placeAdr.text = place.roadAddress
+        placeType.text = place.ctg
 
         return view
     }

@@ -12,28 +12,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingVertical="20dp"
+            android:paddingVertical="30dp"
             android:background="@color/darkBlue">
             <TextView
                 android:id="@+id/recommend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
-                android:text="추천 경로"
+                android:text="# 추천 경로"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:fontFamily="@font/dd"
+
+                android:fontFamily="@font/b"
                 android:textSize="25dp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
+                android:text="추천 코스로 라이딩과 함께 시흥시를 즐겨보세요!"
+                android:textColor="#D5D5D5D5"
+                android:textStyle="bold"
+                android:fontFamily="@font/c"
+                android:textSize="9dp"/>
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
-                android:padding="10dp" />
-            </LinearLayout>
+                android:padding="20dp" />
+
+
 
         </LinearLayout>
     </ScrollView>

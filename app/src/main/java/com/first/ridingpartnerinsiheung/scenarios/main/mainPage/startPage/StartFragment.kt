@@ -98,10 +98,6 @@ class StartFragment : Fragment() {
             }
 
         }
-
-
-
-
         return binding.root
     }
 

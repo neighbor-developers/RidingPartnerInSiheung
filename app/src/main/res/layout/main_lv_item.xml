@@ -4,18 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="20dp"
-    android:paddingVertical="10dp"
+    android:paddingVertical="15dp"
+    android:elevation="11dp"
+    android:background="@drawable/list_edge"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/placeImg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/path"
-        />
+        android:src="@drawable/path" />
 
     <TextView
         android:id="@+id/placeTxt"
@@ -23,10 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:text="오이도 빨간 등대"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/cc"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@font/e"
+        android:layout_marginTop="3dp"
         app:layout_constraintStart_toEndOf="@+id/placeImg"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,8 +36,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="23.5Km"
-        android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textColor="#3A3A3A"
+        android:textSize="13sp"
         android:layout_marginStart="25dp"
         android:fontFamily="@font/b"
         app:layout_constraintBottom_toBottomOf="parent"

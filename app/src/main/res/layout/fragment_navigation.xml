@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <fragment
-            android:id="@+id/ridingMapView"
+            android:id="@+id/navigetionMapView"
             android:name="com.naver.maps.map.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -21,109 +21,111 @@
             android:id="@+id/directionSetting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="15dp"
             android:orientation="vertical">
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/searchStart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:elevation="11dp"
+                android:background="@drawable/edge">
+
                 <EditText
                     android:id="@+id/startPlace"
-                    android:layout_width="100dp"
-                    android:layout_height="48dp"
-                    android:hint="출발지"
-                    android:textSize="10dp" />
-                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=" 출발지"
+                    android:textSize="15dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/searchStartBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
                     android:id="@+id/searchStartBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:textColor="#000000"
-                    android:textSize="10dp"
-                    android:text="검색"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_search"
                     android:onClick="@{()-> viewModel.setStartPlace()}"
-                    />
-            </LinearLayout>
-            <LinearLayout
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/searchEnd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:elevation="11dp"
+                android:layout_marginVertical="10dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/edge">
+
                 <EditText
                     android:id="@+id/endPlace"
-                    android:layout_width="100dp"
-                    android:layout_height="48dp"
-                    android:hint="도착지"
-                    android:textSize="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=" 도착지"
+                    android:textSize="15dp"
                     android:visibility="visible"
-                    />
-                <Button
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/searchEndBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/searchEndBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:textColor="#000000"
-                    android:textSize="10dp"
-                    android:text="검색"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_search"
                     android:onClick="@{()-> viewModel.setEndPlace()}"
-                    />
-            </LinearLayout>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ListView
                 android:id="@+id/placeListView"
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:padding="10dp"
+                android:layout_height="wrap_content"
                 android:visibility="gone" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:padding="5dp"
+            android:layout_marginHorizontal="15dp"
+            android:elevation="10dp"
             android:layout_gravity="bottom"
+            android:background="@drawable/riding_edge"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/startBtn"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/riding_radius"
+                android:background="#00FF0000"
                 android:onClick="@{()-> viewModel.startNavigation()}"
-                android:paddingEnd="5dp"
-                android:text="라이딩 시작하기"
-                android:textColor="@color/white"
+                android:text="안내 시작하기"
+                android:elevation="0dp"
+                android:textColor="@color/black"
                 android:textStyle="bold"
-                android:visibility="gone" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/saveBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/riding_radius_2"
-                android:onClick="@{()-> viewModel.saveNavigation()}"
-                android:text="저장"
-                android:textColor="@color/iphoneBlue"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/stopBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:background="@drawable/riding_radius_2"
-                android:onClick="@{()-> viewModel.stopNavigation()}"
-                android:text="라이딩 중단"
-                android:textColor="@color/iphoneBlue"
-                android:textStyle="bold"
-                android:visibility="gone" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

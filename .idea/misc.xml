@@ -37,6 +37,7 @@
         <entry key="app/src/main/res/drawable/memo_edge.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/ok_btn.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/riding.xml" value="0.18796844482421876" />
+        <entry key="app/src/main/res/drawable/riding_edge.xml" value="0.149" />
         <entry key="app/src/main/res/drawable/riding_radius.xml" value="0.1315" />
         <entry key="app/src/main/res/drawable/riding_radius_2.xml" value="0.181" />
         <entry key="app/src/main/res/layout/activity_loading.xml" value="0.1954020845717278" />
@@ -55,15 +56,16 @@
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.21467391304347827" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.14635416666666667" />
-        <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.7788637357023804" />
-        <entry key="app/src/main/res/layout/fragment_path_list.xml" value="0.19322916666666667" />
+        <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.5019762845849802" />
+        <entry key="app/src/main/res/layout/fragment_navigation.xml" value="0.20287033355164674" />
+        <entry key="app/src/main/res/layout/fragment_path_list.xml" value="0.31736857096354165" />
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_recording.xml" value="0.285302734375" />
         <entry key="app/src/main/res/layout/fragment_rental_location.xml" value="0.2526041666666667" />
-        <entry key="app/src/main/res/layout/fragment_riding.xml" value="0.2612359550561798" />
+        <entry key="app/src/main/res/layout/fragment_riding.xml" value="0.40207610398196114" />
         <entry key="app/src/main/res/layout/fragment_start.xml" value="0.2526041666666667" />
-        <entry key="app/src/main/res/layout/main_lv_item.xml" value="0.33123925546261557" />
-        <entry key="app/src/main/res/layout/place_list_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/main_lv_item.xml" value="0.31021118164062494" />
+        <entry key="app/src/main/res/layout/place_list_item.xml" value="0.6027736497961957" />
         <entry key="app/src/main/res/layout/riding_finish_fragment.xml" value="0.2947860717773438" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.30462962962962964" />
       </map>

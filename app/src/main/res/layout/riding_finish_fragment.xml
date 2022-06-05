@@ -7,212 +7,212 @@
             name="viewModel"
             type="com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordViewModel" />
     </data>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".scenarios.main.recordPage.RidingFinishFragment">
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="40dp"
-        >
-        <TextView
-            android:id="@+id/rComplete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="주행 기록"
-            android:textColor="#000000"
-            android:fontFamily="@font/dd"
-            android:textSize="25dp"
-            android:layout_marginBottom="25dp"
-            android:textStyle="bold" />
-        <View
+        tools:context=".scenarios.main.recordPage.RidingFinishFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="40dp"
+            >
+            <TextView
+                android:id="@+id/rComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="주행 기록"
+                android:textColor="#000000"
+                android:fontFamily="@font/dd"
+                android:textSize="25dp"
+                android:layout_marginBottom="25dp"
+                android:textStyle="bold" />
+            <View
+                android:layout_marginHorizontal="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="20dp"
+                android:background="#cdcdcd"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:layout_marginHorizontal="35dp"
+                android:fontFamily="@font/recode_font2"
+                android:textColor="@color/black"
+                android:text="@{viewModel.mainDistanceText}"
+                android:textSize="60sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="35dp"
+
+                android:text=" 킬로미터"
+                android:textSize="15sp"/>
+
+
+
+            <ImageView
+                android:id="@+id/cImage"
+                android:layout_width="200dp"
+                android:layout_height="180dp"
+                android:layout_marginVertical="20dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/path"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/cTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="27sp"
+                        android:paddingVertical="3dp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/c"
+                        android:text="@{viewModel.timerText}"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="주행 시간"
+                        android:fontFamily="@font/d"
+                        android:textSize="13sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/avrSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="27sp"
+                        android:textColor="@color/black"
+                        android:paddingVertical="3dp"
+                        android:fontFamily="@font/c"
+                        android:text="@{viewModel.speedText}"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="평균 속도"
+                        android:fontFamily="@font/d"
+                        android:textSize="13sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/sumDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="27sp"
+                        android:textColor="@color/black"
+                        android:paddingVertical="3dp"
+                        android:fontFamily="@font/c"
+                        android:text="@{viewModel.distanceText}"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="주행 거리"
+                        android:fontFamily="@font/d"
+                        android:textSize="13dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/kcal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="27sp"
+                        android:textColor="@color/black"
+                        android:paddingVertical="3dp"
+                        android:fontFamily="@font/c"
+                        android:text="@{viewModel.kcalText}"/>
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="소모 칼로리"
+                        android:fontFamily="@font/d"
+                        android:textSize="13dp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <View
             android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="20dp"
             android:background="#cdcdcd"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:layout_marginHorizontal="35dp"
-            android:fontFamily="@font/recode_font2"
-            android:textColor="@color/black"
-            android:text="@{viewModel.mainDistanceText}"
-            android:textSize="60sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="35dp"
 
-            android:text=" 킬로미터"
-            android:textSize="15sp"/>
-
-
-
-        <ImageView
-            android:id="@+id/cImage"
-            android:layout_width="200dp"
-            android:layout_height="180dp"
-            android:layout_marginVertical="20dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/path"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:padding="10dp">
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="20dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+
                 <TextView
-                    android:id="@+id/cTime"
+                    android:id="@+id/addMemo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="27sp"
-                    android:paddingVertical="3dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/c"
-                    android:text="@{viewModel.timerText}"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="주행 시간"
+                    android:text="메모 추가하기"
+                    android:textColor="#000000"
                     android:fontFamily="@font/d"
-                    android:textSize="13sp"/>
+                    android:textSize="18sp"
+                    android:layout_gravity="center_vertical" />
             </LinearLayout>
-            <LinearLayout
+            <EditText
+                android:id="@+id/memoET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/cc"
+                android:background="@android:color/transparent"
                 android:layout_marginHorizontal="20dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/avrSpeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="27sp"
-                    android:textColor="@color/black"
-                    android:paddingVertical="3dp"
-                    android:fontFamily="@font/c"
-                    android:text="@{viewModel.speedText}"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="평균 속도"
-                    android:fontFamily="@font/d"
-                    android:textSize="13sp"/>
-            </LinearLayout>
+                android:hint="#오늘의 라이을 #기록해보세요"/>
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:padding="10dp">
-            <LinearLayout
+            <android.widget.Button
+                android:id="@+id/complete"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/sumDistance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="27sp"
-                    android:textColor="@color/black"
-                    android:paddingVertical="3dp"
-                    android:fontFamily="@font/c"
-                    android:text="@{viewModel.distanceText}"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="주행 거리"
-                    android:fontFamily="@font/d"
-                    android:textSize="13dp"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/kcal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="27sp"
-                    android:textColor="@color/black"
-                    android:paddingVertical="3dp"
-                    android:fontFamily="@font/c"
-                    android:text="@{viewModel.kcalText}"/>
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="소모 칼로리"
-                    android:fontFamily="@font/d"
-                    android:textSize="13dp"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-        <View
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#cdcdcd"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/addMemo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="메모 추가하기"
-                android:textColor="#000000"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/riding_radius"
                 android:fontFamily="@font/d"
-                android:textSize="18sp"
-                android:layout_gravity="center_vertical" />
+                android:text="완료"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
-        <EditText
-            android:id="@+id/memoET"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/cc"
-            android:background="@android:color/transparent"
-            android:layout_marginHorizontal="20dp"
-            android:hint="#오늘의 라이을 #기록해보세요"/>
-
-        <android.widget.Button
-            android:id="@+id/complete"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/riding_radius"
-            android:fontFamily="@font/d"
-            android:text="완료"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
 </layout>
