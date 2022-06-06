@@ -18,4 +18,8 @@ class MySharedPreferences(context: Context) {
     var recentRidingTime : String?
         get() = prefs.getString("riding_time","")
         set(value) = prefs.edit().putString("riding_time",value).apply()
+
+    var goalDistance : Int
+        get() = prefs.getInt("goal_distance", 0)
+        set(value) = prefs.edit().putInt("goal_distance",value).apply()
 }

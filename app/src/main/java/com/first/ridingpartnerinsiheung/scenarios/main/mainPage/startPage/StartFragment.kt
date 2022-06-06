@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,12 +20,15 @@ import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageViewModel
+import com.first.ridingpartnerinsiheung.views.dialog.ChangeGoalDistanceDialog
 import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.round
@@ -39,10 +41,10 @@ class StartFragment : Fragment() {
     private val auth = Firebase.auth
     private val user = auth.currentUser!!.uid
 
-    var recordArray = arrayListOf<String>()
     private lateinit var mLastLocation : Location
     private var mFusedLocationProviderClient : FusedLocationProviderClient? = null
     private lateinit var mLocationRequest: LocationRequest
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,51 +57,76 @@ class StartFragment : Fragment() {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         startLocationUpdate()
-
+        initObserves()
 
         //뷰모델 실행중 날씨모델 mutablestateflow 관찰해서 이미지 뷰 세팅
-        viewModel.run{
-            weather.onEach{
-                when(it!!.sky){
+        viewModel.run {
+            weather.onEach {
+                when (it!!.sky) {
                     "맑음" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_sun3)
                     "구름 많음" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_cloud)
                     "흐림" -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_overcast)
                     else -> binding.skyTypeImg.setImageResource(R.drawable.icon_whether_sun3)
                 }
-                when(it!!.rainType){
-                    "강수 예정 없음" ->binding.rainTypeImg.setImageResource(R.drawable.icon_whether_sun)
+                when (it!!.rainType) {
+                    "강수 예정 없음" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_sun)
                     "비" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
                     "비/눈" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
-                    "눈" ->  binding.rainTypeImg.setImageResource(R.drawable.icon_whether_snow)
+                    "눈" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_snow)
                     "빗방울" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
-                    "빗방울 눈날림"-> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
+                    "빗방울 눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
                     "눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_snow)
                 }
 //
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
 
+        var recentRecord: RidingData
 
-        var prefs = MySharedPreferences((activity as MainActivity).applicationContext)
-        var recentRecord : RidingData
-        if (prefs.recentRidingTime!=""){
-            showToast("최근 라이딩 데이터 불러오는 중")
+        val prefs = MySharedPreferences((activity as MainActivity).applicationContext)
+
+        if (prefs.recentRidingTime != "") {
             val recDoc = db.collection(user)
                 .document(prefs.recentRidingTime!!)
 
             recDoc.get().addOnSuccessListener { documentSnapshot ->
                 recentRecord = documentSnapshot.toObject<RidingData>()!!
-                binding.timerTv.text = recentRecord.timer.toString() +" sec"
-                binding.distanceTv.text = (round((recentRecord.sumDistance)*100)/100).toString() + " km"
-                binding.speedTv.text = (round((recentRecord.averSpeed)*100)/100).toString() + " km/h"
 
+                binding.timerTv.text = recentRecord.timer.let {
+                    "${it / 3600} : ${it / 60} : ${it % 60}"
+                }
+                binding.distanceTv.text = "달린 거리 : ${round(recentRecord.sumDistance / 10) / 100} km"
+                binding.speedTv.text = "${round(recentRecord.averSpeed / 10) / 100} km/h"
+                binding.distanceProgressbar.progress = (recentRecord.sumDistance / 100).toInt()
             }
-
+        }
+        if(prefs.goalDistance != 0){
+            binding.distanceProgressbar.max = prefs.goalDistance*10
+            binding.goalDistanceTv.text = "${prefs.goalDistance}km"
         }
         return binding.root
     }
+    private fun initObserves(){
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.event.collect(){ event ->
+                when(event){
+                    StartViewModel.StartEvent.ShowDialog -> showDialog()
+                }
+            }
+        }
+    }
+    private fun showDialog(){
+        val prefs = MySharedPreferences((activity as MainActivity).applicationContext)
 
-
+        val dialog = ChangeGoalDistanceDialog(requireContext())
+        dialog.start()
+        dialog.setOnClickListener(object:ChangeGoalDistanceDialog.DialogOKCLickListener{
+            override fun onOKClicked(data: Int) {
+                prefs.goalDistance = data
+                showToast("앱 재시동시 적용됩니다")
+            }
+        })
+    }
 
     private fun initBinding(inflater: LayoutInflater = this.layoutInflater, container: ViewGroup? = null){
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_start, container, false)

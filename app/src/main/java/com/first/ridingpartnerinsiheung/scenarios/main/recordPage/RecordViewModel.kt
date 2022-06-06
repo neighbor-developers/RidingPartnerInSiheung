@@ -23,15 +23,15 @@ class RecordViewModel: ViewModel() {
     var memo = MutableStateFlow("")
 
     var distanceText = savedDistance.map {
-        "${ round(it*100) /100} km"
+        "${ round(it/10)/100} km"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     var mainDistanceText = savedDistance.map {
-        "${ round(it*100) /100}"
+        "${ round(it/10)/100}"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     var speedText = savedSpeed.map {
-        "${round(it*100)/100} km/h"
+        "${round(it/10)/100} km/h"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     var kcalText = savedKcal.map {
@@ -41,5 +41,6 @@ class RecordViewModel: ViewModel() {
     var timerText = savedTimer.map {
         "${it/3600} : ${it / 60} : ${it%60}"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
+
 
 }

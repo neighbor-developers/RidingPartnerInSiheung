@@ -7,7 +7,10 @@ import com.first.ridingpartnerinsiheung.data.LocationXY
 import com.first.ridingpartnerinsiheung.api.weather.ApiObject
 import com.first.ridingpartnerinsiheung.data.ModelWeather
 import com.first.ridingpartnerinsiheung.api.weather.Weather
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -19,6 +22,9 @@ class StartViewModel() : ViewModel() {
 
     // 날씨 정보 담을 변수
     var weather = MutableStateFlow<ModelWeather?>(ModelWeather())
+
+    private val _event = MutableSharedFlow<StartEvent>()
+    val event = _event.asSharedFlow()
 
     // 날짜 시간 설정
     private val _date = MutableStateFlow(
@@ -168,5 +174,11 @@ class StartViewModel() : ViewModel() {
         val y = (ro - ra * Math.cos(theta) + YO + 0.5).toInt()
 
         return LocationXY(x, y)
+    }
+
+
+    fun showDialog() = viewModelScope.launch { _event.emit(StartEvent.ShowDialog) }
+    sealed class StartEvent{
+        object ShowDialog: StartEvent()
     }
 }

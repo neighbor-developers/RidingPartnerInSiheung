@@ -40,15 +40,15 @@ class RidingViewModel: ViewModel() {
     var curLatLng = LatLng(0.0, 0.0)
 
     val distanceText = sumDistance.map {
-        "${round(it*100)/100} km"
+        "${round(it/10)/100} km"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     val averSpeedText = averSpeed.map {
-        "${round(it*100)/100} km/h"
+        "${round(it/10)/100} km/h"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     val speedText = speed.map {
-        "${round(it*100)/100}"
+        "${round(it/10)/100}"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     val timerText = timer.map {
@@ -80,10 +80,10 @@ class RidingViewModel: ViewModel() {
 
                     sumDistance.value += distance // 총 주행거리 누적
 
-                    speed.value = distance / 3 * 100
+                    speed.value = distance / 3 * 3.6 //k/h
 //                    speed.value = ((speed.value * 100) / 100.0) // 순간 속도
 
-                    averSpeed.value = sumDistance.value / timer.value // 평균 속도
+                    averSpeed.value = sumDistance.value / timer.value /3.6 // 평균 속도
 
                     befLatLng = curLatLng
                 }
