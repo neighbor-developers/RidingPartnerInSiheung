@@ -29,7 +29,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-
+import kotlin.math.round
 class StartFragment : Fragment() {
 
     //viewBinding
@@ -80,21 +80,19 @@ class StartFragment : Fragment() {
         }
 
 
-// TODO : doc 가 null 이라고 나오는데 파이어베이스에 진짜 없는건지 아이디가 일치안해서 없는건지 확인하고 진짜 없는거면 수정 해야함
-
-//        주석 해제하면 오류날수 있습니다!
         var prefs = MySharedPreferences((activity as MainActivity).applicationContext)
         var recentRecord : RidingData
         if (prefs.recentRidingTime!=""){
-            showToast("데이터 불러오는 중")
+            showToast("최근 라이딩 데이터 불러오는 중")
             val recDoc = db.collection(user)
                 .document(prefs.recentRidingTime!!)
 
             recDoc.get().addOnSuccessListener { documentSnapshot ->
                 recentRecord = documentSnapshot.toObject<RidingData>()!!
-                binding.recentRidingTv.text = recentRecord.timer.toString()
+                binding.timerTv.text = recentRecord.timer.toString() +" sec"
+                binding.distanceTv.text = (round((recentRecord.sumDistance)*100)/100).toString() + " km"
+                binding.speedTv.text = (round((recentRecord.averSpeed)*100)/100).toString() + " km/h"
 
-                showToast(recentRecord.sumDistance.toString())
             }
 
         }
