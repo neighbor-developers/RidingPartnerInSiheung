@@ -1,9 +1,11 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.rentalMap.RentalLocationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage.RouteSearchFragment
@@ -29,5 +31,4 @@ class MapActivity : AppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
-
 }

@@ -38,6 +38,8 @@
         <entry key="app/src/main/res/drawable/ok_btn.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/progressbar.xml" value="0.149" />
         <entry key="app/src/main/res/drawable/record_edge.xml" value="0.29" />
+        <entry key="app/src/main/res/drawable/record_edge_pupple.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/record_edge_yellow.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/riding.xml" value="0.18796844482421876" />
         <entry key="app/src/main/res/drawable/riding_edge.xml" value="0.149" />
         <entry key="app/src/main/res/drawable/riding_radius.xml" value="0.1315" />
@@ -66,7 +68,7 @@
         <entry key="app/src/main/res/layout/fragment_recording.xml" value="0.285302734375" />
         <entry key="app/src/main/res/layout/fragment_rental_location.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/fragment_riding.xml" value="0.40207610398196114" />
-        <entry key="app/src/main/res/layout/fragment_start.xml" value="0.37725630176159763" />
+        <entry key="app/src/main/res/layout/fragment_start.xml" value="0.33093061816784763" />
         <entry key="app/src/main/res/layout/main_lv_item.xml" value="0.31021118164062494" />
         <entry key="app/src/main/res/layout/place_list_item.xml" value="0.6027736497961957" />
         <entry key="app/src/main/res/layout/progressbar.xml" value="0.22552083333333334" />

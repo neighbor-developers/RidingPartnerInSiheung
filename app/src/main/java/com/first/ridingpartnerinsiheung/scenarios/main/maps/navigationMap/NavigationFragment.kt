@@ -50,10 +50,12 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         initBinding()
         initMapView()
         initObserves()
         initMapView()
+
         return binding.root
     }
     private fun initMapView(){

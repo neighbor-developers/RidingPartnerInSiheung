@@ -3,6 +3,7 @@ package com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.PointF
 import android.location.LocationManager
 import android.os.Bundle
@@ -30,6 +31,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.flow.collect
 import retrofit2.Call
 import retrofit2.Response
@@ -118,8 +120,11 @@ class RouteSearchFragment : Fragment(), OnMapReadyCallback {
         marker.position = latLng
         marker.map = mNaverMap
         marker.width = 50
-        marker.height = 50
+        marker.height = 70
         marker.captionText = title
+        if(title == "도착지"){
+            marker.icon = MarkerIcons.RED
+        }
         return marker
     }
 

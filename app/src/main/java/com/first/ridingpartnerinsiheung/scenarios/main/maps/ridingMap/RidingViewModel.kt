@@ -83,7 +83,7 @@ class RidingViewModel: ViewModel() {
                     speed.value = distance / 3 * 3.6 //k/h
 //                    speed.value = ((speed.value * 100) / 100.0) // 순간 속도
 
-                    averSpeed.value = sumDistance.value / timer.value /3.6 // 평균 속도
+                    averSpeed.value = sumDistance.value / timer.value *3.6 // 평균 속도
 
                     befLatLng = curLatLng
                 }

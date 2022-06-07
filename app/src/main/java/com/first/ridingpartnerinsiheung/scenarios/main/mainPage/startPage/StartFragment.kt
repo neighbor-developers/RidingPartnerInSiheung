@@ -102,7 +102,7 @@ class StartFragment : Fragment() {
         }
         if(prefs.goalDistance != 0){
             binding.distanceProgressbar.max = prefs.goalDistance*10
-            binding.goalDistanceTv.text = "${prefs.goalDistance}km"
+            binding.goalDistanceTv.text = "목표 : ${prefs.goalDistance}km"
         }
         return binding.root
     }
