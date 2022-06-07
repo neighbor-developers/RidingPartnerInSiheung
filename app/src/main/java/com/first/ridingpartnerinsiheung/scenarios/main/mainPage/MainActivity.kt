@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.myPage-> setFrag(MyPageFragment())
                 R.id.pathList -> setFrag(PathListFragment())
                 R.id.riding -> toMap("riding")
-                R.id.rental -> toMap("navigation")
+                R.id.rental -> toMap("routeSearch")
             }
             true
         })

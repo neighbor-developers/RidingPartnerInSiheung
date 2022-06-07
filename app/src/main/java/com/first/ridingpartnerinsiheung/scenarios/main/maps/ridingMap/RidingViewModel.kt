@@ -145,16 +145,12 @@ class RidingViewModel: ViewModel() {
     fun postFailuer(e :Exception) = viewModelScope.launch { _event.emit(RidingEvent.PostFailuer(e)) }
 
     sealed class NavigationEvent{
-        object SetStartPlace : NavigationEvent()
-        object SetEndPlace : NavigationEvent()
         object StartNavigation : NavigationEvent()
         object StopNavigation : NavigationEvent()
         object SaveNavigation : NavigationEvent()
         object GetPath: NavigationEvent()
     }
 
-    fun setStartPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SetStartPlace) }
-    fun setEndPlace() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SetEndPlace) }
     fun startNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.StartNavigation) }
     fun stopNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.StopNavigation) }
     fun saveNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SaveNavigation) }

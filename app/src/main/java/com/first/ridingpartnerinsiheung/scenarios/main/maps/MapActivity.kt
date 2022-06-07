@@ -4,10 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
-import com.first.ridingpartnerinsiheung.data.RentalLocation
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.rentalMap.RentalLocationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage.RouteSearchFragment
 
 class MapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,8 +19,8 @@ class MapActivity : AppCompatActivity() {
             setFragment(RidingFragment())
         }else if(to=="rental"){
             setFragment(RentalLocationFragment())
-        }else if(to=="navigation"){
-            setFragment(NavigationFragment())
+        }else if(to=="routeSearch"){
+            setFragment(RouteSearchFragment())
         }
     }
     private fun setFragment(fragment: Fragment){

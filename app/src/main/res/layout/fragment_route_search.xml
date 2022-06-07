@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage.RouteSearchViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <fragment
+            android:id="@+id/routeMapView"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/directionSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:orientation="vertical">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/searchStart"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:elevation="11dp"
+                android:background="@drawable/edge">
+
+                <EditText
+                    android:id="@+id/startPlace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=" 출발지"
+                    android:textSize="15dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/searchStartBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/searchStartBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_search"
+                    android:onClick="@{()-> viewModel.setStartPlace()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/searchEnd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:elevation="11dp"
+                android:layout_marginVertical="10dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/edge">
+
+                <EditText
+                    android:id="@+id/endPlace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=" 도착지"
+                    android:textSize="15dp"
+                    android:visibility="visible"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/searchEndBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/searchEndBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_search"
+                    android:onClick="@{()-> viewModel.setEndPlace()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ListView
+                android:id="@+id/placeListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="15dp"
+            android:elevation="10dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/riding_edge"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FF0000"
+                android:onClick="@{()-> viewModel.startNavigation()}"
+                android:text="안내 시작하기"
+                android:elevation="0dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>

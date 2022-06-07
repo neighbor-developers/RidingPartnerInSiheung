@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage
 
 import android.Manifest
 import android.content.Context
@@ -7,12 +7,12 @@ import android.graphics.PointF
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
@@ -20,10 +20,11 @@ import com.first.ridingpartnerinsiheung.api.bikepath.ApiObject2
 import com.first.ridingpartnerinsiheung.api.bikepath.Path
 import com.first.ridingpartnerinsiheung.api.place.ApiObject
 import com.first.ridingpartnerinsiheung.api.place.PlaceDetail
-import com.first.ridingpartnerinsiheung.databinding.FragmentNavigationBinding
+import com.first.ridingpartnerinsiheung.databinding.FragmentRouteSearchBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingViewModel
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage.PlaceAdapter
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordFragment
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
@@ -33,10 +34,10 @@ import kotlinx.coroutines.flow.collect
 import retrofit2.Call
 import retrofit2.Response
 
-class NavigationFragment : Fragment(), OnMapReadyCallback {
+class RouteSearchFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var binding: FragmentNavigationBinding
-    private val viewModel by viewModels<RidingViewModel>()
+    private lateinit var binding: FragmentRouteSearchBinding
+    private val viewModel by viewModels<RouteSearchViewModel>()
 
     private lateinit var mNaverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
@@ -60,9 +61,9 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         locationSource = FusedLocationSource(this, PERMISSION_CODE)
 
         val fm = childFragmentManager
-        val mapFragment = fm.findFragmentById(R.id.navigationMapView) as MapFragment?
+        val mapFragment = fm.findFragmentById(R.id.routeMapView) as MapFragment?
             ?: MapFragment.newInstance().also {
-                fm.beginTransaction().add(R.id.navigationMapView, it).commit()
+                fm.beginTransaction().add(R.id.routeMapView, it).commit()
             }
         mapFragment?.getMapAsync(this)
 
@@ -73,16 +74,18 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater = this.layoutInflater,
         container: ViewGroup? = null
     ) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_navigation, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_route_search, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
     }
 
     private fun initObserves(){
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.navigationEvent.collect(){ event ->
+            viewModel.event.collect(){ event ->
                 when(event){
-                    RidingViewModel.NavigationEvent.StartNavigation -> startNavigation()
+                    RouteSearchViewModel.RouteSearchEvent.SetStartPlace -> setPlace("start")
+                    RouteSearchViewModel.RouteSearchEvent.SetEndPlace -> setPlace("end")
+                    RouteSearchViewModel.RouteSearchEvent.StartNavigation -> startNavigation()
                 }
             }
         }
@@ -120,19 +123,80 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         return marker
     }
 
-    private fun startNavigation(){ // 시작버튼
-        // binding.startBtn.visibility = View.GONE
-        var startTime = viewModel.getTimeNow() // 시작 시간
-        var startLatLng = LatLng(startPlaceData.y.toDouble(), startPlaceData.x.toDouble())
-        var startMarker = marker(startLatLng, "출발지점") // 출발지점 마크
+    private fun setPlace(type: String) {
+        val place = when(type){
+            "start" -> binding.startPlace.text.toString()
+            "end" -> binding.endPlace.text.toString()
+            else -> ""
+        }
 
-        var endLatLng = LatLng(endPlaceData.y.toDouble(), endPlaceData.x.toDouble())
+        val call = ApiObject.retrofitService.getPlaces(
+            coords = "37.5055196999994,126.94229594606628",
+            query = place
+        )
 
-        var path = getPath();
-        setOverlay()
+        call.enqueue(object : retrofit2.Callback<PlaceDetail> {
+            override fun onResponse(call: Call<PlaceDetail>, response: Response<PlaceDetail>) {
+                if (response.isSuccessful) {
+                    try {
+                        val placeDetail: List<PlaceDetail.Place> = response.body()!!.place
+                        Log.d("확인", "해치웠나")//ㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 
-        viewModel.befLatLng = startLatLng
-        viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
+                        setListView(type, placeDetail)
+
+                    }catch (e : NullPointerException){
+                        Log.d("에러", e.message.toString())
+                    }
+                }
+                else {
+                    Log.d("확인", "에러")
+                }
+            }
+            override fun onFailure(call: Call<PlaceDetail>, t: Throwable) {
+                Log.d("에러", t.message.toString())
+            }
+        })
+        Log.d("확인", "출발지 검색 작동")
+    }
+
+    private fun setListView(type: String, placeDetail: List<PlaceDetail.Place>){
+        val placeAdapter = PlaceAdapter(requireContext(), placeDetail)
+        binding.placeListView.adapter = placeAdapter
+        binding.placeListView.visibility = View.VISIBLE
+
+        binding.placeListView.setOnItemClickListener { adapterView, view, i, l ->
+            if (type == "start") {
+                startPlaceData = placeDetail[i]
+                binding.placeListView.visibility = View.GONE
+                binding.startPlace.setText(startPlaceData.title)
+
+                val startPlaceLatLng = LatLng(startPlaceData.y.toDouble(), startPlaceData.x.toDouble())
+                marker(startPlaceLatLng, "출발지")
+                val cameraUpdate = CameraUpdate.scrollAndZoomTo(startPlaceLatLng, 17.0).animate(
+                    CameraAnimation.Easing)
+                mNaverMap.moveCamera(cameraUpdate)
+
+            } else if(type == "end"){
+                endPlaceData = placeDetail[i]
+                binding.placeListView.visibility = View.GONE
+                binding.endPlace.setText(endPlaceData.title)
+
+                val endPlaceLatLng = LatLng(endPlaceData.y.toDouble(), endPlaceData.x.toDouble())
+                marker(endPlaceLatLng, "도착지")
+                val cameraUpdate = CameraUpdate.scrollAndZoomTo(endPlaceLatLng, 17.0).animate(
+                    CameraAnimation.Easing)
+                mNaverMap.moveCamera(cameraUpdate)
+            }
+            if (binding.startPlace.text.toString().isNotEmpty() && binding.endPlace.text.toString().isNotEmpty()) {
+                binding.buttonLayout.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun startNavigation(){
+        // 네비게이션 페이지로 이동
+
+        (activity as MainActivity).setFrag(NavigationFragment())
     }
 
     private fun getPath(): Path? {

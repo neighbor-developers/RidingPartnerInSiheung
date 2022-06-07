@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage
 
 import android.content.Context
 import android.view.LayoutInflater
