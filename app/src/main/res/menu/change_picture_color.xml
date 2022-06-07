@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/changePictureColor"
+        android:title="사진 흑백으로 변경">
+    </item>
+    <item
+        android:id="@+id/changeTextColor"
+        android:title="글자색 흰색으로 변경">
+    </item>
+</menu>
