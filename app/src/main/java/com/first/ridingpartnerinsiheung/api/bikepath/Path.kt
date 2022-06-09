@@ -2,10 +2,11 @@ package com.first.ridingpartnerinsiheung.api.bikepath
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.Serializable
 
 data class Path (
     val routes: List<Route>
-){
+) : Serializable {
     data class Route (
         val summary: RouteSummary,
         val route_fullpath: String,

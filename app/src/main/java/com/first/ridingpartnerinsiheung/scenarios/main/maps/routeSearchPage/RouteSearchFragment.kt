@@ -8,24 +8,21 @@ import android.graphics.PointF
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
-import com.first.ridingpartnerinsiheung.api.bikepath.ApiObject2
-import com.first.ridingpartnerinsiheung.api.bikepath.Path
 import com.first.ridingpartnerinsiheung.api.place.ApiObject
 import com.first.ridingpartnerinsiheung.api.place.PlaceDetail
 import com.first.ridingpartnerinsiheung.databinding.FragmentRouteSearchBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
-import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordFragment
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
@@ -59,6 +56,7 @@ class RouteSearchFragment : Fragment(), OnMapReadyCallback {
         initMapView()
         return binding.root
     }
+
     private fun initMapView(){
         locationSource = FusedLocationSource(this, PERMISSION_CODE)
 
@@ -200,38 +198,19 @@ class RouteSearchFragment : Fragment(), OnMapReadyCallback {
 
     private fun startNavigation(){
         // 네비게이션 페이지로 이동
+        val bundle = Bundle()
 
-        (activity as MainActivity).setFrag(NavigationFragment())
-    }
+        val startLatLng = startPlaceData.x + "," + startPlaceData.y
+        val startPlaceId = startPlaceData.id
+        val startName = startPlaceData.title
+        val endLatLng = endPlaceData.x + "," + endPlaceData.y
+        val endPlaceId = endPlaceData.id
+        val endName = endPlaceData.title
 
-    private fun getPath(): Path? {
-        val call = ApiObject2.retrofitService.getPAth(
-            start = "126.9820673,37.4853855,name=이수역 7호선",
-            destination = "126.9803409,37.5029146,name=동작역 4호선",
-        )
+        bundle.putString("startParam", "$startLatLng,placeid=$startPlaceId,name=$startName")
+        bundle.putString("destinationParam", "$endLatLng,placeid=$endPlaceId,name=$endName")
 
-        var path: Path? = null;
-
-        call.enqueue(object : retrofit2.Callback<Path> {
-            override fun onResponse(call: Call<Path>, response: Response<Path>) {
-                if (response.isSuccessful) {
-                    try {
-                        Log.d("확인", "성공")
-                        path = response.body()!!
-                    }catch (e : NullPointerException){
-                        Log.d("에러러", "dd")
-                    }
-                } else {
-                    Log.d("확인", "에러")
-                }
-            }
-
-            override fun onFailure(call: Call<Path>, t: Throwable) {
-                Log.d("에러", "ㅜㅜ")
-            }
-        })
-
-        return path
+        (activity as MapActivity).setFragment(NavigationFragment(), bundle)
     }
 
     //  권한 요청

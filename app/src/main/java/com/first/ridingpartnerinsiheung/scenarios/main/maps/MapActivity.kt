@@ -1,11 +1,9 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.rentalMap.RentalLocationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage.RouteSearchFragment
@@ -25,10 +23,17 @@ class MapActivity : AppCompatActivity() {
             setFragment(RouteSearchFragment())
         }
     }
-    private fun setFragment(fragment: Fragment){
+    fun setFragment(fragment: Fragment, bundle: Bundle? = null){
         val transaction = supportFragmentManager.beginTransaction()
+        if (bundle != null) {
+            fragment.arguments = bundle;
+        }
         transaction.replace(R.id.mainframe, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 }

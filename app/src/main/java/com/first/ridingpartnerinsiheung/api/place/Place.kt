@@ -1,6 +1,5 @@
 package com.first.ridingpartnerinsiheung.api.place
 
-import com.first.ridingpartnerinsiheung.api.weather.retrofit
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -12,7 +11,7 @@ data class PlaceDetail (
     val bus: List<Any?>,
     val menu: List<Any?>,
     val all: List<All>
-    ){
+) {
     data class Meta (
         val model: String,
         val query: String,
@@ -40,6 +39,7 @@ data class PlaceDetail (
         val bus: Any? = null
     )
 }
+
 val placeRetrofit = Retrofit.Builder()
     .baseUrl("https://map.naver.com/")
     .addConverterFactory(GsonConverterFactory.create())
