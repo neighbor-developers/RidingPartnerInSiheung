@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.rentalMap.RentalLocationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage.RouteSearchFragment
@@ -21,7 +22,10 @@ class MapActivity : AppCompatActivity() {
             setFragment(RentalLocationFragment())
         }else if(to=="routeSearch"){
             setFragment(RouteSearchFragment())
+        }else if(to=="navi"){
+            setFragment(NavigationFragment())
         }
+
     }
     fun setFragment(fragment: Fragment, bundle: Bundle? = null){
         val transaction = supportFragmentManager.beginTransaction()

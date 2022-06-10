@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
+        android:id="@+id/rental"
         android:enabled="true"
-        android:icon="@drawable/icon_home_selector"
-        android:title="홈"/>
-
-    <item
-        android:id="@+id/myPage"
-        android:enabled="true"
-
-        android:icon="@drawable/icon_person"
-        android:title="마이페이지"/>
+        android:icon="@drawable/icon_storefront"
+        android:title="대여소"/>
 
     <item
         android:id="@+id/pathList"
@@ -20,10 +13,19 @@
         android:title="경로"/>
 
     <item
-        android:id="@+id/rental"
+        android:id="@+id/home"
         android:enabled="true"
-        android:icon="@drawable/icon_storefront"
-        android:title="대여소"/>
+        android:icon="@drawable/icon_home_selector"
+        android:title="홈"/>
+
+    <item
+        android:id="@+id/navigator"
+        android:enabled="true"
+
+        android:icon="@drawable/icon_navigator"
+        android:title="네비게이션"/>
+
+
     <item
         android:id="@+id/riding"
         android:enabled="true"

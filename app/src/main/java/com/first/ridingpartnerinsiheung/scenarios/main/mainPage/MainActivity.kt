@@ -23,10 +23,11 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> setFrag(StartFragment())
-                R.id.myPage-> setFrag(MyPageFragment())
+//                R.id.navigator-> toMap("navi")
+                R.id.navigator-> toMap("routeSearch")
                 R.id.pathList -> setFrag(PathListFragment())
                 R.id.riding -> toMap("riding")
-                R.id.rental -> toMap("routeSearch")
+                R.id.rental -> toMap("rental")
             }
             true
         })
