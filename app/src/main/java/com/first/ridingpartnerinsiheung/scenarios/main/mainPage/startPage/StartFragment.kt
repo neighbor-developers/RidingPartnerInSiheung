@@ -45,7 +45,7 @@ class StartFragment : Fragment() {
     private var mFusedLocationProviderClient : FusedLocationProviderClient? = null
     private lateinit var mLocationRequest: LocationRequest
 
-
+        // 최근 데이터 불러오기
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,7 +77,7 @@ class StartFragment : Fragment() {
                     "빗방울 눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_umbrella)
                     "눈날림" -> binding.rainTypeImg.setImageResource(R.drawable.icon_whether_snow)
                 }
-//
+
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
 
