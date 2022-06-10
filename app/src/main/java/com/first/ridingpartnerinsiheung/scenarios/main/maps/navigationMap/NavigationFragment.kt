@@ -28,14 +28,21 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.Exception
 
 class NavigationFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentNavigationBinding
-    private val viewModel by viewModels<RidingViewModel>()
+    private val viewModel = NavigationViewModel()
 
     private lateinit var mNaverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
@@ -56,9 +63,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         val destinationParam = arguments?.getString("destinationParam").toString()
         val wayPointParam = arguments?.getString("wayPointParam").toString()
 
-        val pathDetail = getPath(startParam, destinationParam)
-
-//
+        viewModel.generatePath(mNaverMap, startParam, destinationParam)
 
         return binding.root
     }
@@ -89,7 +94,10 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.navigationEvent.collect() { event ->
                 when (event) {
-                    RidingViewModel.NavigationEvent.StartNavigation -> startNavigation()
+//                    NavigationViewModel.NavigationEvent.StartNavigation -> startNavigation()
+//                    NavigationViewModel.NavigationEvent.StopNavigation -> stopNavigation()
+//                    NavigationViewModel.NavigationEvent.SaveNavigation -> saveNavigation()
+                    is NavigationViewModel.NavigationEvent.PostFailuer -> showToast("저장 실패")
                 }
             }
         }
@@ -113,34 +121,6 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         locationOverlay.subAnchor = PointF(0.5f, 0.5f)
     }
 
-    private fun drawPath(summary: Path.RouteSummary) {
-        val path = PathOverlay()
-        val startLatLng = LatLng(
-            summary.start.location.split(",")[0].toDouble(),
-            summary.start.location.split(",")[1].toDouble()
-        )
-        val waypoints = summary.road_summary.map {
-            LatLng(
-                it.location.split(",")[0].toDouble(),
-                it.location.split(",")[1].toDouble()
-            )
-        }
-        val endLatLng = LatLng(
-            summary.start.location.split(",")[0].toDouble(),
-            summary.start.location.split(",")[1].toDouble()
-        )
-
-        val fullPath: List<LatLng> = waypoints.toMutableList().prepend(startLatLng) + endLatLng
-
-        path.coords = fullPath;
-        path.color = Color.BLUE
-        path.map = mNaverMap
-    }
-
-    fun <T> MutableList<T>.prepend(element: T): MutableList<T> {
-        return add(0, element) as MutableList<T>
-    }
-
     // 시작지점 마크
     private fun marker(
         latLng: LatLng,
@@ -153,44 +133,6 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         marker.height = 50
         marker.captionText = title
         return marker
-    }
-
-    private fun startNavigation() { // 시작버튼
-        // binding.startBtn.visibility = View.GONE
-        var startTime = viewModel.getTimeNow() // 시작 시간
-        viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
-    }
-
-    private fun getPath(start: String, destination: String): Path? {
-        val call = ApiObject2.retrofitService.getPAth(
-            start, // "126.9820673,37.4853855,name=이수역 7호선",
-            destination, // "126.9803409,37.5029146,name=동작역 4호선",
-        )
-
-        var path: Path? = null;
-
-        call.enqueue(object : retrofit2.Callback<Path> {
-            override fun onResponse(call: Call<Path>, response: Response<Path>) {
-                Log.d("제발요", "죽겠어요")
-                if (response.isSuccessful) {
-                    try {
-                        Log.d("확인", "성공")
-                        path = response.body()!!
-                        drawPath(path!!.routes[0].summary)
-                    } catch (e: NullPointerException) {
-                        Log.d("에러러", "dd")
-                    }
-                } else {
-                    Log.d("확인", "에러")
-                }
-            }
-
-            override fun onFailure(call: Call<Path>, t: Throwable) {
-                Log.d("에러", "ㅜㅜ")
-            }
-        })
-
-        return path
     }
 
     //  권한 요청

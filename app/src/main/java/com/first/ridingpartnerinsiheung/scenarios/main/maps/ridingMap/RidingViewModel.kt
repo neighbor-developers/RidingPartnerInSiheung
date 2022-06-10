@@ -23,8 +23,6 @@ class RidingViewModel: ViewModel() {
 
     private var _event = MutableSharedFlow<RidingEvent>()
     var event = _event.asSharedFlow()
-    private var _navigationEvent = MutableSharedFlow<NavigationEvent>()
-    var navigationEvent = _navigationEvent.asSharedFlow()
 
     var mLocation = MutableStateFlow<Location?>(null)
 
@@ -66,7 +64,7 @@ class RidingViewModel: ViewModel() {
             while(true){
                 delay(1000) // 1초마다 타이머 증가
 
-                timer.value+=1
+                timer.value += 1
 
                 if(timer.value % 3 == 0) { // 3초마다 속도, 거리 업데이트
                     curLatLng = LatLng(mLocation.value!!.latitude, mLocation.value!!.longitude)
@@ -143,16 +141,4 @@ class RidingViewModel: ViewModel() {
     fun stopRiding() = viewModelScope.launch { _event.emit(RidingEvent.StopRiding) }
     fun saveRiding() = viewModelScope.launch { _event.emit(RidingEvent.SaveRiding) }
     fun postFailuer(e :Exception) = viewModelScope.launch { _event.emit(RidingEvent.PostFailuer(e)) }
-
-    sealed class NavigationEvent{
-        object StartNavigation : NavigationEvent()
-        object StopNavigation : NavigationEvent()
-        object SaveNavigation : NavigationEvent()
-        object GetPath: NavigationEvent()
-    }
-
-    fun startNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.StartNavigation) }
-    fun stopNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.StopNavigation) }
-    fun saveNavigation() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.SaveNavigation) }
-    fun getPath() = viewModelScope.launch { _navigationEvent.emit(NavigationEvent.GetPath) }
 }

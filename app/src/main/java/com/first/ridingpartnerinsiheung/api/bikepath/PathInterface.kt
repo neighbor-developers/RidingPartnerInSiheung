@@ -5,9 +5,9 @@ import retrofit2.http.Query
 
 interface PathInterface {
     @GET("v5/api/dir/findbicycle?")
-    fun getPAth(
+    suspend fun getPathSuspend(
         @Query("start") start: String,
         @Query("destination") destination: String,
         // @Query("way_point") way_point: String,
-    ): retrofit2.Call<Path>
+    ): Path
 }

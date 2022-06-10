@@ -16,17 +16,15 @@ class MapActivity : AppCompatActivity() {
 
         val to = intent.getStringExtra("to")
 
-        if (to=="riding"){
-            setFragment(RidingFragment())
-        }else if(to=="rental"){
-            setFragment(RentalLocationFragment())
-        }else if(to=="routeSearch"){
-            setFragment(RouteSearchFragment())
-        }else if(to=="navi"){
-            setFragment(NavigationFragment())
+        when (to) {
+            "riding" -> setFragment(RidingFragment())
+            "rental" -> setFragment(RentalLocationFragment())
+            "routeSearch" -> setFragment(RouteSearchFragment())
+            "navi" -> setFragment(NavigationFragment())
         }
 
     }
+
     fun setFragment(fragment: Fragment, bundle: Bundle? = null){
         val transaction = supportFragmentManager.beginTransaction()
         if (bundle != null) {

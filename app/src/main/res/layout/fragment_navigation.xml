@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingViewModel" />
+            type="com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationViewModel" />
     </data>
 
     <FrameLayout
