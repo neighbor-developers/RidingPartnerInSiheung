@@ -89,6 +89,8 @@ class StartFragment : Fragment() {
             val recDoc = db.collection(user)
                 .document(prefs.recentRidingTime!!)
 
+            binding.recordDate.text = "(${prefs.recentRidingTime})"
+
             recDoc.get().addOnSuccessListener { documentSnapshot ->
                 recentRecord = documentSnapshot.toObject<RidingData>()!!
 

@@ -57,7 +57,8 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         val wayPointParam = arguments?.getString("wayPointParam").toString()
 
         val pathDetail = getPath(startParam, destinationParam)
-        drawPath(pathDetail!!.routes[0].summary)
+
+//
 
         return binding.root
     }
@@ -175,6 +176,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                     try {
                         Log.d("확인", "성공")
                         path = response.body()!!
+                        drawPath(path!!.routes[0].summary)
                     } catch (e: NullPointerException) {
                         Log.d("에러러", "dd")
                     }

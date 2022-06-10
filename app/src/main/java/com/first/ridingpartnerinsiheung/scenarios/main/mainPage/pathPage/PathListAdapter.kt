@@ -12,7 +12,7 @@ import com.first.ridingpartnerinsiheung.data.PlaceList
 
 class PathListAdapter(val context: Context, val placeList : List<PlaceList>) : BaseAdapter() {
     override fun getView(position : Int, convertView: View?, parent : ViewGroup?): View {
-        val view : View = LayoutInflater.from(context).inflate(R.layout.main_lv_item, null)
+        val view : View = LayoutInflater.from(context).inflate(R.layout.listview_route_item, null)
 
         val photo = view.findViewById<ImageView>(R.id.placeImg)
         val placeName = view.findViewById<TextView>(R.id.placeTxt)

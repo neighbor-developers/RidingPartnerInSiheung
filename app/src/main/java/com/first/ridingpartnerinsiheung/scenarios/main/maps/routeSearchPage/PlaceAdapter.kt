@@ -11,7 +11,7 @@ import com.first.ridingpartnerinsiheung.api.place.PlaceDetail
 
 class PlaceAdapter(val context: Context, val places : List<PlaceDetail.Place>) : BaseAdapter() {
     override fun getView(position : Int, convertView: View?, parent : ViewGroup?): View {
-        val view : View = LayoutInflater.from(context).inflate(R.layout.place_list_item, null)
+        val view : View = LayoutInflater.from(context).inflate(R.layout.listview_place_item, null)
 
         val placeName = view.findViewById<TextView>(R.id.placeName)
         val placeAdr = view.findViewById<TextView>(R.id.placeAdr)

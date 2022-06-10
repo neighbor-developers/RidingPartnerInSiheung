@@ -26,6 +26,11 @@ class StartViewModel() : ViewModel() {
     private val _event = MutableSharedFlow<StartEvent>()
     val event = _event.asSharedFlow()
 
+    val today = MutableStateFlow(
+    System.currentTimeMillis().let { current ->
+        SimpleDateFormat("yyyy/MM/dd").format(current)
+    })
+
     // 날짜 시간 설정
     private val _date = MutableStateFlow(
         System.currentTimeMillis().let { current ->

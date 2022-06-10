@@ -7,7 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="darkBlue">#090D37</color>
+    <color name="darkBlue">#000000</color>
     <color name="iphone">#F0F0F0</color>
     <color name="iphoneBlue">#2A71CD</color>
 </resources>
