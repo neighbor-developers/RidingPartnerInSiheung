@@ -8,7 +8,7 @@ interface PathInterface {
     fun getPath(
         @Query("start") start: String,
         @Query("destination") destination: String,
-        // @Query("way_point") way_point: String,
+        @Query("way_point") way_point: String?,
     ): retrofit2.Call<Path>
 
 

@@ -207,8 +207,8 @@ class RouteSearchFragment : Fragment(), OnMapReadyCallback {
         val endPlaceId = endPlaceData.id
         val endName = endPlaceData.title
 
-        bundle.putString("startParam", "$startLatLng,placeid=$startPlaceId,name=$startName")
-        bundle.putString("destinationParam", "$endLatLng,placeid=$endPlaceId,name=$endName")
+        bundle.putString("startParam", "${startPlaceData.x.toDouble()},${startPlaceData.y.toDouble()},placeid=$startPlaceId,name=$startName")
+        bundle.putString("destinationParam", "${endPlaceData.x.toDouble()},${endPlaceData.y.toDouble()},placeid=$endPlaceId,name=$endName")
         bundle.putParcelable("startLatLng", startLatLng)
         bundle.putParcelable("endLatLng", endLatLng)
 

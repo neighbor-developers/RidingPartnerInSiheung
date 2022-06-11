@@ -27,12 +27,14 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/navigationLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="10dp"
             android:background="@color/white"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/frameLayout"
             app:layout_constraintTop_toTopOf="@+id/frameLayout">
 

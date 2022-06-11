@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.PointF
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import com.first.ridingpartnerinsiheung.api.bikepath.Path
 import com.first.ridingpartnerinsiheung.databinding.FragmentNavigationBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
@@ -56,7 +58,9 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         val destinationParam = arguments?.getString("destinationParam").toString()
         val wayPointParam = arguments?.getString("wayPointParam").toString()
 
-        getPath(startParam, destinationParam) {s -> drawPath(s)}
+        Handler().postDelayed({
+            getPath(startParam, destinationParam, wayPointParam) {route -> drawPath(route)}
+        }, 500)
 
         return binding.root
     }
@@ -100,8 +104,10 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         binding.startBtn.visibility = View.GONE
         binding.stopBtn.visibility = View.VISIBLE
         binding.saveBtn.visibility = View.GONE
+        binding.navigationLayout.visibility = View.VISIBLE
 
         var startTime = viewModel.getTimeNow()
+
 
         changeLocation()
         setOverlay()
@@ -152,57 +158,130 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         return marker
     }
 
-    private fun getPath(start: String, destination: String, onPath: (Path.RouteSummary) -> Unit) {
+    private fun getPath(start: String, destination: String, wayPoint: String, onPath: (Path.Route) -> Unit) {
         val call = ApiObject2.retrofitService.getPath(
             start, // "126.9820673,37.4853855,name=이수역 7호선",
             destination, // "126.9803409,37.5029146,name=동작역 4호선",
+            wayPoint,
         )
 
         call.enqueue(object : retrofit2.Callback<Path> {
             override fun onResponse(call: Call<Path>, response: Response<Path>) {
                 if (response.isSuccessful) {
                     try {
-                        guides = response.body()!!.routes[0].legs[0].steps.map { step ->
+                        var routes = response.body()!!.routes[0]
+                        guides = routes.legs[0].steps.map { step ->
                             step.guide
                         }
-                        onPath(response.body()!!.routes[0].summary)
+                        onPath(routes)
                     } catch (e: NullPointerException) {
+                        Log.d("에러", e.message.toString())
                     }
                 } else {
-                    Log.d("에러", "ㅜㅜ1")
+                    Log.d("에러", "원인모를 통신 실패")
                 }
             }
 
             override fun onFailure(call: Call<Path>, t: Throwable) {
-                Log.d("에러", "ㅜㅜ2")
+                Log.d("에러", t.message.toString())
             }
         })
     }
 
-    private fun drawPath(summary: Path.RouteSummary) {
-        val startLatLng = LatLng(
-            summary.start.location.split(",")[0].toDouble(),
-            summary.start.location.split(",")[1].toDouble()
-        )
+    private fun drawPath(route: Path.Route) {
+        var summary = route.summary
+        var steps = route.legs[0].steps
 
-        val waypoints = summary.road_summary.map {
-            LatLng(
-                it.location.split(",")[0].toDouble(),
-                it.location.split(",")[1].toDouble()
-            )
-        }
+        val startLatLng = stringToLatLng(summary.start.location)
 
-        val endLatLng = summary.end.location.split(",").let {
-            LatLng(it[0].toDouble(), it[1].toDouble())
-        }
+        val waypoints = steps.map { step ->
+            if (step.path.isNullOrEmpty()) {
+                listOf()
+            } else {
+                step.path.split(" ").map {
+                    stringToLatLng(it)
+                }
+            }
+        }.flatten()
+
+        val endLatLng = stringToLatLng(summary.end.location)
 
         marker(startLatLng, "출발지")
         marker(endLatLng, "도착지")
-        val fullPath: List<LatLng> = listOf(startLatLng) + waypoints + endLatLng
+        // val fullPath: List<LatLng> = listOf(startLatLng) + waypoints + endLatLng
 
-        path.coords = fullPath
+        // 네이버 맵 범위지정 함수 하지만 작동이 안된다 ㅠ
+        mNaverMap.extent = LatLngBounds(
+            LatLng(
+                summary.bounds.right_bottom.split(",")[1].toDouble(),
+                summary.bounds.left_top.split(",")[0].toDouble(),
+            ),
+            LatLng(
+                summary.bounds.left_top.split(",")[1].toDouble(),
+                summary.bounds.right_bottom.split(",")[0].toDouble(),
+            ),
+        )
+
+        // 임시방편이라도 써야겠다 ㅠ
+        val centerLatLng = LatLng(
+            (summary.bounds.right_bottom.split(",")[1].toDouble() + summary.bounds.left_top.split(",")[1].toDouble()) / 2,
+            (summary.bounds.left_top.split(",")[0].toDouble() + summary.bounds.right_bottom.split(",")[0].toDouble()) / 2
+        )
+
+        // 위치에 따른 줌레벨 조정 함수 필요 노가다 요망
+        // moveCameraToCenter(right_bottom: String, left_top: String)
+
+        // 임시 중앙 카메라 이동후 줌고정
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(centerLatLng, 12.0).animate(
+            CameraAnimation.Easing)
+        mNaverMap.moveCamera(cameraUpdate)
+
+        path.coords = waypoints
         path.color = Color.BLUE
+        path.width = 12
+        path.patternImage = OverlayImage.fromResource(R.drawable.icon_navigator)
+        path.patternInterval = 10
         path.map = mNaverMap
+    }
+
+    // 위치에 따른 줌레벨 조정 함수 노가다 요망 미완성
+    private fun moveCameraToCenter(right_bottom: String, left_top: String) {
+        val right = right_bottom.split(",")[0].toDouble();
+        val bottom = right_bottom.split(",")[1].toDouble();
+        val left = left_top.split(",")[0].toDouble();
+        val top = left_top.split(",")[1].toDouble();
+
+        val centerLatLng = LatLng(
+            (top + bottom) / 2,
+            (left + right) / 2
+        )
+
+        var zoomLevel: Double = 1.0
+
+        val topBottomDiff = top - bottom
+        val eastWestDiff = right - left
+
+        // 시간나면 만들자....
+        if (topBottomDiff > 10 || eastWestDiff > 10)
+        {
+            zoomLevel = 2.0
+        }
+        if (topBottomDiff > 20 || eastWestDiff > 20)
+        {
+            zoomLevel = 3.0
+        }
+
+        // 위치에 따른 줌레벨 조정 함수 필요 노가다 요망
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(centerLatLng, zoomLevel).animate(
+            CameraAnimation.Easing)
+        mNaverMap.moveCamera(cameraUpdate)
+    }
+
+    private fun stringToLatLng (str: String): LatLng {
+        return LatLng(
+            str.split(",")[1].toDouble(),
+            str.split(",")[0].toDouble(),
+        )
     }
 
     private fun changeLocation() {
@@ -213,6 +292,14 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
             nowDestination.turn_point.split(",")[0].toDouble(),
             nowDestination.turn_point.split(",")[1].toDouble()
         )
+
+        // 줌 15로 초기
+        locationSource.lastLocation?.let { location ->
+            var lastLocation = LatLng(location.latitude, location.longitude)
+            val cameraUpdate = CameraUpdate.scrollAndZoomTo(lastLocation, 15.0).animate(
+                CameraAnimation.Easing)
+            mNaverMap.moveCamera(cameraUpdate)
+        }
 
         binding.navigationPoint.text = nowDestination.point
         binding.navigationContent.text = nowDestination.instructions
