@@ -1,5 +1,7 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps
 
+import java.text.SimpleDateFormat
+
 class CalcModel {
     fun calculateKcal(averageSpeed: Double, savedTimer: Int, weight: Double): Double {
         // 평속을 칼로리 소비계수로 전환

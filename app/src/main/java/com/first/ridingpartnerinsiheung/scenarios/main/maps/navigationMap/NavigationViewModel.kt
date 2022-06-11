@@ -1,25 +1,25 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap
 
 import android.graphics.Color
-import android.util.Log
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.first.ridingpartnerinsiheung.api.bikepath.ApiObject2
 import com.first.ridingpartnerinsiheung.api.bikepath.Path
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.CalcModel
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.PathOverlay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Response
+import java.text.SimpleDateFormat
 
 class NavigationViewModel : ViewModel() {
 
     val calcModel = CalcModel()
+    var mLocation = MutableStateFlow<Location?>(null)
     private var _event = MutableSharedFlow<NavigationEvent>()
     var navigationEvent = _event.asSharedFlow()
 
@@ -27,6 +27,12 @@ class NavigationViewModel : ViewModel() {
         viewModelScope.launch {
             val routeSummary = getPathSuspend(start, destination)
             drawPath(naverMap, routeSummary!!)
+        }
+    }
+
+    fun getTimeNow() : String{
+        return System.currentTimeMillis().let { current ->
+            SimpleDateFormat("yyyy/MM/dd HH:mm").format(current)
         }
     }
 
