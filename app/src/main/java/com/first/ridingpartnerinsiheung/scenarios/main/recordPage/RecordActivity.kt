@@ -17,18 +17,18 @@ class RecordActivity : AppCompatActivity() {
         setFragment(RidingFinishFragment(),time!!, data as RidingData)
     }
 
-    fun setFragment(fragment: Fragment, time : String, data: RidingData){
+    fun setFragment(fragment: Fragment, time : String, data: RidingData) {
+        //  RidingFinishFragment에서 데이터 수신
         val bundle = Bundle()
         bundle.putString("time", time)
         bundle.putSerializable("data", data)
         fragment.arguments = bundle
 
+
+        // 데이터가 셋팅된 프래그먼트 띄우기
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainframe, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
-
-
-
 }

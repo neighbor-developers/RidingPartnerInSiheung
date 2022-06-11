@@ -85,26 +85,28 @@ class RidingFinishFragment : Fragment() {
     private fun finishClickListener() {
         binding.complete.setOnClickListener {
             val recordActivity = activity as RecordActivity
-            viewModel.memo.value = memo.toString()
             recordActivity.setFragment(RecordFragment(), time!!, data!!)
             addResultImage()
             saveData()
         }
     }
+
     private fun initTextChanged(){
         binding.memoET.doAfterTextChanged {
             memo = it.toString()
-            saveData()
         }
     }
+
     private fun saveData(){
+        val map= mapOf(time to memo!!)
+
         memo?.let {
             dbStore.collection(user)
-                .document("Massage").collection(time!!)
+                .document("Message").collection(time!!)
                 .document("a")
-                .set(memo!!)
+                .set(map)
                 .addOnSuccessListener {
-                    showToast("")
+                    showToast("")   // hashMap 에 memo 추가됨
                 }
                 .addOnFailureListener{
                     showToast("")
@@ -172,6 +174,7 @@ class RidingFinishFragment : Fragment() {
             }
         }
     }
+
     private var getContent: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
@@ -192,7 +195,6 @@ class RidingFinishFragment : Fragment() {
             intent.type = MediaStore.Images.Media.CONTENT_TYPE
             intent.type = "image/*"
             getContent.launch(intent)
-            addResultImage()
         } else {
             ActivityCompat.requestPermissions(
                 (requireActivity()), arrayOf(
