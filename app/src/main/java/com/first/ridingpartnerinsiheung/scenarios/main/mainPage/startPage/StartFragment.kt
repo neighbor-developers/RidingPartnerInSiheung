@@ -2,6 +2,9 @@ package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -10,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -22,15 +26,21 @@ import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageViewModel
+import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordList.RecordList
 import com.first.ridingpartnerinsiheung.views.dialog.ChangeGoalDistanceDialog
 import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.lang.reflect.Type
 import kotlin.math.round
 class StartFragment : Fragment() {
 
@@ -102,12 +112,14 @@ class StartFragment : Fragment() {
                 binding.distanceProgressbar.progress = (recentRecord.sumDistance / 100).toInt()
             }
         }
+
         if(prefs.goalDistance != 0){
             binding.distanceProgressbar.max = prefs.goalDistance*10
             binding.goalDistanceTv.text = "목표 : ${prefs.goalDistance}km"
         }
         return binding.root
     }
+
     private fun initObserves(){
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.event.collect(){ event ->
@@ -199,5 +211,4 @@ class StartFragment : Fragment() {
     private fun permissionDenied() {
         showToast("위치 권한이 필요합니다")
     }
-
 }

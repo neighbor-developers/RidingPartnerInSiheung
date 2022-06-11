@@ -345,11 +345,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:background="@drawable/record_edge_blue_3"
                 android:padding="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rInformation"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/b"
+                    android:paddingStart="16dp"
+                    android:text="거리    속도    시간"/>
+
                 <ListView
+                    android:id="@+id/recorListView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                </ListView>
 
             </LinearLayout>
         </LinearLayout>
