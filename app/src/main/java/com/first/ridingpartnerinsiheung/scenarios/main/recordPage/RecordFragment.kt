@@ -31,24 +31,24 @@ class RecordFragment : Fragment() {
     private var dbStorage = FirebaseStorage.getInstance()
     private val storageRef = dbStorage.reference
 
-
     lateinit var binding: FragmentRecordBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentRecordBinding.inflate(inflater, container, false)
 
         binding.date.setTextColor(Color.BLACK)
         binding.memo.setTextColor(Color.BLACK)
         binding.distance.setTextColor(Color.BLACK)
+
         var a:Int=0;
         var b:Int=0;
 
         Toast.makeText(requireContext(), "사진을 캡쳐해 사용하세요!", Toast.LENGTH_SHORT).show();
-
-
+        
         binding.backButton.setOnClickListener{
             val intent= Intent(activity, MainActivity::class.java)
             startActivity(intent)
@@ -89,30 +89,30 @@ class RecordFragment : Fragment() {
         return binding.root
     }
     // firebase 이미지  가져오기
-    private fun getDiaryImage() {
-        val fileName = user + time + ".png" // time은 페이지 바꾸면서 데이터 넣기
-        storageRef.child(user).child(fileName).downloadUrl
-            .addOnSuccessListener {
-                Glide.with(this)
-                    .load(it)
-                    .into(binding.diaryImage)
-                binding.diaryImage.clipToOutline
-            }
-            .addOnFailureListener {
-                binding.diaryImage.setImageResource(R.drawable.img_cat7)
-            }
-    }
-    private fun getMassage(){
-        db.collection("user")
-            .document(user).collection("Massage")
-            .document(time)
-            .get("어쩌구").addOnSuccessListener{
-
-            }.addOnFailureListener {
-
-            }
-
-    }
+//    private fun getDiaryImage() {
+//        val fileName = user + time + ".png" // time은 페이지 바꾸면서 데이터 넣기
+//        storageRef.child(user).child(fileName).downloadUrl
+//            .addOnSuccessListener {
+//                Glide.with(this)
+//                    .load(it)
+//                    .into(binding.diaryImage)
+//                binding.diaryImage.clipToOutline
+//            }
+//            .addOnFailureListener {
+//                binding.diaryImage.setImageResource(R.drawable.img_cat7)
+//            }
+//    }
+//    private fun getMassage(){
+//        db.collection("user")
+//            .document(user).collection("Massage")
+//            .document(time)
+//            .get("어쩌구").addOnSuccessListener{
+//
+//            }.addOnFailureListener {
+//
+//            }
+//
+//    }
 }
 
 

@@ -21,7 +21,11 @@ import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage.PathListAdapter
 import com.first.ridingpartnerinsiheung.views.dialog.ChangeGoalDistanceDialog
+import com.first.ridingpartnerinsiheung.views.dialog.ChangeNameDialog
+import com.first.ridingpartnerinsiheung.views.dialog.RecordDialog
 import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -45,6 +49,8 @@ class StartFragment : Fragment() {
     private lateinit var mLastLocation : Location
     private var mFusedLocationProviderClient : FusedLocationProviderClient? = null
     private lateinit var mLocationRequest: LocationRequest
+
+    private val recordList: ArrayList<RecordList> = ArrayList()
 
         // 최근 데이터 불러오기
     override fun onCreateView(
@@ -100,12 +106,12 @@ class StartFragment : Fragment() {
                 binding.timerTv.text = recentRecord.timer.let {
                     "${it / 3600} : ${it / 60} : ${it % 60}"
                 }
-                binding.distanceTv.text = "달린 거리 : ${round(recentRecord.sumDistance / 10) / 100} km"
+                binding.distanceTv.text = "${round(recentRecord.sumDistance / 10) / 100} km"
                 binding.speedTv.text = "${round(recentRecord.averSpeed / 10) / 100} km/h"
                 binding.distanceProgressbar.progress = (recentRecord.sumDistance / 100).toInt()
             }
 
-            setListView(ridingDateList);
+            setList(ridingDateList);
         }
 
         if(prefs.goalDistance != 0){
@@ -115,33 +121,47 @@ class StartFragment : Fragment() {
         return binding.root
     }
 
-    private fun setListView(ridingDateList: List<String>){
-        var recordList: ArrayList<RecordList> = ArrayList()
+    private fun setList(ridingDateList: List<String>){
+
 
         ridingDateList.forEach {
-            var recDoc = db.collection(user).document(it)
+            val recDoc = db.collection(user).document(it)
 
             recDoc.get().addOnSuccessListener { documentSnapshot ->
-                var recordDocument = documentSnapshot.toObject<RidingData>()!!
+                val recordDocument = documentSnapshot.toObject<RidingData>()!!
 
-                var time = recordDocument.timer.let {
+                val timer = recordDocument.timer.let {
                     "${it / 3600} : ${it / 60} : ${it % 60}"
                 }
-                var distance = (round(recordDocument.sumDistance / 10) / 100).toString()
-                var avgSpeed = (round(recordDocument.averSpeed / 10) / 100).toString()
+                val distance = (round(recordDocument.sumDistance / 10) / 100).toString()
+                val avgSpeed = (round(recordDocument.averSpeed / 10) / 100).toString()
 
-                var record = RecordList(it, distance , avgSpeed, time)
+                val record = RecordList(it, distance , avgSpeed, timer)
 
-                recordList!!.add(record)
+                recordList.add(record)
             }
         }
 
         Handler().postDelayed({
-            if (recordList != null) {
-                val recordListAdapter = RecordListAdapter(requireContext(), recordList!!)
-                binding.recorListView.adapter = recordListAdapter
-            }
-        }, 3000)
+            val recordListAdapter = RecordListAdapter(requireContext(), recordList)
+            binding.recorListView.adapter = recordListAdapter
+        }, 2000)
+
+        initListClickListener()
+    }
+    private fun initListClickListener(){
+        binding.recorListView.isNestedScrollingEnabled = false
+
+        binding.recorListView.setOnItemClickListener { adapterView, view, i, l ->
+            val data = recordList[i]
+            data.distance
+            showDialog(data.distance, data.avgSpeed, data.time)
+        }
+
+    }
+    private fun showDialog(distance : String, averSpeed : String, timer : String){
+        val dialog = RecordDialog(requireContext())
+        dialog.start(distance, averSpeed, timer)
     }
 
     private fun initObserves(){

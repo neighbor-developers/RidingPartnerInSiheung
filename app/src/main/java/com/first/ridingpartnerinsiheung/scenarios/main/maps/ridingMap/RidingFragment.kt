@@ -27,11 +27,8 @@ import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordActivity
 import com.first.ridingpartnerinsiheung.views.dialog.RidingSaveDialog
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.*
 
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
@@ -143,6 +140,10 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         path.coords = listOf(startLatLng, endLatLng)
         path.color = Color.BLUE
         path.map = mNaverMap
+
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(endLatLng, 17.0).animate(CameraAnimation.Easing)
+        mNaverMap.moveCamera(cameraUpdate)
+
 
         startLatLng = endLatLng
     }

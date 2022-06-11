@@ -25,17 +25,13 @@ class RecordListAdapter(val context: Context, private val recordList: ArrayList<
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
         val view: View = LayoutInflater.from(context).inflate(R.layout.listview_record_item, null)
 
-        var date = view.findViewById<TextView>(R.id.date)
-        var distance = view.findViewById<TextView>(R.id.distance)
-        var avgSpeed = view.findViewById<TextView>(R.id.avgSpeed)
-        var time = view.findViewById<TextView>(R.id.time)
-
+        val date = view.findViewById<TextView>(R.id.date)
         val record = recordList[p0]
 
         date.text = record.date
-        distance.text = record.distance
-        avgSpeed.text = record.avgSpeed
-        time.text = record.time
+//        distance.text = record.distance
+//        avgSpeed.text = record.avgSpeed
+//        time.text = record.time
 
         return view
     }

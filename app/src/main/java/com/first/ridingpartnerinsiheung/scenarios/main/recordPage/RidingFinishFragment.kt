@@ -85,7 +85,6 @@ class RidingFinishFragment : Fragment() {
     private fun finishClickListener() {
         binding.complete.setOnClickListener {
             val recordActivity = activity as RecordActivity
-            viewModel.memo.value = memo.toString()
             recordActivity.setFragment(RecordFragment(), time!!, data!!)
             addResultImage()
             saveData()
