@@ -2,20 +2,17 @@ package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
@@ -24,24 +21,18 @@ import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageViewModel
-import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordList.RecordList
 import com.first.ridingpartnerinsiheung.views.dialog.ChangeGoalDistanceDialog
 import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.lang.reflect.Type
+import java.util.*
 import kotlin.math.round
+
 class StartFragment : Fragment() {
 
     //viewBinding
@@ -95,11 +86,13 @@ class StartFragment : Fragment() {
 
         val prefs = MySharedPreferences((activity as MainActivity).applicationContext)
 
-        if (prefs.recentRidingTime != "") {
-            val recDoc = db.collection(user)
-                .document(prefs.recentRidingTime!!)
+        if (prefs.ridingDateList != "") {
+            val ridingDateList = prefs.ridingDateList!!.split(",")
 
-            binding.recordDate.text = "(${prefs.recentRidingTime})"
+            val recDoc = db.collection(user)
+                .document(ridingDateList[0])
+
+            binding.recordDate.text = "(${ridingDateList[0]})"
 
             recDoc.get().addOnSuccessListener { documentSnapshot ->
                 recentRecord = documentSnapshot.toObject<RidingData>()!!
@@ -111,6 +104,8 @@ class StartFragment : Fragment() {
                 binding.speedTv.text = "${round(recentRecord.averSpeed / 10) / 100} km/h"
                 binding.distanceProgressbar.progress = (recentRecord.sumDistance / 100).toInt()
             }
+
+            setListView(ridingDateList);
         }
 
         if(prefs.goalDistance != 0){
@@ -118,6 +113,35 @@ class StartFragment : Fragment() {
             binding.goalDistanceTv.text = "목표 : ${prefs.goalDistance}km"
         }
         return binding.root
+    }
+
+    private fun setListView(ridingDateList: List<String>){
+        var recordList: ArrayList<RecordList> = ArrayList()
+
+        ridingDateList.forEach {
+            var recDoc = db.collection(user).document(it)
+
+            recDoc.get().addOnSuccessListener { documentSnapshot ->
+                var recordDocument = documentSnapshot.toObject<RidingData>()!!
+
+                var time = recordDocument.timer.let {
+                    "${it / 3600} : ${it / 60} : ${it % 60}"
+                }
+                var distance = (round(recordDocument.sumDistance / 10) / 100).toString()
+                var avgSpeed = (round(recordDocument.averSpeed / 10) / 100).toString()
+
+                var record = RecordList(it, distance , avgSpeed, time)
+
+                recordList!!.add(record)
+            }
+        }
+
+        Handler().postDelayed({
+            if (recordList != null) {
+                val recordListAdapter = RecordListAdapter(requireContext(), recordList!!)
+                binding.recorListView.adapter = recordListAdapter
+            }
+        }, 3000)
     }
 
     private fun initObserves(){

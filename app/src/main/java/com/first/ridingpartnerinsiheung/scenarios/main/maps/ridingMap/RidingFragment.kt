@@ -200,7 +200,11 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
             override fun onOKClicked() {
                 viewModel.saveData(onFailure = { showToast("저장 실패") }, data, endTime)
                 var prefs = MySharedPreferences((activity as MapActivity).applicationContext)
-                prefs.recentRidingTime = endTime    // string 배열로 만들기
+                if (prefs.ridingDateList.isNullOrEmpty()) {
+                    prefs.ridingDateList = endTime
+                } else {
+                    prefs.ridingDateList = endTime + "," + prefs.ridingDateList
+                }
                 val intent = Intent(requireContext(), RecordActivity::class.java)
                 intent.putExtra("time",endTime)
                 intent.putExtra("data", data)

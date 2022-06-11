@@ -29,25 +29,24 @@
         android:id="@+id/avgSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/distance"
-        android:paddingLeft="16dp"
-        android:fontFamily="@font/b"
         android:layout_below="@id/date"
+        android:layout_toRightOf="@id/distance"
+        android:fontFamily="@font/b"
+        android:paddingLeft="16dp"
         android:textSize="19sp"
         android:textStyle="bold"
-        tools:text="3.4"/>
+        tools:text="3.4" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/b"
-        android:textSize="19sp"
-        android:paddingLeft="16dp"
         android:layout_below="@id/date"
         android:layout_toRightOf="@id/avgSpeed"
+        android:fontFamily="@font/b"
+        android:paddingLeft="16dp"
+        android:textSize="19sp"
         android:textStyle="bold"
-        tools:text="20.3"
-        />
+        tools:text="20.3" />
 
 </RelativeLayout>

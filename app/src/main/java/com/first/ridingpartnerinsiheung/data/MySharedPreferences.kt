@@ -15,7 +15,7 @@ class MySharedPreferences(context: Context) {
         get() = prefs.getString("account_name", "")
         set(value) = prefs.edit().putString("account_name", value).apply()
 
-    var recentRidingTime : String?
+    var ridingDateList : String?
         get() = prefs.getString("riding_time","")
         set(value) = prefs.edit().putString("riding_time",value).apply()
 
