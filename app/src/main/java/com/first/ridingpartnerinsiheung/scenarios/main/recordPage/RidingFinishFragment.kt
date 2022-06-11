@@ -52,8 +52,9 @@ class RidingFinishFragment : Fragment() {
     // Firebase
     private val auth = Firebase.auth
     private val user = auth.currentUser!!.uid
-    private var db = FirebaseStorage.getInstance()
-    private val storageRef = db.reference
+    private var dbStorage = FirebaseStorage.getInstance()
+    private val storageRef = dbStorage.reference
+    private val dbStore = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,6 +88,7 @@ class RidingFinishFragment : Fragment() {
             viewModel.memo.value = memo.toString()
             recordActivity.setFragment(RecordFragment(), time!!, data!!)
             addResultImage()
+            saveData()
         }
     }
     private fun initTextChanged(){
@@ -96,9 +98,18 @@ class RidingFinishFragment : Fragment() {
         }
     }
     private fun saveData(){
-        viewModel.addDiaryContent(
-            onSuccess = {showToast("저장")},
-            onFailure = {showToast("실패")})
+        memo?.let {
+            dbStore.collection(user)
+                .document("Massage").collection(time!!)
+                .document("a")
+                .set(memo!!)
+                .addOnSuccessListener {
+                    showToast("")
+                }
+                .addOnFailureListener{
+                    showToast("")
+                }
+        }
     }
 
     private fun initData(time : String, data: RidingData){

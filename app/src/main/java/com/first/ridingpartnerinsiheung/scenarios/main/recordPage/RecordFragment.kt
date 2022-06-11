@@ -28,8 +28,8 @@ class RecordFragment : Fragment() {
     private val auth = Firebase.auth
     private val user = auth.currentUser!!.uid
 
-    private var storage = FirebaseStorage.getInstance()
-    private val storageRef = storage.reference
+    private var dbStorage = FirebaseStorage.getInstance()
+    private val storageRef = dbStorage.reference
 
 
     lateinit var binding: FragmentRecordBinding
@@ -90,7 +90,7 @@ class RecordFragment : Fragment() {
     }
     // firebase 이미지  가져오기
     private fun getDiaryImage() {
-        val fileName = user +time +".png" // time은 페이지 바꾸면서 데이터 넣기
+        val fileName = user + time + ".png" // time은 페이지 바꾸면서 데이터 넣기
         storageRef.child(user).child(fileName).downloadUrl
             .addOnSuccessListener {
                 Glide.with(this)
@@ -101,6 +101,18 @@ class RecordFragment : Fragment() {
             .addOnFailureListener {
                 binding.diaryImage.setImageResource(R.drawable.img_cat7)
             }
+    }
+    private fun getMassage(){
+        db.collection("user")
+            .document(user).collection("Massage")
+            .document(time)
+            .get("어쩌구").addOnSuccessListener{
+
+            }.addOnFailureListener {
+
+            }
+
+    }
 }
 
 
