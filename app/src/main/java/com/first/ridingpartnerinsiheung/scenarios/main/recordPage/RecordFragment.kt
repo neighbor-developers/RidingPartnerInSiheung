@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentRecordBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
@@ -35,6 +36,7 @@ class RecordFragment : Fragment() {
 
     private var dbStorage = FirebaseStorage.getInstance()
     private val storageRef = dbStorage.reference
+    private var data : RidingData? = null
 
     private lateinit var binding: FragmentRecordBinding
     private val viewModel by viewModels<RecordViewModel>()
@@ -48,10 +50,7 @@ class RecordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         initBinding()
-
-        binding.date.setTextColor(Color.BLACK)
-        binding.memo.setTextColor(Color.BLACK)
-        binding.distance.setTextColor(Color.BLACK)
+        data = arguments?.getSerializable("data") as RidingData
 
         arguments?.let{
             time = it.getString("time")
@@ -66,6 +65,7 @@ class RecordFragment : Fragment() {
 
         clickHomeButtonListener()
         changeColorButtonListener()
+        initData(data!!)
 
         return binding.root
     }
@@ -76,6 +76,11 @@ class RecordFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_record, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+    }
+
+    private fun initData(data: RidingData){
+        viewModel.savedDistance.value = data.sumDistance
+        binding.distance.text= "${data.sumDistance.toString()}km"
     }
 
     private fun changeColorButtonListener(){
@@ -132,10 +137,8 @@ class RecordFragment : Fragment() {
             }
             .addOnFailureListener {
                 binding.picture.setImageResource(R.drawable.loding_page_color)
-                showToast("실패!!!!!!!!!!!!!!!!!!!!!!!!!1")
             }
     }
-
 }
 
 

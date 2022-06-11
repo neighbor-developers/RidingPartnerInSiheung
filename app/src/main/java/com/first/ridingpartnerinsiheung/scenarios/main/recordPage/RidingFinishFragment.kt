@@ -164,7 +164,6 @@ class RidingFinishFragment : Fragment() {
         imageUri?.let {
             storageRef.child(user).child(fileName).putFile(it)
                 .addOnSuccessListener {
-                    showToast("사진 저장에 성공")
                 }
                 .addOnFailureListener{
                     showToast("사진 저장에 실패하였습니다.")

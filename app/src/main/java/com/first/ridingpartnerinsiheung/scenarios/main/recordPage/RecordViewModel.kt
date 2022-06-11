@@ -68,7 +68,16 @@ class RecordViewModel: ViewModel() {
                         }
                        memo.value = _memo
                     }
+//                listenerRegistration.value = db.collection(user).document(time+"massage")
+//                    .addSnapshotListener{ value, error ->
+//                        var distance:Double=0.0
+//                        value?.data?.get(time)?.let{
+//                            distance=Integer.parseInt(it.toString()).toDouble()
+//                        }
+//                        savedDistance.value=distance
+//                    }
             }
+
         }
     }
     fun changeTime(_time : String){
