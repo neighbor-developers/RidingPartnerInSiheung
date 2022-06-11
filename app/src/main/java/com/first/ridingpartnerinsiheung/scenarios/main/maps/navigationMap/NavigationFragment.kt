@@ -215,7 +215,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         )
 
         binding.navigationPoint.text = nowDestination.point
-        binding.navigationPoint.text = nowDestination.content
+        binding.navigationContent.text = nowDestination.instructions
 
         mNaverMap.addOnLocationChangeListener { location ->
             if (mNaverMap.locationTrackingMode == LocationTrackingMode.NoFollow) {
@@ -242,7 +242,17 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                 )
 
                 binding.navigationPoint.text = nowDestination.point
-                binding.navigationPoint.text = nowDestination.content
+                binding.navigationContent.text = nowDestination.instructions
+
+                if (nowDestination.instructions.contains("좌회전")) {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_turn_left)
+                } else if (nowDestination.instructions.contains("우회전")) {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_turn_right)
+                } else if (nowDestination.instructions.contains("유턴")) {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_uturn)
+                } else {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_straight)
+                }
             }
 
             viewModel.mLocation.value = location
