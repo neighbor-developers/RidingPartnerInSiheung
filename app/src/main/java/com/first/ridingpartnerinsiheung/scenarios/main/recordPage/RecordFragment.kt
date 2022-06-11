@@ -29,11 +29,10 @@ class RecordFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private val auth = Firebase.auth
     private val user = auth.currentUser!!.uid
-    private var time : String? = null
 
-    //  사진
     private var dbStorage = FirebaseStorage.getInstance()
     private val storageRef = dbStorage.reference
+
 
     lateinit var binding: FragmentRecordBinding
 
@@ -65,6 +64,12 @@ class RecordFragment : Fragment() {
 
         return binding.root
     }
+        Toast.makeText(requireContext(), "사진을 캡쳐해 사용하세요!", Toast.LENGTH_SHORT).show();
+
+        binding.backButton.setOnClickListener{
+            val intent= Intent(activity, MainActivity::class.java)
+            startActivity(intent)
+        }
 
     private fun changeColorButtonListener(){
         binding.changePictureColor.setOnClickListener {
@@ -150,6 +155,5 @@ class RecordFragment : Fragment() {
         }
     }
 }
-
 
 

@@ -13,22 +13,26 @@
         android:background="@color/darkBlue"
         android:orientation="vertical"
         android:paddingTop="30dp"
-        android:paddingHorizontal="25dp"
+        android:paddingHorizontal="20dp"
         android:paddingBottom="80dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/recode_font2"
             android:text="HOME"
-            android:textColor="#FFFFFF"
-            android:textSize="28dp"/>
+            android:gravity="center"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/white"
+            android:textSize="35sp"/>
         <TextView
             android:id="@+id/todayText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="13sp"
+            android:gravity="center"
             android:fontFamily="@font/cc"
+            android:layout_marginStart="5dp"
             android:textStyle="italic"
             android:text="@{viewModel.today}"/>
 
@@ -41,9 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="25dp"
-                android:padding="20dp"
-                android:background="@drawable/record_edge_blue_1">
+                android:layout_marginTop="35dp"
+                android:padding="7dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -52,14 +55,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" # 최근 라이딩 기록"
-                        android:textColor="@color/black"
-                        android:textSize="15dp"
-                        android:layout_marginBottom="25dp"
-                        android:fontFamily="@font/b"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
+                        android:layout_marginBottom="3dp"
+                        android:fontFamily="@font/bb"
                         android:textStyle="bold" />
                     <TextView
                         android:id="@+id/recordDate"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/white"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:textSize="12dp"
@@ -70,6 +74,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="17dp"
+                    android:paddingVertical="8dp"
                     android:layout_height="wrap_content">
 
                     <LinearLayout
@@ -78,12 +84,15 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
+                        android:layout_marginVertical="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
                             android:gravity="center">
 
                             <TextView
@@ -94,34 +103,43 @@
                                 android:fontFamily="@font/dd"
                                 android:gravity="center"
                                 android:text="10km"
-                                android:textColor="@color/black"
+                                android:textColor="@color/white"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
 
                             <ImageButton
                                 android:id="@+id/editNameBtn"
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
                                 android:background="@drawable/cog_wheel3"
                                 android:onClick="@{()-> viewModel.showDialog()}" />
                         </LinearLayout>
 
                         <FrameLayout
-                            android:layout_width="120dp"
-                            android:layout_height="120dp">
+                            android:layout_width="175dp"
+                            android:layout_height="175dp"
+                            android:layout_marginTop="5dp">
 
                             <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="140dp"
+                                android:layout_height="110dp"
                                 android:layout_gravity="center"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/icon_bike" />
+                                android:layout_marginStart="3dp"
+                                android:src="@drawable/riding_human" />
+                            <ProgressBar
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="180dp"
+                                android:layout_height="180dp"
+                                android:max="100"
+                                android:progress="100"
+                                android:progressDrawable="@drawable/progressbar2" />
 
                             <ProgressBar
                                 android:id="@+id/distanceProgressbar"
                                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
+                                android:layout_width="180dp"
+                                android:layout_height="180dp"
                                 android:max="100"
                                 android:progress="70"
                                 android:progressDrawable="@drawable/progressbar" />
@@ -142,34 +160,36 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
+                            android:gravity="center_horizontal"
+                            android:layout_marginEnd="5dp"
+                            android:orientation="vertical">
                             <TextView
-                                android:id="@+id/distanceTv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/b"
                                 android:gravity="center"
                                 android:text="달린 거리"
-                                android:textColor="@color/black"
+                                android:textColor="#B3B3B3"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="20dp"
-                            android:orientation="horizontal">
-
+                            <TextView
+                                android:id="@+id/distanceTv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/b"
+                                android:layout_marginVertical="20dp"
+                                android:gravity="center"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="10dp"
                                 android:fontFamily="@font/b"
                                 android:gravity="center"
                                 android:text="평균 속도"
-                                android:textColor="@color/black"
+                                android:textColor="#B3B3B3"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
 
@@ -180,23 +200,18 @@
                                 android:fontFamily="@font/b"
                                 android:gravity="center"
                                 android:text=""
-                                android:textColor="@color/black"
+                                android:layout_marginVertical="20dp"
+                                android:textColor="@color/white"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="10dp"
                                 android:fontFamily="@font/b"
                                 android:text="주행 시간"
-                                android:textColor="@color/black"
+                                android:layout_marginBottom="20dp"
+                                android:textColor="#B3B3B3"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
 
@@ -207,7 +222,7 @@
                                 android:fontFamily="@font/b"
                                 android:gravity="center"
                                 android:text=""
-                                android:textColor="@color/black"
+                                android:textColor="@color/white"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -218,7 +233,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_height="140dp"
+                android:layout_height="120dp"
                 android:layout_marginVertical="20dp"
                 >
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -226,7 +241,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
-                    android:padding="20dp">
+                    android:padding="15dp">
 
                     <ImageView
                         android:id="@+id/skyTypeImg"
@@ -256,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:text="@{viewModel.weather.temp}"
                         android:textColor="@color/black"
-                        android:textSize="13dp"
+                        android:textSize="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -303,13 +318,13 @@
 <!--                        android:text="@{viewModel.weather.rainType}" />-->
 <!--                </LinearLayout>-->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:background="@drawable/record_edge_blue_2"
+                    android:background="@drawable/record_edge_blue_3"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_marginStart="20dp"
                     android:orientation="vertical"
-                    android:padding="18dp">
+                    android:padding="15dp">
 
                     <ImageView
                         android:id="@+id/rainTypeImg"
@@ -334,10 +349,9 @@
                         android:fontFamily="@font/b"
                         android:text="@{viewModel.weather.rainType}"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_marginStart="5dp"
-                        android:layout_marginBottom="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -346,22 +360,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@drawable/record_edge_blue_3"
-                android:padding="15dp">
+                android:background="@drawable/record_edge_blue_1"
+                android:padding="10dp">
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/rInformation"-->
+<!--                    android:textColor="#000000"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:fontFamily="@font/b"-->
+<!--                    android:paddingStart="16dp"-->
+<!--                    android:text="거리    속도    시간"/>-->
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/rInformation"
                     android:textColor="#000000"
+                    android:gravity="center"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="5dp"
                     android:textStyle="bold"
                     android:fontFamily="@font/b"
-                    android:paddingStart="16dp"
-                    android:text="거리    속도    시간"/>
+                    android:text="기록 보기"/>
 
                 <ListView
                     android:id="@+id/recorListView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginHorizontal="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -370,66 +396,5 @@
 
             </LinearLayout>
         </LinearLayout>
-
-<!--                <android.widget.Button-->
-<!--                    android:id="@+id/myPageBtn"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_margin="10dp"-->
-<!--                    android:background="@drawable/edge"-->
-<!--                    android:shadowColor="#FFFFFF"-->
-<!--                    android:text="마이페이지"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="20dp"-->
-<!--                    android:textStyle="bold"/>-->
-<!--                <android.widget.Button-->
-<!--                    android:id="@+id/recommendBtn"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_margin="10dp"-->
-<!--                    android:background="@drawable/edge"-->
-<!--                    android:shadowColor="#FFFFFF"-->
-<!--                    android:text="추천 경로 보기"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="20dp"-->
-<!--                    android:textStyle="bold"/>-->
-<!--                <android.widget.Button-->
-<!--                    android:id="@+id/findOfficeBtn"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_margin="10dp"-->
-<!--                    android:background="@drawable/edge"-->
-<!--                    android:shadowColor="#FFFFFF"-->
-<!--                    android:text="대여소 위치 찾기"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="20dp"-->
-<!--                    android:textStyle="bold"/>-->
-<!--                <android.widget.Button-->
-<!--                    android:id="@+id/findPathBtn"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_margin="10dp"-->
-<!--                    android:background="@drawable/edge"-->
-<!--                    android:shadowColor="#FFFFFF"-->
-<!--                    android:text="목표까지 길찾기"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="20dp"-->
-<!--                    android:textStyle="bold"/>-->
-<!--                <android.widget.Button-->
-<!--                    android:id="@+id/ridingBtn"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_margin="10dp"-->
-<!--                    android:background="@drawable/edge"-->
-<!--                    android:shadowColor="#FFFFFF"-->
-<!--                    android:text="라이딩 시작"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="20dp"-->
-<!--                    android:textStyle="bold"/>-->
     </LinearLayout>
 </layout>

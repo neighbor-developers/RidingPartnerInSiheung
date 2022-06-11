@@ -21,7 +21,7 @@ class ChangeGoalDistanceDialog(context : Context){
     private val cancelBtn : Button by lazy { dialog.findViewById(R.id.cancelBtn)}
     private val spinnerGoalDistance : Spinner by lazy { dialog.findViewById(R.id.spinnerGoal) }
 
-    private val goalArray = arrayOf(1, 3, 5, 10, 15, 20, 25, 30)
+    private val goalArray = arrayOf(5, 10, 20, 30, 40)
 
     fun start() {
         setDialog()

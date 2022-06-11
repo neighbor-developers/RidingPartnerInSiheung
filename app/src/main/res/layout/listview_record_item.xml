@@ -1,52 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="60dp"
-    android:layout_marginStart="16dp"
-    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
+        android:layout_marginVertical="8dp"
         android:id="@+id/date"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/b"
-        android:textSize="22dp"
+        android:textSize="15sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         tools:text="2022/06/09 12:55" />
 
-    <TextView
-        android:id="@+id/distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/date"
-        android:fontFamily="@font/b"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        tools:text="36:04" />
+<!--    <TextView-->
+<!--        android:id="@+id/distance"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/date"-->
+<!--        android:fontFamily="@font/b"-->
+<!--        android:textSize="19sp"-->
+<!--        android:textStyle="bold"-->
+<!--        tools:text="36:04" />-->
 
-    <TextView
-        android:id="@+id/avgSpeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/date"
-        android:layout_toRightOf="@id/distance"
-        android:fontFamily="@font/b"
-        android:paddingLeft="16dp"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        tools:text="3.4" />
+<!--    <TextView-->
+<!--        android:id="@+id/avgSpeed"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/date"-->
+<!--        android:layout_toRightOf="@id/distance"-->
+<!--        android:fontFamily="@font/b"-->
+<!--        android:paddingLeft="16dp"-->
+<!--        android:textSize="19sp"-->
+<!--        android:textStyle="bold"-->
+<!--        tools:text="3.4" />-->
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/date"
-        android:layout_toRightOf="@id/avgSpeed"
-        android:fontFamily="@font/b"
-        android:paddingLeft="16dp"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        tools:text="20.3" />
+<!--    <TextView-->
+<!--        android:id="@+id/time"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/date"-->
+<!--        android:layout_toRightOf="@id/avgSpeed"-->
+<!--        android:fontFamily="@font/b"-->
+<!--        android:paddingLeft="16dp"-->
+<!--        android:textSize="19sp"-->
+<!--        android:textStyle="bold"-->
+<!--        tools:text="20.3" />-->
 
 </RelativeLayout>
