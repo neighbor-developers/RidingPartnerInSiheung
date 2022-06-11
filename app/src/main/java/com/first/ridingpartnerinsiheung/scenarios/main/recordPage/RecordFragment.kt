@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.first.ridingpartnerinsiheung.R
-import com.first.ridingpartnerinsiheung.databinding.FragmentRecodePictureBinding
+import com.first.ridingpartnerinsiheung.databinding.FragmentRecordBinding
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,13 +32,13 @@ class RecordFragment : Fragment() {
     private val storageRef = storage.reference
 
 
-    lateinit var binding: FragmentRecodePictureBinding
+    lateinit var binding: FragmentRecordBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentRecodePictureBinding.inflate(inflater, container, false)
+        binding = FragmentRecordBinding.inflate(inflater, container, false)
 
         binding.date.setTextColor(Color.BLACK)
         binding.memo.setTextColor(Color.BLACK)
@@ -88,6 +88,19 @@ class RecordFragment : Fragment() {
         }
         return binding.root
     }
+    // firebase 이미지  가져오기
+    private fun getDiaryImage() {
+        val fileName = user +time +".png" // time은 페이지 바꾸면서 데이터 넣기
+        storageRef.child(user).child(fileName).downloadUrl
+            .addOnSuccessListener {
+                Glide.with(this)
+                    .load(it)
+                    .into(binding.diaryImage)
+                binding.diaryImage.clipToOutline
+            }
+            .addOnFailureListener {
+                binding.diaryImage.setImageResource(R.drawable.img_cat7)
+            }
 }
 
 

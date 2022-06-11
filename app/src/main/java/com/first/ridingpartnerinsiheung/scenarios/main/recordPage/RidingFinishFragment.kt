@@ -54,13 +54,13 @@ class RidingFinishFragment : Fragment() {
     private val user = auth.currentUser!!.uid
     private var db = FirebaseStorage.getInstance()
     private val storageRef = db.reference
-    var ridingContent = MutableStateFlow("")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         time = arguments?.getString("time")
         data = arguments?.getSerializable("data") as RidingData
 
@@ -86,12 +86,19 @@ class RidingFinishFragment : Fragment() {
             val recordActivity = activity as RecordActivity
             viewModel.memo.value = memo.toString()
             recordActivity.setFragment(RecordFragment(), time!!, data!!)
+            addResultImage()
         }
     }
     private fun initTextChanged(){
         binding.memoET.doAfterTextChanged {
             memo = it.toString()
+            saveData()
         }
+    }
+    private fun saveData(){
+        viewModel.addDiaryContent(
+            onSuccess = {showToast("저장")},
+            onFailure = {showToast("실패")})
     }
 
     private fun initData(time : String, data: RidingData){
@@ -158,15 +165,13 @@ class RidingFinishFragment : Fragment() {
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            lateinit var _imageUri : Uri
             result.data?.data?.let {
-                _imageUri = it
+                imageUri = it
                 Glide.with(this)
                     .load(it)
                     .into(binding.cImage)
                 binding.cImage.clipToOutline
             }
-            imageUri = _imageUri
         }
     }
 
@@ -176,11 +181,11 @@ class RidingFinishFragment : Fragment() {
             intent.type = MediaStore.Images.Media.CONTENT_TYPE
             intent.type = "image/*"
             getContent.launch(intent)
+            addResultImage()
         } else {
             ActivityCompat.requestPermissions(
                 (requireActivity()), arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ),
                 REQUEST_CODE
@@ -194,20 +199,12 @@ class RidingFinishFragment : Fragment() {
         }
     }
 
-    private fun saveData(){
-        addDiaryContent(
-            onSuccess = {showToast("저장")},
-            onFailure = {showToast("실패")})
-        addResultImage()
-    }
-
-
     private fun addResultImage(){
-        val fileName = user + viewModel.savedTime.value.toString() +".png"
+        val fileName = "$user$time.png"
         imageUri?.let {
             storageRef.child(user).child(fileName).putFile(it)
                 .addOnSuccessListener {
-                    /*no-op*/
+                    showToast("사진 저장에 성공")
                 }
                 .addOnFailureListener{
                     showToast("사진 저장에 실패하였습니다.")

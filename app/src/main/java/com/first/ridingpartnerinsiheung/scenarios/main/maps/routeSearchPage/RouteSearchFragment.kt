@@ -200,15 +200,17 @@ class RouteSearchFragment : Fragment(), OnMapReadyCallback {
         // 네비게이션 페이지로 이동
         val bundle = Bundle()
 
-        val startLatLng = startPlaceData.x + "," + startPlaceData.y
+        val startLatLng = LatLng(startPlaceData.x.toDouble() , startPlaceData.y.toDouble())
         val startPlaceId = startPlaceData.id
         val startName = startPlaceData.title
-        val endLatLng = endPlaceData.x + "," + endPlaceData.y
+        val endLatLng = LatLng(endPlaceData.x.toDouble(), endPlaceData.y.toDouble())
         val endPlaceId = endPlaceData.id
         val endName = endPlaceData.title
 
         bundle.putString("startParam", "$startLatLng,placeid=$startPlaceId,name=$startName")
         bundle.putString("destinationParam", "$endLatLng,placeid=$endPlaceId,name=$endName")
+        bundle.putParcelable("startLatLng", startLatLng)
+        bundle.putParcelable("endLatLng", endLatLng)
 
         (activity as MapActivity).setFragment(NavigationFragment(), bundle)
     }
