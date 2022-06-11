@@ -14,20 +14,19 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.api.bikepath.ApiObject2
 import com.first.ridingpartnerinsiheung.api.bikepath.Path
 import com.first.ridingpartnerinsiheung.databinding.FragmentNavigationBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.flow.collect
 import retrofit2.Call
 import retrofit2.Response
@@ -35,18 +34,19 @@ import retrofit2.Response
 class NavigationFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentNavigationBinding
-    private val viewModel by viewModels<RidingViewModel>()
+    private val viewModel = NavigationViewModel()
 
     private lateinit var mNaverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     private var locationManager: LocationManager? = null
+    private lateinit var path: PathOverlay
+    private lateinit var guides: List<Path.Guide>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         initBinding()
         initMapView()
         initObserves()
@@ -56,9 +56,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         val destinationParam = arguments?.getString("destinationParam").toString()
         val wayPointParam = arguments?.getString("wayPointParam").toString()
 
-        val pathDetail = getPath(startParam, destinationParam)
-
-//
+        getPath(startParam, destinationParam) {s -> drawPath(s)}
 
         return binding.root
     }
@@ -89,16 +87,40 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.navigationEvent.collect() { event ->
                 when (event) {
-                    RidingViewModel.NavigationEvent.StartNavigation -> startNavigation()
+                    NavigationViewModel.NavigationEvent.StartNavigation -> startNavigation()
+                    NavigationViewModel.NavigationEvent.StopNavigation -> stopNavigation()
+//                    NavigationViewModel.NavigationEvent.SaveNavigation -> saveNavigation()
+                    is NavigationViewModel.NavigationEvent.PostFailuer -> showToast("저장 실패")
                 }
             }
         }
+    }
+
+    private fun startNavigation(){ // 시작버튼
+        binding.startBtn.visibility = View.GONE
+        binding.stopBtn.visibility = View.VISIBLE
+        binding.saveBtn.visibility = View.GONE
+
+        var startTime = viewModel.getTimeNow()
+
+        changeLocation()
+        setOverlay()
+    }
+
+    private fun stopNavigation() { // 중지버튼
+        binding.startBtn.visibility = View.VISIBLE
+        binding.startBtn.text = "이어서 라이딩하기"
+        binding.saveBtn.visibility = View.VISIBLE
+        binding.stopBtn.visibility = View.GONE
+
+        var endTime = viewModel.getTimeNow()
     }
 
     override fun onMapReady(naverMap: NaverMap) {
         mNaverMap = naverMap
         mNaverMap.locationSource = locationSource
         mNaverMap.locationTrackingMode = LocationTrackingMode.Follow
+        path = PathOverlay()
 
         setOverlay()
     }
@@ -113,34 +135,6 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         locationOverlay.subAnchor = PointF(0.5f, 0.5f)
     }
 
-    private fun drawPath(summary: Path.RouteSummary) {
-        val path = PathOverlay()
-        val startLatLng = LatLng(
-            summary.start.location.split(",")[0].toDouble(),
-            summary.start.location.split(",")[1].toDouble()
-        )
-        val waypoints = summary.road_summary.map {
-            LatLng(
-                it.location.split(",")[0].toDouble(),
-                it.location.split(",")[1].toDouble()
-            )
-        }
-        val endLatLng = LatLng(
-            summary.start.location.split(",")[0].toDouble(),
-            summary.start.location.split(",")[1].toDouble()
-        )
-
-        val fullPath: List<LatLng> = waypoints.toMutableList().prepend(startLatLng) + endLatLng
-
-        path.coords = fullPath;
-        path.color = Color.BLUE
-        path.map = mNaverMap
-    }
-
-    fun <T> MutableList<T>.prepend(element: T): MutableList<T> {
-        return add(0, element) as MutableList<T>
-    }
-
     // 시작지점 마크
     private fun marker(
         latLng: LatLng,
@@ -150,47 +144,123 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         marker.position = latLng
         marker.map = mNaverMap
         marker.width = 50
-        marker.height = 50
+        marker.height = 70
         marker.captionText = title
+        if(title == "도착지"){
+            marker.icon = MarkerIcons.RED
+        }
         return marker
     }
 
-    private fun startNavigation() { // 시작버튼
-        // binding.startBtn.visibility = View.GONE
-        var startTime = viewModel.getTimeNow() // 시작 시간
-        viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
-    }
-
-    private fun getPath(start: String, destination: String): Path? {
-        val call = ApiObject2.retrofitService.getPAth(
+    private fun getPath(start: String, destination: String, onPath: (Path.RouteSummary) -> Unit) {
+        val call = ApiObject2.retrofitService.getPath(
             start, // "126.9820673,37.4853855,name=이수역 7호선",
             destination, // "126.9803409,37.5029146,name=동작역 4호선",
         )
 
-        var path: Path? = null;
-
         call.enqueue(object : retrofit2.Callback<Path> {
             override fun onResponse(call: Call<Path>, response: Response<Path>) {
-                Log.d("제발요", "죽겠어요")
                 if (response.isSuccessful) {
                     try {
-                        Log.d("확인", "성공")
-                        path = response.body()!!
-                        drawPath(path!!.routes[0].summary)
+                        guides = response.body()!!.routes[0].legs[0].steps.map { step ->
+                            step.guide
+                        }
+                        onPath(response.body()!!.routes[0].summary)
                     } catch (e: NullPointerException) {
-                        Log.d("에러러", "dd")
                     }
                 } else {
-                    Log.d("확인", "에러")
+                    Log.d("에러", "ㅜㅜ1")
                 }
             }
 
             override fun onFailure(call: Call<Path>, t: Throwable) {
-                Log.d("에러", "ㅜㅜ")
+                Log.d("에러", "ㅜㅜ2")
             }
         })
+    }
 
-        return path
+    private fun drawPath(summary: Path.RouteSummary) {
+        val startLatLng = LatLng(
+            summary.start.location.split(",")[0].toDouble(),
+            summary.start.location.split(",")[1].toDouble()
+        )
+
+        val waypoints = summary.road_summary.map {
+            LatLng(
+                it.location.split(",")[0].toDouble(),
+                it.location.split(",")[1].toDouble()
+            )
+        }
+
+        val endLatLng = summary.end.location.split(",").let {
+            LatLng(it[0].toDouble(), it[1].toDouble())
+        }
+
+        marker(startLatLng, "출발지")
+        marker(endLatLng, "도착지")
+        val fullPath: List<LatLng> = listOf(startLatLng) + waypoints + endLatLng
+
+        path.coords = fullPath
+        path.color = Color.BLUE
+        path.map = mNaverMap
+    }
+
+    private fun changeLocation() {
+        var nowLatLng: LatLng?
+        var count = 0
+        var nowDestination = guides[0]
+        var nowDestinationLatLng = LatLng(
+            nowDestination.turn_point.split(",")[0].toDouble(),
+            nowDestination.turn_point.split(",")[1].toDouble()
+        )
+
+        binding.navigationPoint.text = nowDestination.point
+        binding.navigationContent.text = nowDestination.instructions
+
+        mNaverMap.addOnLocationChangeListener { location ->
+            if (mNaverMap.locationTrackingMode == LocationTrackingMode.NoFollow) {
+                setOverlay()
+            }
+            // 지나온길 표시
+            path.passedColor = Color.GRAY
+
+            // 현재 위치
+            nowLatLng = LatLng(location.latitude, location.longitude)
+
+            // 목표위치 도달할시
+            if (nowDestinationLatLng.distanceTo(nowLatLng!!) < 10 ) {
+                if (guides.size - 1 == count) {
+                    finishNavigation()
+                }
+
+                // 목표지 갱신
+                count++
+                nowDestination = guides[count]
+                nowDestinationLatLng = LatLng(
+                    nowDestination.turn_point.split(",")[0].toDouble(),
+                    nowDestination.turn_point.split(",")[1].toDouble()
+                )
+
+                binding.navigationPoint.text = nowDestination.point
+                binding.navigationContent.text = nowDestination.instructions
+
+                if (nowDestination.instructions.contains("좌회전")) {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_turn_left)
+                } else if (nowDestination.instructions.contains("우회전")) {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_turn_right)
+                } else if (nowDestination.instructions.contains("유턴")) {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_uturn)
+                } else {
+                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_straight)
+                }
+            }
+
+            viewModel.mLocation.value = location
+        }
+    }
+
+    private fun finishNavigation() {
+        return
     }
 
     //  권한 요청
