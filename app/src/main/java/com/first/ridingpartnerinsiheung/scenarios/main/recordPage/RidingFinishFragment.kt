@@ -86,7 +86,7 @@ class RidingFinishFragment : Fragment() {
         binding.complete.setOnClickListener {
             val recordActivity = activity as RecordActivity
             recordActivity.setFragment(RecordFragment(), time!!, data!!)
-            addResultImage()
+//            addResultImage()
             saveData()
         }
     }
@@ -102,14 +102,13 @@ class RidingFinishFragment : Fragment() {
 
         memo?.let {
             dbStore.collection(user)
-                .document("Message").collection(time!!)
-                .document("a")
+                .document(time!!+"massage")
                 .set(map)
                 .addOnSuccessListener {
-                    showToast("")   // hashMap 에 memo 추가됨
+                    /*no-op*/
                 }
                 .addOnFailureListener{
-                    showToast("")
+                    showToast("저장 실패")
                 }
         }
     }
@@ -122,6 +121,56 @@ class RidingFinishFragment : Fragment() {
         viewModel.savedTime.value = time
     }
 
+    private fun initClickListener() {
+        // 갤러리에서 이미지 불러오기
+        binding.cImage.setOnClickListener {
+            setImage()
+        }
+    }
+
+    private fun setImage(){
+        if (requestPermission()) {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.type = "image/*"
+            getContent.launch(intent)
+        } else {
+            ActivityCompat.requestPermissions(
+                (requireActivity()), arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ),
+                REQUEST_CODE
+            )
+        }
+    }
+
+    private var getContent: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let {
+                imageUri = it
+                Glide.with(this)
+                    .load(it)
+                    .into(binding.cImage)
+                binding.cImage.clipToOutline
+                addResultImage()
+            }
+        }
+    }
+    private fun addResultImage(){
+        val fileName = "$user$time.png"
+        imageUri?.let {
+            storageRef.child(user).child(fileName).putFile(it)
+                .addOnSuccessListener {
+                    showToast("사진 저장에 성공")
+                }
+                .addOnFailureListener{
+                    showToast("사진 저장에 실패하였습니다.")
+                }
+        }
+    }
     // 권한 부여
     private fun requestPermission(): Boolean {
         val writePermission: Int = ContextCompat.checkSelfPermission(requireContext(),
@@ -172,56 +221,6 @@ class RidingFinishFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    private var getContent: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let {
-                imageUri = it
-                Glide.with(this)
-                    .load(it)
-                    .into(binding.cImage)
-                binding.cImage.clipToOutline
-            }
-        }
-    }
-
-    private fun setImage(){
-        if (requestPermission()) {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = MediaStore.Images.Media.CONTENT_TYPE
-            intent.type = "image/*"
-            getContent.launch(intent)
-        } else {
-            ActivityCompat.requestPermissions(
-                (requireActivity()), arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ),
-                REQUEST_CODE
-            )
-        }
-    }
-    private fun initClickListener() {
-        // 갤러리에서 이미지 불러오기
-        binding.cImage.setOnClickListener {
-            setImage()
-        }
-    }
-
-    private fun addResultImage(){
-        val fileName = "$user$time.png"
-        imageUri?.let {
-            storageRef.child(user).child(fileName).putFile(it)
-                .addOnSuccessListener {
-                    showToast("사진 저장에 성공")
-                }
-                .addOnFailureListener{
-                    showToast("사진 저장에 실패하였습니다.")
-                }
         }
     }
 }

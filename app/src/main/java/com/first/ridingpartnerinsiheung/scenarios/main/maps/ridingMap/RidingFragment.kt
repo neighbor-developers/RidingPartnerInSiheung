@@ -200,7 +200,7 @@ class RidingFragment : Fragment(), OnMapReadyCallback {
         dialog.setOnClickListener(object: RidingSaveDialog.DialogOKCLickListener{
             override fun onOKClicked() {
                 viewModel.saveData(onFailure = { showToast("저장 실패") }, data, endTime)
-                var prefs = MySharedPreferences((activity as MapActivity).applicationContext)
+                val prefs = MySharedPreferences((activity as MapActivity).applicationContext)
                 if (prefs.ridingDateList.isNullOrEmpty()) {
                     prefs.ridingDateList = endTime
                 } else {

@@ -10,6 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.databinding.FragmentRecordBinding
@@ -33,19 +36,18 @@ class RecordFragment : Fragment() {
     private var dbStorage = FirebaseStorage.getInstance()
     private val storageRef = dbStorage.reference
 
-    private var time : String? = null
-
-
-    lateinit var binding: FragmentRecordBinding
+    private lateinit var binding: FragmentRecordBinding
+    private val viewModel by viewModels<RecordViewModel>()
 
     var a:Int=0;
     var b:Int=0;
+    var time : String? = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentRecordBinding.inflate(inflater, container, false)
+        initBinding()
 
         binding.date.setTextColor(Color.BLACK)
         binding.memo.setTextColor(Color.BLACK)
@@ -53,23 +55,28 @@ class RecordFragment : Fragment() {
 
         arguments?.let{
             time = it.getString("time")
+            if(time != ""){
+                viewModel.changeTime(time!!)
+                getDiaryImage(time!!)
+
+            }
         }
 
-
-        Toast.makeText(requireContext(), "사진을 캡쳐해 사용하세요!", Toast.LENGTH_SHORT).show()
-
-        getDiaryImage()
-        getMassage()
+        showToast("사진을 캡쳐해 사용하세요!")
 
         clickHomeButtonListener()
         changeColorButtonListener()
 
-
         return binding.root
     }
-
-
-
+    private fun initBinding(
+        inflater: LayoutInflater = this.layoutInflater,
+        container: ViewGroup? = null
+    ) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_record, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+    }
 
     private fun changeColorButtonListener(){
         binding.changePictureColor.setOnClickListener {
@@ -114,7 +121,7 @@ class RecordFragment : Fragment() {
     }
 
     // firebase 이미지  가져오기
-    private fun getDiaryImage() {
+    private fun getDiaryImage(time : String) {
         val fileName = "$user$time.png" // time은 페이지 바꾸면서 데이터 넣기
         storageRef.child(user).child(fileName).downloadUrl
             .addOnSuccessListener {
@@ -129,31 +136,6 @@ class RecordFragment : Fragment() {
             }
     }
 
-    private fun getMassage(){
-
-//        time?.let {
-//            db.collection("user")
-//                .document(user).collection("Message")
-//                .document(time!!)
-//                .get().addOnSuccessListener {
-//                    val memo=it.get("memo").toString()
-//                    showToast(memo)
-//                    binding.memo.text = memo
-//                }
-//        }
-
-        time?.let {
-            db.collection(user)
-                .document("Message").collection(time!!)
-                .document("a")
-                .get().addOnSuccessListener {
-                    val memo=it.get("memo").toString()
-                    binding.memo.text = memo
-                }.addOnFailureListener {
-                    showToast("memo failure")
-                }
-        }
-    }
 }
 
 

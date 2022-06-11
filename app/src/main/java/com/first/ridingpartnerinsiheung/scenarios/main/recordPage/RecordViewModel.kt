@@ -9,18 +9,23 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import kotlin.math.round
 
 class RecordViewModel: ViewModel() {
 
     // Firebase
-
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = Firebase.auth
+    private val user = auth.currentUser!!.uid
 
     var savedTimer = MutableStateFlow(0)
     var savedSpeed = MutableStateFlow(1.0)
     var savedDistance = MutableStateFlow(0.0)
     var savedKcal = MutableStateFlow(0.0)
     var savedTime = MutableStateFlow("0/0/0")
+
+    var time = MutableStateFlow("")
 
     var distanceText = savedDistance.map {
         "${ round(it/10)/100} km"
@@ -41,5 +46,33 @@ class RecordViewModel: ViewModel() {
     var timerText = savedTimer.map {
         "${it/3600} : ${it / 60} : ${it%60}"
     }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
+
+    val today = MutableStateFlow(
+        System.currentTimeMillis().let { current ->
+            SimpleDateFormat("yyyy.MM.dd").format(current)
+        })
+
+    var memo = MutableStateFlow("")
+
+    private val listenerRegistration = MutableStateFlow<ListenerRegistration?>(null)
+
+    init {
+        viewModelScope.launch {
+            time.collect { time ->
+                listenerRegistration.value?.remove()
+                listenerRegistration.value = db.collection(user).document(time+"massage")
+                    .addSnapshotListener{ value, error ->
+                        var _memo = ""
+                        value?.data?.get(time)?.let {
+                            _memo = it.toString()
+                        }
+                       memo.value = _memo
+                    }
+            }
+        }
+    }
+    fun changeTime(_time : String){
+        time.value = _time
+    }
 
 }
