@@ -41,12 +41,23 @@
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:paddingVertical="20dp"
+            android:orientation="horizontal"
             android:paddingHorizontal="20dp">
             <ImageView
                 android:layout_gravity="center"
                 android:id="@+id/pathImage"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginEnd="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/path"/>
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/routeImage"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginStart="10dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/path"/>
         </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout

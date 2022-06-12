@@ -19,11 +19,13 @@ class PathDialog(context: Context) {
     private lateinit var okBtn : Button
     private lateinit var cancelBtn : Button
     private lateinit var pathImageView: ImageView
+    private lateinit var pathImageView2: ImageView
+
     private lateinit var pathNameTextView : TextView
 
-    fun start(pathName : String, pathImage: Int){
+    fun start(pathName : String, pathImage: Int, routeImage : Int){
         setDialog()
-        initView(pathName, pathImage)
+        initView(pathName, pathImage, routeImage)
         initClickListener()
     }
     private fun setDialog(){
@@ -33,14 +35,16 @@ class PathDialog(context: Context) {
         dialog.setCancelable(false)
         dialog.show()
     }
-    private fun initView(pathName : String, pathImage: Int){
+    private fun initView(pathName : String, pathImage: Int, routeImage: Int){
         okBtn = dialog.findViewById(R.id.okBtn)
         cancelBtn = dialog.findViewById(R.id.cancelBtn)
         pathImageView = dialog.findViewById(R.id.pathImage)
         pathNameTextView = dialog.findViewById(R.id.pathName)
+        pathImageView2 = dialog.findViewById(R.id.routeImage)
 
         pathNameTextView.text = pathName
         pathImageView.setImageResource(pathImage)
+        pathImageView2.setImageResource(routeImage)
     }
 
     private fun initClickListener(){

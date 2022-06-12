@@ -34,13 +34,13 @@ class PathListFragment : Fragment() {
         binding.listView.adapter = placeAdapter
 
         binding.listView.setOnItemClickListener { adapterView, view, i, l ->
-            showPathDialog(placeList[i].placeTxt, placeList[i].photo, placeList[i].path)
+            showPathDialog(placeList[i].placeTxt, placeList[i].photo, placeList[i].routePhoto, placeList[i].path)
         }
     }
 
-    private fun showPathDialog(pathName : String, pathImage : Int, path: ArrayList<String>){
+    private fun showPathDialog(pathName : String, pathImage : Int, routeImage: Int, path: ArrayList<String>){
         val dialog = PathDialog(requireContext())
-        dialog.start(pathName, pathImage)
+        dialog.start(pathName, pathImage, routeImage)
         dialog.setOnClickListener(object:PathDialog.DialogOKCLickListener{
             override fun onOKClicked() {
                 val bundle = Bundle()

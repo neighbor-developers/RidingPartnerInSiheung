@@ -45,6 +45,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_storefront_24.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/ic_home_selector.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/icon2_background.xml" value="0.2075" />
         <entry key="app/src/main/res/drawable/icon_home.xml" value="0.2075" />
         <entry key="app/src/main/res/drawable/list_edge.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/memo_edge.xml" value="0.1805" />
@@ -94,6 +95,10 @@
         <entry key="app/src/main/res/layout/place_list_item.xml" value="0.19166666666666668" />
         <entry key="app/src/main/res/layout/riding_finish_fragment.xml" value="0.2947860717773438" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.30462962962962964" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.144" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.144" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/icon2.xml" value="0.2075" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/icon2_round.xml" value="0.1955" />
       </map>
     </option>
   </component>

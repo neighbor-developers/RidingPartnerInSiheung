@@ -3,16 +3,15 @@ package com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage
 import android.content.Context
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.PlaceList
-import com.google.android.gms.maps.model.LatLng
 
 class PathList(private val context: Context) {
     fun read():List<PlaceList>{
         return listOf(
-            PlaceList("오이도역 - 오이도 - 반달섬", "30km", R.drawable.place_oido, coastline),
-            PlaceList("그린웨이", "20km", R.drawable.place_mulwang, greenWay),
-            PlaceList("오이도역 - 시화방조제 - 대부도 공원", "22km", R.drawable.place_sihwa, sihwaSeawall),
-            PlaceList("시흥 순환 코스", "24km", R.drawable.place_botong, siheungCycleCourse),
-            PlaceList("한국공학대 - 정왕역 코스", "10km", R.drawable.place_kpu, commutingKpu)
+            PlaceList("오이도역 - 오이도 - 반달섬", "30km", R.drawable.place_oido,R.drawable.img_route_coastline ,coastline),
+            PlaceList("그린웨이", "20km", R.drawable.place_mulwang, R.drawable.img_route_greenway, greenWay),
+            PlaceList("오이도역 - 시화방조제 - 대부도 공원", "22km", R.drawable.place_sihwa,R.drawable.img_route_sihwa_seawall, sihwaSeawall),
+            PlaceList("시흥 순환 코스", "24km", R.drawable.place_botong, R.drawable.img_route_coastline,siheungCycleCourse), // 오류로 사진 대체
+            PlaceList("한국공학대 - 정왕역 코스", "10km", R.drawable.place_kpu, R.drawable.img_route_commuting_kpu, commutingKpu)
         )
     }
 
