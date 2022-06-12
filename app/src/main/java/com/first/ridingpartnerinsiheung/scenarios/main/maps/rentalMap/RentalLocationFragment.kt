@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +13,17 @@ import androidx.core.app.ActivityCompat
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.RentalLocation
 import com.first.ridingpartnerinsiheung.extensions.showToast
+import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordFragment
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 
 class RentalLocationFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
+    private lateinit var markers: List<Marker>
 
     private val rentalLocation = arrayListOf(
         RentalLocation("정왕 자전거 대여소", LatLng(37.343991285297, 126.74729588817)),
@@ -28,9 +34,58 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Handler().postDelayed({
+            initClickListener()
+        }, 500)
         return inflater.inflate(R.layout.fragment_rental_location, container, false)
 
         requirePermissions()
+    }
+
+    private fun initClickListener(){
+        val infoWindowAtjeongWang = InfoWindow()
+        infoWindowAtjeongWang.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
+            override fun getText(infoWindow: InfoWindow): CharSequence {
+                return "월 ~ 금\n" +
+                        "(07시 ~ 21시)\n" +
+                        "토요일, 일요일, 공휴일 휴무\n" +
+                        "☎ 031-433-0101"
+            }
+        }
+
+        val infoWindowAtWolgot = InfoWindow()
+        infoWindowAtWolgot.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
+            override fun getText(infoWindow: InfoWindow): CharSequence {
+                return "수 ~ 일\n" +
+                        "(09시 ~ 20시)\n" +
+                        "월요일, 화요일, 공휴일 휴무\n" +
+                        "☎ 031-433-0101"
+            }
+        }
+
+        var infoWindows = listOf(infoWindowAtjeongWang, infoWindowAtWolgot)
+
+        // 지도 클릭시 정보창 제거
+        naverMap.setOnMapClickListener {
+                a, b -> infoWindows.forEach {it.close()}
+        }
+
+        // 마커를 클릭하면:
+        val listener = infoWindows.map {Overlay.OnClickListener { overlay ->
+            val marker = overlay as Marker
+
+            if (marker.infoWindow == null) {
+                // 현재 마커에 정보 창이 열려있지 않을 경우 엶
+                it.open(marker)
+            } else {
+                // 이미 현재 마커에 정보 창이 열려있을 경우 닫음
+                it.close()
+            }
+            true
+        }}
+
+        markers[0].onClickListener = listener[0]
+        markers[1].onClickListener = listener[1]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,21 +108,23 @@ class RentalLocationFragment : Fragment(), OnMapReadyCallback {
         naverMap.moveCamera(cameraUpdate)
 
         //대여소 위치 추가
-        addMarkers(naverMap)
+        markers = addMarkers(naverMap, rentalLocation)
 
         // 내 위치 받기
         val uiSettings = naverMap.uiSettings
         uiSettings.isLocationButtonEnabled = true
     }
 
-    private fun addMarkers(naverMap: NaverMap){
-        rentalLocation.forEach{ place ->
+    private fun addMarkers(naverMap: NaverMap, place: List<RentalLocation>): List<Marker> {
+        return place.map {
             val marker = Marker()
             marker.position = LatLng(
-                place.location.latitude,
-                place.location.longitude)
-            marker.captionText = place.name
+                it.location.latitude,
+                it.location.longitude)
+            marker.captionText = it.name
             marker.map=naverMap
+
+            marker
         }
     }
 
