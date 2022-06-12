@@ -25,7 +25,7 @@ class MapActivity : AppCompatActivity() {
 
         val bundle = intent.extras
 
-        if (bundle != null) {
+        if (bundle!!.getString("startParam") != null) {
             setFragment(NavigationFragment(), bundle)
         }
     }

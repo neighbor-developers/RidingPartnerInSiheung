@@ -293,14 +293,6 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
             nowDestination.turn_point.split(",")[1].toDouble()
         )
 
-        // 줌 15로 초기
-        locationSource.lastLocation?.let { location ->
-            var lastLocation = LatLng(location.latitude, location.longitude)
-            val cameraUpdate = CameraUpdate.scrollAndZoomTo(lastLocation, 15.0).animate(
-                CameraAnimation.Easing)
-            mNaverMap.moveCamera(cameraUpdate)
-        }
-
         binding.navigationPoint.text = nowDestination.point
         binding.navigationContent.text = nowDestination.instructions
 
