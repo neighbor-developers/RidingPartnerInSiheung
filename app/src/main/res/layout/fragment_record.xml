@@ -12,47 +12,49 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:padding="10dp"
+            android:layout_height="50dp">
 
             <ImageButton
                 android:id="@+id/backButton"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
                 android:background="@color/white"
-                android:padding="10dp"
                 android:paddingEnd="20dp"
                 android:scaleType="fitStart"
-                android:src="@drawable/icons_home" />
+                android:src="@drawable/icon_home"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="10dp" />
 
             <ImageButton
                 android:id="@+id/changeTextColor"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="15dp"
-                android:scaleType="fitEnd"
                 android:background="@color/white"
-                android:src="@drawable/color_dropper_black" />
+                android:scaleType="fitEnd"
+                android:src="@drawable/color_dropper_black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/changePictureColor"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/changePictureColor"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:scaleType="fitEnd"
                 android:background="@color/white"
-                android:src="@drawable/color_64_black2" />
-        </LinearLayout>
+                android:scaleType="fitEnd"
+                android:src="@drawable/color_64_black2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="12"
+            android:layout_height="match_parent"
             android:background="@drawable/loding_page_color">
 
             <ImageView

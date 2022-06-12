@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_record.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDate
+import kotlin.math.round
 
 class RecordFragment : Fragment() {
     // Firebase
@@ -80,7 +81,7 @@ class RecordFragment : Fragment() {
 
     private fun initData(data: RidingData){
         viewModel.savedDistance.value = data.sumDistance
-        binding.distance.text= "${viewModel.distanceText}"
+        binding.distance.text= "${ round(data.sumDistance/10)/100}km"
     }
 
     private fun changeColorButtonListener(){
