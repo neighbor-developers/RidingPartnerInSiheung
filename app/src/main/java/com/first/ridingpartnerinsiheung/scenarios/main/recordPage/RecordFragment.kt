@@ -80,7 +80,7 @@ class RecordFragment : Fragment() {
 
     private fun initData(data: RidingData){
         viewModel.savedDistance.value = data.sumDistance
-        binding.distance.text= "${data.sumDistance.toString()}km"
+        binding.distance.text= "${viewModel.distanceText}"
     }
 
     private fun changeColorButtonListener(){
