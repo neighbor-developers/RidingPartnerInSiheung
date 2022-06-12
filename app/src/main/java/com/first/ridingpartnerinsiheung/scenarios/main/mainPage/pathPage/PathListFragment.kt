@@ -11,6 +11,7 @@ import com.first.ridingpartnerinsiheung.databinding.FragmentPathListBinding
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.startPage.StartFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
 import com.first.ridingpartnerinsiheung.views.dialog.PathDialog
 
 
@@ -33,16 +34,31 @@ class PathListFragment : Fragment() {
         binding.listView.adapter = placeAdapter
 
         binding.listView.setOnItemClickListener { adapterView, view, i, l ->
-            showPathDialog(placeList[i].placeTxt, placeList[i].photo)
+            showPathDialog(placeList[i].placeTxt, placeList[i].photo, placeList[i].path)
         }
     }
 
-    private fun showPathDialog(pathName : String, pathImage : Int){
+    private fun showPathDialog(pathName : String, pathImage : Int, path: ArrayList<String>){
         val dialog = PathDialog(requireContext())
         dialog.start(pathName, pathImage)
         dialog.setOnClickListener(object:PathDialog.DialogOKCLickListener{
             override fun onOKClicked() {
-                startActivity(Intent(requireContext(), MapActivity::class.java))
+                val bundle = Bundle()
+
+                val startParam = path[0]
+                val destinationParam = path[path.size - 1]
+
+                bundle.putString("startParam", startParam)
+                bundle.putString("destinationParam", destinationParam)
+
+                if (path.size > 2) {
+                    val wayPointParam = path.filterIndexed { index, s -> index != 0 && index != (path.size - 1) }
+                    bundle.putString("wayPointParam", wayPointParam.joinToString(separator = "|"))
+                }
+
+                val intent = Intent(requireContext(), MapActivity::class.java)
+                intent.putExtras(bundle)
+                startActivity(intent)
             }
         })
     }

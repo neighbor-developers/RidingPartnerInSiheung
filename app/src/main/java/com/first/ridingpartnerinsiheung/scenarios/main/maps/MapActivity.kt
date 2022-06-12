@@ -1,7 +1,7 @@
 package com.first.ridingpartnerinsiheung.scenarios.main.maps
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
@@ -23,6 +23,11 @@ class MapActivity : AppCompatActivity() {
             "navi" -> setFragment(NavigationFragment())
         }
 
+        val bundle = intent.extras
+
+        if (bundle != null) {
+            setFragment(NavigationFragment(), bundle)
+        }
     }
 
     fun setFragment(fragment: Fragment, bundle: Bundle? = null){
