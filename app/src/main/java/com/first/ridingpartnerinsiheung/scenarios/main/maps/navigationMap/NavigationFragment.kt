@@ -2,6 +2,7 @@ package com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PointF
@@ -19,8 +20,13 @@ import androidx.lifecycle.lifecycleScope
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.api.bikepath.ApiObject2
 import com.first.ridingpartnerinsiheung.api.bikepath.Path
+import com.first.ridingpartnerinsiheung.data.MySharedPreferences
+import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentNavigationBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.MapActivity
+import com.first.ridingpartnerinsiheung.scenarios.main.recordPage.RecordActivity
+import com.first.ridingpartnerinsiheung.views.dialog.RidingSaveDialog
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
@@ -43,6 +49,19 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
     private var locationManager: LocationManager? = null
     private lateinit var path: PathOverlay
     private lateinit var guides: List<Path.Guide>
+
+    // 라이딩 프래그먼트에서 가져온 변수 추후 수정예정
+    private var ridingState = true // 라이딩 상태
+    private var ridingStartLatLng = LatLng(0.0, 0.0) // polyline 시작점
+    private var ridingEndLatLng = LatLng(0.0, 0.0) // polyline 끝점
+
+    private var savedTimer = 0
+    private var savedSpeed = 0.0
+    private var savedDistance = 0.0
+    private var savedKcal = 0.0
+
+    private var startTime = ""
+    private var endTime = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,12 +112,41 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                 when (event) {
                     NavigationViewModel.NavigationEvent.StartNavigation -> startNavigation()
                     NavigationViewModel.NavigationEvent.StopNavigation -> stopNavigation()
-//                    NavigationViewModel.NavigationEvent.SaveNavigation -> saveNavigation()
+                    NavigationViewModel.NavigationEvent.SaveNavigation -> saveNavigation()
                     is NavigationViewModel.NavigationEvent.PostFailuer -> showToast("저장 실패")
                 }
             }
         }
     }
+
+    private fun saveNavigation(){
+        savedSpeed = viewModel.averSpeed.value // 평균속도 받아오기
+        savedTimer = viewModel.timer.value // 총 주행시간 받아오기
+        savedDistance = viewModel.sumDistance.value // 총 주행거리 받아오기
+        savedKcal = viewModel.calcModel.calculateKcal(savedSpeed, savedTimer, 60.0)  //  몸무게 임의로 60 설정
+
+        val data = RidingData(savedDistance, savedSpeed, savedTimer, savedKcal)
+        // 페이지 이동
+        val dialog = RidingSaveDialog(requireContext())
+        dialog.start()
+        dialog.setOnClickListener(object: RidingSaveDialog.DialogOKCLickListener{
+            override fun onOKClicked() {
+                viewModel.saveData(onFailure = { showToast("저장 실패") }, data, endTime)
+                val prefs = MySharedPreferences((activity as MapActivity).applicationContext)
+                if (prefs.ridingDateList.isNullOrEmpty()) {
+                    prefs.ridingDateList = endTime
+                } else {
+                    prefs.ridingDateList = endTime + "," + prefs.ridingDateList
+                }
+                val intent = Intent(requireContext(), RecordActivity::class.java)
+                intent.putExtra("time",endTime)
+                intent.putExtra("data", data)
+                startActivity(intent)
+
+            }
+        })
+    }
+
 
     private fun startNavigation(){ // 시작버튼
         binding.startBtn.visibility = View.GONE
@@ -108,9 +156,17 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
 
         var startTime = viewModel.getTimeNow()
 
+        locationSource.lastLocation?.let { location ->
+            ridingStartLatLng =
+                LatLng(location.latitude, location.longitude)
+            marker(ridingStartLatLng, "라이딩 출발 지점") // 출발지점 마크
+        }
 
         changeLocation()
         setOverlay()
+
+        viewModel.befLatLng = ridingStartLatLng
+        viewModel.calDisSpeed() // 속도, 거리, 주행시간 계산 시작
     }
 
     private fun stopNavigation() { // 중지버튼
@@ -119,7 +175,14 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         binding.saveBtn.visibility = View.VISIBLE
         binding.stopBtn.visibility = View.GONE
 
-        var endTime = viewModel.getTimeNow()
+        endTime = viewModel.getTimeNow()
+
+        locationSource.lastLocation?.let { location ->
+            viewModel.stopCal()
+
+            ridingEndLatLng = LatLng(location.latitude, location.longitude)
+            marker(ridingEndLatLng, "라이딩 종료 지점")
+        }
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -154,6 +217,12 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         marker.captionText = title
         if(title == "도착지"){
             marker.icon = MarkerIcons.RED
+        }
+        if(title == "라이딩 출발 지점"){
+            marker.icon = MarkerIcons.LIGHTBLUE
+        }
+        if(title == "라이딩 종료 지점"){
+            marker.icon = MarkerIcons.YELLOW
         }
         return marker
     }
@@ -333,6 +402,11 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                     binding.navigationImage.setImageResource(R.drawable.icon_insturctor_straight)
                 }
             }
+
+            var lastLocation = LatLng(location.latitude, location.longitude)
+            val cameraUpdate = CameraUpdate.scrollAndZoomTo(lastLocation, 17.0).animate(
+                CameraAnimation.Easing)
+            mNaverMap.moveCamera(cameraUpdate)
 
             viewModel.mLocation.value = location
         }

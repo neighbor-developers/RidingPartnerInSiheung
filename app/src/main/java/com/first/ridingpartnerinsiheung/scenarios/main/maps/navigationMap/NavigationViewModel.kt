@@ -6,33 +6,48 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.first.ridingpartnerinsiheung.api.bikepath.ApiObject2
 import com.first.ridingpartnerinsiheung.api.bikepath.Path
-import com.first.ridingpartnerinsiheung.scenarios.main.maps.CalcModel
+import com.first.ridingpartnerinsiheung.data.RidingData
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.model.CalcModel
+import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.CalDistance
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.PathOverlay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 
 class NavigationViewModel : ViewModel() {
+    // Firebase
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = Firebase.auth
+    private val user = auth.currentUser!!.uid
 
-    val calcModel = CalcModel()
     var mLocation = MutableStateFlow<Location?>(null)
     private var _event = MutableSharedFlow<NavigationEvent>()
     var navigationEvent = _event.asSharedFlow()
+    var calcModel = CalcModel()
+
+    // 라이딩 뷰모델에서 가져온 변수들 추후 수정 예정
+    var sumDistance = MutableStateFlow(0.0)
+    var averSpeed = MutableStateFlow(0.0)
+
+    var speed = MutableStateFlow(0.0)
+    var timer = MutableStateFlow(0)
+
+    var kcal = MutableStateFlow(0.0)
+
+    var befLatLng = LatLng(0.0, 0.0)
+    var curLatLng = LatLng(0.0, 0.0)
+
+    private lateinit var calDisSpeedJob : Job
 
     fun generatePath(naverMap: NaverMap, start: String, destination: String) {
         viewModelScope.launch {
             val routeSummary = getPathSuspend(start, destination)
             drawPath(naverMap, routeSummary!!)
-        }
-    }
-
-    fun getTimeNow() : String{
-        return System.currentTimeMillis().let { current ->
-            SimpleDateFormat("yyyy/MM/dd HH:mm").format(current)
         }
     }
 
@@ -84,4 +99,62 @@ class NavigationViewModel : ViewModel() {
     fun saveNavigation() = viewModelScope.launch { _event.emit(NavigationEvent.SaveNavigation) }
     fun generatePath() = viewModelScope.launch { _event.emit(NavigationEvent.GeneratePath) }
     fun postFailuer(e :Exception) = viewModelScope.launch { _event.emit(NavigationEvent.PostFailuer(e)) }
+
+
+    // 라이딩 뷰모델에서 가져온 함수 추후 수정예정
+    fun calDisSpeed() {
+
+        calDisSpeedJob = viewModelScope.launch(Dispatchers.Default) {
+            var distance : Double
+            val calDis = CalDistance()
+
+            while(true){
+                delay(1000) // 1초마다 타이머 증가
+
+                timer.value += 1
+
+                if(timer.value % 3 == 0) { // 3초마다 속도, 거리 업데이트
+                    curLatLng = LatLng(mLocation.value!!.latitude, mLocation.value!!.longitude)
+
+                    distance = calDis.getDistance(
+                        befLatLng.latitude,
+                        befLatLng.longitude,
+                        curLatLng.latitude,
+                        curLatLng.longitude
+                    )
+
+                    sumDistance.value += distance // 총 주행거리 누적
+
+                    speed.value = distance / 3 * 3.6 //k/h
+//                    speed.value = ((speed.value * 100) / 100.0) // 순간 속도
+
+                    averSpeed.value = sumDistance.value / timer.value *3.6 // 평균 속도
+
+                    befLatLng = curLatLng
+                }
+            }
+        }
+    }
+    fun stopCal() {
+        kcal.value = calcModel.calculateKcal(averSpeed.value, timer.value, 60.0)
+        viewModelScope.launch {
+            calDisSpeedJob.cancelAndJoin()
+        }
+    }
+    fun getTimeNow() : String{
+        return System.currentTimeMillis().let { current ->
+            SimpleDateFormat("yyyy/MM/dd HH:mm").format(current)
+        }
+    }
+    fun saveData(onFailure : () -> Unit, data : RidingData, time: String){
+        db.collection(user)
+            .document(time)
+            .set(data)
+            .addOnSuccessListener {
+                /*no-op*/
+            }
+            .addOnFailureListener{
+                postFailuer(it)
+            }
+    }
 }

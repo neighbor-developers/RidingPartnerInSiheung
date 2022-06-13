@@ -1,4 +1,4 @@
-package com.first.ridingpartnerinsiheung.scenarios.main.maps
+package com.first.ridingpartnerinsiheung.scenarios.main.maps.model
 
 import java.text.SimpleDateFormat
 
