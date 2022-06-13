@@ -36,7 +36,7 @@ class PathList(private val context: Context) {
     // 배곧생명공원
     private val baegotSaengmyeongPark = "126.7217521,37.3720949,placeid=37310952,name=배곧생명공원"
     // 거북섬
-    private val tutleIsland = "127.0606608,37.0649627,placeid=13270685,name=거북섬"
+    private val tutleIsland = "126.6793288,37.3214043,placeid=1903881322,name=시화MTV거북섬"
     // 반달섬
     private val halfMoonIsland = "126.7381704,37.3000201,placeid=35795149,name=반달섬1로"
     // 시화 방조제
@@ -55,5 +55,5 @@ class PathList(private val context: Context) {
     private val greenWay = arrayListOf(waterKing, lotusFlowerThemePark, gaetgolEcologyPark)
     private val coastline = arrayListOf(oidoStation, baegotSaengmyeongPark, okguPark, oidoRedLighthouse, tutleIsland, halfMoonIsland)
     private val sihwaSeawall = arrayListOf(oidoStation, baegotSaengmyeongPark, okguPark, oidoRedLighthouse, seawall, daebudoPark);
-    private val siheungCycleCourse = arrayListOf(gojanStation, hwajeongcheon, halfMoonIsland, tutleIsland, oidoRedLighthouse, soraePark, waterKing, gojanStation);
+    private val siheungCycleCourse = arrayListOf(gojanStation, halfMoonIsland, tutleIsland, oidoRedLighthouse, waterKing, gojanStation);
 }

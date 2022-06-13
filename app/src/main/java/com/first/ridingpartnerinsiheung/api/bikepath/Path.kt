@@ -84,6 +84,7 @@ data class Path (
         val taxi_fare: Long,
         val start: End,
         val end: End,
+        val waypoints: List<End>?,
         val road_summary: List<RoadSummary>,
         val facility_count: FacilityCount,
         val destination_dir: Long,

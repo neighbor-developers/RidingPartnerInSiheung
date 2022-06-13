@@ -224,6 +224,9 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         if(title == "라이딩 종료 지점"){
             marker.icon = MarkerIcons.YELLOW
         }
+        if(title == "경유지"){
+            marker.icon = MarkerIcons.GRAY
+        }
         return marker
     }
 
@@ -239,9 +242,11 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                 if (response.isSuccessful) {
                     try {
                         var routes = response.body()!!.routes[0]
-                        guides = routes.legs[0].steps.map { step ->
-                            step.guide
-                        }
+                        guides = routes.legs.map { leg ->
+                            leg.steps.map { step ->
+                                step.guide
+                            }
+                        }.flatten()
                         onPath(routes)
                     } catch (e: NullPointerException) {
                         Log.d("에러", e.message.toString())
@@ -259,24 +264,30 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
 
     private fun drawPath(route: Path.Route) {
         var summary = route.summary
-        var steps = route.legs[0].steps
+        var legs = route.legs
 
         val startLatLng = stringToLatLng(summary.start.location)
 
-        val waypoints = steps.map { step ->
-            if (step.path.isNullOrEmpty()) {
-                listOf()
-            } else {
-                step.path.split(" ").map {
-                    stringToLatLng(it)
+        val waypoints = legs.map { leg ->
+            leg.steps.map { step ->
+                if (step.path.isNullOrEmpty()) {
+                    listOf()
+                } else {
+                    step.path.split(" ").map {
+                        stringToLatLng(it)
+                    }
                 }
-            }
-        }.flatten()
+        }}.flatten().flatten()
 
         val endLatLng = stringToLatLng(summary.end.location)
 
         marker(startLatLng, "출발지")
         marker(endLatLng, "도착지")
+
+        summary.waypoints?.forEach {
+            var wayPointLatLng = stringToLatLng(it.location)
+            marker(wayPointLatLng, "경유지")
+        }
         // val fullPath: List<LatLng> = listOf(startLatLng) + waypoints + endLatLng
 
         // 네이버 맵 범위지정 함수 하지만 작동이 안된다 ㅠ
