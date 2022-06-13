@@ -75,7 +75,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
 
         val startParam = arguments?.getString("startParam").toString()
         val destinationParam = arguments?.getString("destinationParam").toString()
-        val wayPointParam = arguments?.getString("wayPointParam").toString()
+        val wayPointParam = arguments?.getString("wayPointParam")?.toString()
 
         Handler().postDelayed({
             getPath(startParam, destinationParam, wayPointParam) {route -> drawPath(route)}
@@ -230,7 +230,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
         return marker
     }
 
-    private fun getPath(start: String, destination: String, wayPoint: String, onPath: (Path.Route) -> Unit) {
+    private fun getPath(start: String, destination: String, wayPoint: String?, onPath: (Path.Route) -> Unit) {
         val call = ApiObject2.retrofitService.getPath(
             start, // "126.9820673,37.4853855,name=이수역 7호선",
             destination, // "126.9803409,37.5029146,name=동작역 4호선",
