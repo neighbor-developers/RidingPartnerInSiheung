@@ -4,11 +4,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -52,13 +54,12 @@ class RecordFragment : Fragment() {
     ): View? {
         initBinding()
         data = arguments?.getSerializable("data") as RidingData
+        setImage(data?.imageUrl)
 
         arguments?.let{
             time = it.getString("time")
             if(time != ""){
                 viewModel.changeTime(time!!)
-                getDiaryImage(time!!)
-
             }
         }
 
@@ -127,18 +128,12 @@ class RecordFragment : Fragment() {
     }
 
     // firebase 이미지  가져오기
-    private fun getDiaryImage(time : String) {
-        val fileName = "$user$time.png" // time은 페이지 바꾸면서 데이터 넣기
-        storageRef.child(user).child(fileName).downloadUrl
-            .addOnSuccessListener {
-                Glide.with(this)
-                    .load(it)
-                    .into(binding.picture)
-                binding.picture.clipToOutline
-            }
-            .addOnFailureListener {
-                binding.picture.setImageResource(R.drawable.loding_page_color)
-            }
+    private fun setImage(imageUri: Uri?) {
+        Glide.with(this)
+            .load(imageUri)
+            .error(R.drawable.loding_page_color)
+            .into(binding.picture)
+        binding.picture.clipToOutline
     }
 }
 

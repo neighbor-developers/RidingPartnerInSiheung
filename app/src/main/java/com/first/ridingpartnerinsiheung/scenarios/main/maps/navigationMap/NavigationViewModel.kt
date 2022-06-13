@@ -18,6 +18,7 @@ import com.naver.maps.map.overlay.PathOverlay
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
+import kotlin.math.round
 
 class NavigationViewModel : ViewModel() {
     // Firebase
@@ -41,6 +42,22 @@ class NavigationViewModel : ViewModel() {
 
     var befLatLng = LatLng(0.0, 0.0)
     var curLatLng = LatLng(0.0, 0.0)
+
+    val distanceText = sumDistance.map {
+        "${round(it/10) /100} km"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
+
+    val averSpeedText = averSpeed.map {
+        "${round(it/10) /100} km/h"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
+
+    val speedText = speed.map {
+        "${round(it/10) /100}"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
+
+    val timerText = timer.map {
+        "${it/3600} : ${it / 60} : ${it%60}"
+    }.stateIn(viewModelScope, SharingStarted.Lazily, "-")
 
     private lateinit var calDisSpeedJob : Job
 

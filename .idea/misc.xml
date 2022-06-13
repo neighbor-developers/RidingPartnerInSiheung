@@ -49,6 +49,7 @@
         <entry key="app/src/main/res/drawable/icon_home.xml" value="0.2075" />
         <entry key="app/src/main/res/drawable/list_edge.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/memo_edge.xml" value="0.1805" />
+        <entry key="app/src/main/res/drawable/navigation_edge.xml" value="0.339" />
         <entry key="app/src/main/res/drawable/ok_btn.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/progressbar.xml" value="0.1805" />
         <entry key="app/src/main/res/drawable/progressbar2.xml" value="0.1095" />
@@ -79,15 +80,16 @@
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.21467391304347827" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.14635416666666667" />
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.4421199442119944" />
-        <entry key="app/src/main/res/layout/fragment_navigation.xml" value="0.15185185185185185" />
+        <entry key="app/src/main/res/layout/fragment_navigation.xml" value="0.2796335290979456" />
         <entry key="app/src/main/res/layout/fragment_path_list.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/fragment_recode_picture.xml" value="0.3734375" />
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.4726114649681529" />
         <entry key="app/src/main/res/layout/fragment_recording.xml" value="0.285302734375" />
         <entry key="app/src/main/res/layout/fragment_rental_location.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/fragment_riding.xml" value="0.43033905029296876" />
+        <entry key="app/src/main/res/layout/fragment_riding_finish.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/layout/fragment_route_search.xml" value="0.16666666666666666" />
-        <entry key="app/src/main/res/layout/fragment_start.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_start.xml" value="0.40534210205078125" />
         <entry key="app/src/main/res/layout/listview_record_item.xml" value="0.3734375" />
         <entry key="app/src/main/res/layout/listview_rocord_itme.xml" value="0.26481481481481484" />
         <entry key="app/src/main/res/layout/listview_route_item.xml" value="0.3734375" />

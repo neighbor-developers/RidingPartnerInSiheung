@@ -19,23 +19,15 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.first.ridingpartnerinsiheung.R
 import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.RidingFinishFragmentBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 
 class RidingFinishFragment : Fragment() {
 
@@ -88,6 +80,7 @@ class RidingFinishFragment : Fragment() {
             recordActivity.setFragment(RecordFragment(), time!!, data!!)
 //            addResultImage()
             saveData()
+
         }
     }
 
@@ -151,6 +144,7 @@ class RidingFinishFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let {
                 imageUri = it
+                data?.imageUrl = imageUri
                 Glide.with(this)
                     .load(it)
                     .into(binding.cImage)

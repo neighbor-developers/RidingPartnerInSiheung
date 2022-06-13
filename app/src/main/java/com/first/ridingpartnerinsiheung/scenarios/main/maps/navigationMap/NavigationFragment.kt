@@ -79,7 +79,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
 
         Handler().postDelayed({
             getPath(startParam, destinationParam, wayPointParam) {route -> drawPath(route)}
-        }, 500)
+        }, 1000)
 
         return binding.root
     }
@@ -404,13 +404,13 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                 binding.navigationContent.text = nowDestination.instructions
 
                 if (nowDestination.instructions.contains("좌회전")) {
-                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_turn_left)
+                    binding.navigationImage.setImageResource(R.drawable.icon_arrow_left)
                 } else if (nowDestination.instructions.contains("우회전")) {
-                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_turn_right)
+                    binding.navigationImage.setImageResource(R.drawable.icon_arrow_right)
                 } else if (nowDestination.instructions.contains("유턴")) {
-                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_uturn)
+                    binding.navigationImage.setImageResource(R.drawable.icon_arrow_uturn)
                 } else {
-                    binding.navigationImage.setImageResource(R.drawable.icon_insturctor_straight)
+                    binding.navigationImage.setImageResource(R.drawable.icon_arrow_straight)
                 }
             }
 

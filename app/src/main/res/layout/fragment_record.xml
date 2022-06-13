@@ -83,8 +83,8 @@
                 android:layout_marginBottom="80dp"
                 android:textColor="@color/white"
                 android:text="@{viewModel.today}"
-                android:textSize="40dp"
-                android:fontFamily="@font/aa"/>
+                android:textSize="30dp"
+                android:fontFamily="@font/recode_font2"/>
             <TextView
                 android:id="@+id/memo"
                 android:layout_width="wrap_content"

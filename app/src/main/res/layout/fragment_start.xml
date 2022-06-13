@@ -104,12 +104,14 @@
                                 android:gravity="center"
                                 android:text="10km"
                                 android:textColor="@color/white"
+                                android:visibility="gone"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
 
                             <ImageButton
                                 android:id="@+id/editNameBtn"
                                 android:layout_width="18dp"
+                                android:visibility="gone"
                                 android:layout_height="18dp"
                                 android:background="@drawable/cog_wheel3"
                                 android:onClick="@{()-> viewModel.showDialog()}" />
@@ -141,7 +143,7 @@
                                 android:layout_width="180dp"
                                 android:layout_height="180dp"
                                 android:max="100"
-                                android:progress="70"
+                                android:progress="100"
                                 android:progressDrawable="@drawable/progressbar" />
                         </FrameLayout>
                     </LinearLayout>
