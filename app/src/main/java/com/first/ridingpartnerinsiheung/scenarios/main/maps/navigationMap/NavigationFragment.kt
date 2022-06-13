@@ -49,6 +49,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
     private var locationManager: LocationManager? = null
     private lateinit var path: PathOverlay
     private lateinit var guides: List<Path.Guide>
+    private lateinit var totalSteps: List<Path.Step>
 
     // 라이딩 프래그먼트에서 가져온 변수 추후 수정예정
     private var ridingState = true // 라이딩 상태
@@ -242,11 +243,14 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                 if (response.isSuccessful) {
                     try {
                         var routes = response.body()!!.routes[0]
-                        guides = routes.legs.map { leg ->
-                            leg.steps.map { step ->
-                                step.guide
-                            }
+
+                        totalSteps = routes.legs.map { leg ->
+                            leg.steps
                         }.flatten()
+
+                        guides = totalSteps.map { step ->
+                            step.guide
+                        }
                         onPath(routes)
                     } catch (e: NullPointerException) {
                         Log.d("에러", e.message.toString())
@@ -264,20 +268,18 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
 
     private fun drawPath(route: Path.Route) {
         var summary = route.summary
-        var legs = route.legs
 
         val startLatLng = stringToLatLng(summary.start.location)
 
-        val waypoints = legs.map { leg ->
-            leg.steps.map { step ->
-                if (step.path.isNullOrEmpty()) {
-                    listOf()
-                } else {
-                    step.path.split(" ").map {
-                        stringToLatLng(it)
-                    }
+        val waypoints = totalSteps.map { step ->
+            if (step.path.isNullOrEmpty()) {
+                listOf()
+            } else {
+                step.path.split(" ").map {
+                    stringToLatLng(it)
                 }
-        }}.flatten().flatten()
+            }
+        }.flatten()
 
         val endLatLng = stringToLatLng(summary.end.location)
 
@@ -365,16 +367,23 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun changeLocation() {
-        var nowLatLng: LatLng?
-        var count = 0
-        var nowDestination = guides[0]
-        var nowDestinationLatLng = LatLng(
-            nowDestination.turn_point.split(",")[0].toDouble(),
-            nowDestination.turn_point.split(",")[1].toDouble()
-        )
+        var count = 1
+        var nowDestination = guides[1]
+        var nowDestinationLatLng = stringToLatLng(nowDestination.turn_point)
 
-        binding.navigationPoint.text = nowDestination.point
-        binding.navigationContent.text = nowDestination.instructions
+        binding.navigationContent.text = nowDestination.content
+        binding.navigationInstructions.text = nowDestination.instructions
+            .replace("<b>","").replace("</b>","")
+
+        if (nowDestination.instructions.contains("좌회전")) {
+            binding.navigationImage.setImageResource(R.drawable.icon_arrow_left)
+        } else if (nowDestination.instructions.contains("우회전")) {
+            binding.navigationImage.setImageResource(R.drawable.icon_arrow_right)
+        } else if (nowDestination.instructions.contains("유턴")) {
+            binding.navigationImage.setImageResource(R.drawable.icon_arrow_uturn)
+        } else {
+            binding.navigationImage.setImageResource(R.drawable.icon_arrow_straight)
+        }
 
         mNaverMap.addOnLocationChangeListener { location ->
             if (mNaverMap.locationTrackingMode == LocationTrackingMode.NoFollow) {
@@ -384,24 +393,23 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
             path.passedColor = Color.GRAY
 
             // 현재 위치
-            nowLatLng = LatLng(location.latitude, location.longitude)
+            var nowLatLng = LatLng(location.latitude, location.longitude)
+            var locationDiff = nowDestinationLatLng.distanceTo(nowLatLng!!)
 
             // 목표위치 도달할시
-            if (nowDestinationLatLng.distanceTo(nowLatLng!!) < 10 ) {
-                if (guides.size - 1 == count) {
+            if (locationDiff < 15 ) {
+                if (guides.size - 2 == count) {
                     finishNavigation()
                 }
 
                 // 목표지 갱신
                 count++
                 nowDestination = guides[count]
-                nowDestinationLatLng = LatLng(
-                    nowDestination.turn_point.split(",")[0].toDouble(),
-                    nowDestination.turn_point.split(",")[1].toDouble()
-                )
+                nowDestinationLatLng = stringToLatLng(nowDestination.turn_point)
 
-                binding.navigationPoint.text = nowDestination.point
-                binding.navigationContent.text = nowDestination.instructions
+                binding.navigationContent.text = nowDestination.content
+                binding.navigationInstructions.text = nowDestination.instructions
+                    .replace("<b>","").replace("</b>","")
 
                 if (nowDestination.instructions.contains("좌회전")) {
                     binding.navigationImage.setImageResource(R.drawable.icon_arrow_left)
@@ -414,8 +422,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
                 }
             }
 
-            var lastLocation = LatLng(location.latitude, location.longitude)
-            val cameraUpdate = CameraUpdate.scrollAndZoomTo(lastLocation, 17.0).animate(
+            val cameraUpdate = CameraUpdate.scrollAndZoomTo(nowLatLng, 17.0).animate(
                 CameraAnimation.Easing)
             mNaverMap.moveCamera(cameraUpdate)
 
@@ -424,7 +431,7 @@ class NavigationFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun finishNavigation() {
-        return
+        return stopNavigation()
     }
 
     //  권한 요청

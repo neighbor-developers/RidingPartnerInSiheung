@@ -214,7 +214,7 @@
                 android:fontFamily="@font/c"
                 android:background="@android:color/transparent"
                 android:layout_marginHorizontal="20dp"
-                android:hint="#오늘의 라이을 #기록해보세요"/>
+                android:hint="#오늘의 #라이딩을 #기록해보세요"/>
 
             <android.widget.Button
                 android:id="@+id/complete"

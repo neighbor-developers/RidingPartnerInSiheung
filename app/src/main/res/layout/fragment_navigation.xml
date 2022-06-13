@@ -53,22 +53,22 @@
                     android:layout_marginStart="10dp"
                     android:orientation="vertical">
                     <TextView
-                        android:id="@+id/navigationPoint"
+                        android:id="@+id/navigationContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18dp"
                         android:fontFamily="@font/d"
                         android:textColor="@color/black"
                         android:layout_marginBottom="2dp"
-                        android:text="point"/>
+                        android:text="content"/>
 
                     <TextView
-                        android:id="@+id/navigationContent"
+                        android:id="@+id/navigationInstructions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12dp"
                         android:fontFamily="d"
-                        android:text="content"/>
+                        android:text="Instructions"/>
                 </LinearLayout>
             </LinearLayout>
 
