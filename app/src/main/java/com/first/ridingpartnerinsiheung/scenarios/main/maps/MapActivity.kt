@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.first.ridingpartnerinsiheung.R
+import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.navigationMap.NavigationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.rentalMap.RentalLocationFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.ridingMap.RidingFragment
 import com.first.ridingpartnerinsiheung.scenarios.main.maps.routeSearchPage.RouteSearchFragment
+import com.first.ridingpartnerinsiheung.views.dialog.BackDialog
+import com.first.ridingpartnerinsiheung.views.dialog.ChangeGoalDistanceDialog
 
 class MapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +44,20 @@ class MapActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finish()
+        val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.mainframe)
+        if (fragment is RidingFragment) {
+            showDialog()
+        }else{
+            finish()
+        }
+    }
+    private fun showDialog(){
+        val dialog = BackDialog(this)
+        dialog.start()
+        dialog.setOnClickListener(object: BackDialog.DialogOKCLickListenertoBack{
+            override fun onOKClicked() {
+                finish()
+            }
+        })
     }
 }

@@ -71,6 +71,7 @@
         <entry key="app/src/main/res/layout/activity_maps2.xml" value="0.30833333333333335" />
         <entry key="app/src/main/res/layout/activity_sign.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_start.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_back.xml" value="0.3734375" />
         <entry key="app/src/main/res/layout/dialog_change_name.xml" value="0.368890380859375" />
         <entry key="app/src/main/res/layout/dialog_path.xml" value="0.2635833740234375" />
         <entry key="app/src/main/res/layout/dialog_record.xml" value="0.3314814814814815" />
@@ -80,7 +81,7 @@
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.21467391304347827" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.14635416666666667" />
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.4421199442119944" />
-        <entry key="app/src/main/res/layout/fragment_navigation.xml" value="0.2796335290979456" />
+        <entry key="app/src/main/res/layout/fragment_navigation.xml" value="0.23976593017578127" />
         <entry key="app/src/main/res/layout/fragment_path_list.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/fragment_recode_picture.xml" value="0.3734375" />
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.4726114649681529" />

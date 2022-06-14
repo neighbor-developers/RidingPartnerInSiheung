@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "541173590470-fnk8vmrqgsohsqac38im4dqkjrvs2vng.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.first.ridingpartnerinsiheung",
+            "certificate_hash": "b3234ae4fa8a8e2356743e5118dba28d8388a874"
+          }
+        },
+        {
           "client_id": "541173590470-g3b64v7cdrg75uftu50n3bo3mtvjjqln.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

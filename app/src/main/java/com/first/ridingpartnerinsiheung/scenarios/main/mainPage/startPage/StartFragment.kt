@@ -21,10 +21,7 @@ import com.first.ridingpartnerinsiheung.data.RidingData
 import com.first.ridingpartnerinsiheung.databinding.FragmentStartBinding
 import com.first.ridingpartnerinsiheung.extensions.showToast
 import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.MainActivity
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.mypage.MyPageFragment
-import com.first.ridingpartnerinsiheung.scenarios.main.mainPage.pathPage.PathListAdapter
 import com.first.ridingpartnerinsiheung.views.dialog.ChangeGoalDistanceDialog
-import com.first.ridingpartnerinsiheung.views.dialog.ChangeNameDialog
 import com.first.ridingpartnerinsiheung.views.dialog.RecordDialog
 import com.google.android.gms.location.*
 import com.google.firebase.auth.ktx.auth

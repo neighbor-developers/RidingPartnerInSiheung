@@ -101,18 +101,17 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="5dp"
                                 android:fontFamily="@font/dd"
-                                android:gravity="center"
+                                android:gravity="center_horizontal"
+                                android:layout_marginTop="2dp"
                                 android:text="10km"
                                 android:textColor="@color/white"
-                                android:visibility="gone"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
 
                             <ImageButton
                                 android:id="@+id/editNameBtn"
-                                android:layout_width="18dp"
-                                android:visibility="gone"
-                                android:layout_height="18dp"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
                                 android:background="@drawable/cog_wheel3"
                                 android:onClick="@{()-> viewModel.showDialog()}" />
                         </LinearLayout>
